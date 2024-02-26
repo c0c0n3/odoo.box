@@ -1,5 +1,5 @@
 {
-  description = "Flake to build and develop odoo.box.";
+  description = "Flake to build and develop 'odoo.box'.";
 
   inputs = {
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-23.11";
@@ -13,6 +13,16 @@
   let
     build = nixie.lib.flakes.mkOutputSetForCoreSystems nixpkgs;
     pkgs = build (import ./pkgs/mkSysOutput.nix);
+
+    overlay = final: prev:
+    {
+      odbox = pkgs.packages.${prev.system} or {};
+    };
+
+    modules = {
+      nixosModules.imports = [ ./modules ];
+    };
   in
-    pkgs;
+    { inherit overlay; } // pkgs // modules;
+
 }

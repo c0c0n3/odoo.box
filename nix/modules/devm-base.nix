@@ -25,7 +25,7 @@ with types;
     # Start from our OS base config, then set up a one-node K8s cluster.
     odbox.base = {
       enable = true;
-      cli-tools = [ pkgs.odbox.cli-tools-node ];
+      cli-tools = pkgs.odbox.linux-admin-shell.paths;
     };
 
     # Allow remote access through SSH, even for root.
