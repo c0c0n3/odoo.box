@@ -9,7 +9,7 @@ with types;
 {
 
   options = {
-    teadal.devm.enable = mkOption {
+    odbox.devm.enable = mkOption {
       type = bool;
       default = false;
       description = ''
@@ -19,20 +19,13 @@ with types;
   };
 
   config = let
-    enabled = config.teadal.devm.enable;
+    enabled = config.odbox.devm.enable;
   in (mkIf enabled
   {
     # Start from our OS base config, then set up a one-node K8s cluster.
-    teadal.base = {
+    odbox.base = {
       enable = true;
-      cli-tools = [ pkgs.teadal.cli-tools-node ];
-    };
-    teadal.k8s = {
-      # package = pkgs.teadal.k8s;
-      # ^ uncomment the line above to install a more recent K8s than the
-      # one that comes w/ the NixOS package set. (NixOS 23.05 ships K8s
-      # 1.27.1.)
-      dev-node.enable = true;
+      cli-tools = [ pkgs.odbox.cli-tools-node ];
     };
 
     # Allow remote access through SSH, even for root.
