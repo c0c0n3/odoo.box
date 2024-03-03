@@ -19,9 +19,17 @@ let
 
   python = python3;
 
-  wkhtmltopdf-odoo = wkhtmltopdf.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "0.12.5";
-    sha256 = "0i6b6z3f4szspbbi23qr3hv22j9bhmcj7c1jizr7y0ra43mrgws1";
+  wkhtmltopdf-odoo =
+  let
+    version-tag = "0.12.5";
+  in wkhtmltopdf.overrideAttrs (finalAttrs: previousAttrs: {
+    version = version-tag;
+    src = fetchFromGitHub {
+      owner = "wkhtmltopdf";
+      repo = "wkhtmltopdf";
+      rev = version-tag;
+      sha256 = "0i6b6z3f4szspbbi23qr3hv22j9bhmcj7c1jizr7y0ra43mrgws1";
+    };
   });                                                          # (1)
 in python.pkgs.buildPythonApplication
 {
