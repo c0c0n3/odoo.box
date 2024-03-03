@@ -15,5 +15,6 @@ in rec {
     default = tools.dev-shell;
     dev-shell = tools.dev-shell;
     linux-admin-shell = tools.linux-admin-shell;
+    odoo-14 = with sysPkgs; callPackage ./odoo-14/pkg.nix {};
   };
 }
