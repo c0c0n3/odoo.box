@@ -63,7 +63,11 @@ python-dateutil = "==2.7.3"
 pytz = "^2019.1"
 pyusb = "==1.0.2"
 qrcode = "==6.1"
-reportlab = "==3.5.55"
+# Original reportlab version in `requirements.txt` (3.5.55) builds on
+# Linux but not on MacOS M1. So we upgrade to version 3.5.59 which was
+# released about 4 months later. See:
+# - https://stackoverflow.com/questions/64871133
+reportlab = "==3.5.59"
 requests = "==2.25.1"
 urllib3 = "==1.26.5"
 zeep = "==3.2.0"
