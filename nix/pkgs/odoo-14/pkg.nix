@@ -5,7 +5,7 @@
 #
 {
   lib, stdenv, fetchzip, fetchFromGitHub,
-  poetry2nix, python3,
+  poetry2nix, python39,
   rtlcss, wkhtmltopdf
 }:
 let
@@ -28,7 +28,7 @@ in poetry2nix.mkPoetryApplication rec {
   projectDir = src;
   pyproject = ./pyproject.toml;
   poetrylock = ./poetry.lock;
-  python = python3;
+  python = python39;
 
   doCheck = false;                                             # (3)
   dontStrip = true;                                            # (4)
