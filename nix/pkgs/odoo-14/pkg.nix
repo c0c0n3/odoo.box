@@ -4,17 +4,16 @@
 # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/applications/finance/odoo/odoo15.nix
 #
 {
-  lib, stdenv, fetchzip,
-  python3, rtlcss, wkhtmltopdf
+  lib, stdenv, fetchzip, poetry2nix, python3,
+  rtlcss, wkhtmltopdf
 }:
 let
   isLinux = stdenv.isLinux;
   ifLinux = ps: if isLinux then ps else [];
 
-  python = python3;
   wkhtmltopdf-odoo = import ./wkhtmltopdf.nix { inherit wkhtmltopdf; };
                                                                # (1)
-in python.pkgs.buildPythonApplication rec {
+in poetry2nix.mkPoetryApplication rec {
   pname = "odoo14";
   series = "14.0";
   version = "${series}.20231205";
@@ -24,51 +23,13 @@ in python.pkgs.buildPythonApplication rec {
     name = "${pname}-${version}";
     hash = "sha256-ZmDplN3a3Xc1s/ApWaPxP2hADJ46txFByRbsyeD7vt4=";
   };                                                           # (2)
-  format = "setuptools";
-
-  propagatedBuildInputs = with python.pkgs; [
-    babel
-    chardet
-    decorator
-    docutils
-    ebaysdk
-    freezegun
-    gevent
-    greenlet
-    idna
-    jinja2
-    libsass
-    lxml
-    mako
-    markupsafe
-    num2words
-    ofxparse
-    passlib
-    pillow
-    polib
-    psutil
-    psycopg2
-    pydot
-    pypdf2
-    pyserial
-    python-dateutil
-    python-ldap
-    python-stdnum
-    pytz
-    pyusb
-    qrcode
-    reportlab
-    requests
-    urllib3
-    vobject
-    werkzeug
-    xlrd
-    xlsxwriter
-    xlwt
-    zeep
-  ];
+  projectDir = src;
+  pyproject = ./pyproject.toml;
+  poetrylock = ./poetry.lock;
+  python = python3;
 
   doCheck = false;                                             # (3)
+  dontStrip = true;                                            # (4)
 
   makeWrapperArgs =
   let
@@ -76,8 +37,6 @@ in python.pkgs.buildPythonApplication rec {
   in [
     "--prefix" "PATH" ":" "${lib.makeBinPath ps}"
   ];
-
-  dontStrip = true;                                            # (4)
 
   meta = with lib; {
     description = "Open Source ERP and CRM";

@@ -7,14 +7,21 @@
       url = "github:c0c0n3/nixie";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixie }:
+  outputs = { self, nixpkgs, nixie, poetry2nix }:
   let
     inputPkgs = nixpkgs // {
       mkConfig = system: {
         permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];   # (1)
       };
+      mkOverlays = system: [
+        poetry2nix.overlays.default
+      ];
     };
     build = nixie.lib.flakes.mkOutputSetForCoreSystems inputPkgs;
     pkgs = build (import ./pkgs/mkSysOutput.nix);
