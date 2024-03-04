@@ -4,34 +4,26 @@
 # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/applications/finance/odoo/odoo15.nix
 #
 {
-  lib, stdenv, fetchFromGitHub,
+  lib, stdenv, fetchzip,
   python3, rtlcss, wkhtmltopdf
 }:
 let
   isLinux = stdenv.isLinux;
   ifLinux = ps: if isLinux then ps else [];
 
-  source = {
-    branch = "14.0";
-    date = "20240215";
-    rev = "6c7f4559386776aaa2cfa8f3df5cd6d2b6c5ed95";
-  };
-
   python = python3;
-
   wkhtmltopdf-odoo = import ./wkhtmltopdf.nix { inherit wkhtmltopdf; };
                                                                # (1)
-in python.pkgs.buildPythonApplication
-{
+in python.pkgs.buildPythonApplication rec {
   pname = "odoo14";
-  version = "${source.branch}.${source.date}";
+  series = "14.0";
+  version = "${series}.20231205";
 
-  src = fetchFromGitHub {
-    owner = "odoo";
-    repo = "odoo";
-    rev = source.rev;
-    sha256 = "sha256-4pUiBNadOWA3RrT2EEK1dLa7YI1KlRx4TQ2Ip5AMMRo=";
-  };
+  src = fetchzip {
+    url = "https://nightly.odoo.com/${series}/nightly/src/odoo_${version}.tar.gz";
+    name = "${pname}-${version}";
+    hash = "sha256-ZmDplN3a3Xc1s/ApWaPxP2hADJ46txFByRbsyeD7vt4=";
+  };                                                           # (2)
   format = "setuptools";
 
   propagatedBuildInputs = with python.pkgs; [
@@ -76,7 +68,7 @@ in python.pkgs.buildPythonApplication
     zeep
   ];
 
-  doCheck = false;                                             # (2)
+  doCheck = false;                                             # (3)
 
   makeWrapperArgs =
   let
@@ -85,7 +77,7 @@ in python.pkgs.buildPythonApplication
     "--prefix" "PATH" ":" "${lib.makeBinPath ps}"
   ];
 
-  dontStrip = true;                                            # (3)
+  dontStrip = true;                                            # (4)
 
   meta = with lib; {
     description = "Open Source ERP and CRM";
@@ -97,8 +89,15 @@ in python.pkgs.buildPythonApplication
 # ----
 # 1. wkhtmltopdf. See (1) in `wkhtmltopdf.nix`.
 #
-# 2. Broken tests. Some tests are broken, so we've got to skip testing.
+# 2. Source. Why not fetch from GitHub? Because the tarball consolidates
+# all the add-ons in the `odoo/addons` dir whereas the repo has them split
+# in two dirs: `repo/addons` and `repo/odoo/addons`. If you run the server
+# from the repo you'll have to pass the path to the other addons dir since
+# some of the modules the code in `repo/odoo` expects are actually in the
+# `repo/addons` dir.
 #
-# 3.Stripping. The Odoo 15 package skips stripping, claiming it takes 5+
+# 3. Broken tests. Some tests are broken, so we've got to skip testing.
+#
+# 4.Stripping. The Odoo 15 package skips stripping, claiming it takes 5+
 # minutes and there are no files to strip. So we do the same.
 #
