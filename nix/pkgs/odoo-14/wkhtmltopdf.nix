@@ -1,4 +1,5 @@
 {
+    fetchFromGitHub,
     wkhtmltopdf
 }:
 let

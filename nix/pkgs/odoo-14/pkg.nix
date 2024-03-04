@@ -4,15 +4,17 @@
 # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/applications/finance/odoo/odoo15.nix
 #
 {
-  lib, stdenv, fetchzip, poetry2nix, python3,
+  lib, stdenv, fetchzip, fetchFromGitHub,
+  poetry2nix, python3,
   rtlcss, wkhtmltopdf
 }:
 let
   isLinux = stdenv.isLinux;
   ifLinux = ps: if isLinux then ps else [];
 
-  wkhtmltopdf-odoo = import ./wkhtmltopdf.nix { inherit wkhtmltopdf; };
-                                                               # (1)
+  wkhtmltopdf-odoo = import ./wkhtmltopdf.nix {
+    inherit fetchFromGitHub wkhtmltopdf;
+  };                                                           # (1)
 in poetry2nix.mkPoetryApplication rec {
   pname = "odoo14";
   series = "14.0";
