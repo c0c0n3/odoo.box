@@ -9,7 +9,12 @@
     stdenv, fetchFromGitHub
 }:
 let
-  vendor = ../../../vendor/addons;                             # (1)
+  vendor = fetchFromGitHub {                                   # (1)
+    owner = "c0c0n3";
+    repo = "odoo.box";
+    rev = "vendor-addons-08-mar-2024";
+    sha256 = "sha256-CdB3uEDXN25nI71ur+8DFVt9L36Cg7Kn76/2EXLVy4g=";
+  };
   hr-timesheet-overtime = fetchFromGitHub {
     owner = "martel-innovate";
     repo = "hr_timesheet_overtime";
@@ -37,7 +42,7 @@ in stdenv.mkDerivation rec {
       mkdir -p $out/timesheets_by_employee
       cp -rv ${src-timesheets-by-employee}/. $out/timesheets_by_employee
 
-      cp -rv $src/* $out
+      cp -rv $src/vendor/addons/* $out
     '';
 }
 # NOTE
