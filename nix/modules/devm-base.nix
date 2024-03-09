@@ -20,9 +20,10 @@ with types;
 
   config = let
     enabled = config.odbox.devm.enable;
+    psql = config.services.postgresql.package;
   in (mkIf enabled
   {
-    # Start from our OS base config, then set up a one-node K8s cluster.
+    # Start from our OS base config.
     odbox.base = {
       enable = true;
       cli-tools = pkgs.odbox.linux-admin-shell.paths;
@@ -36,6 +37,14 @@ with types;
 
     # Get rid of the firewall.
     networking.firewall.enable = false;
+
+    services.odoo = {
+      enable = true;
+      package = pkgs.odbox.odoo-14;
+      domain = "localhost";
+    };
+    services.nginx.enable = true;
+    environment.systemPackages = [ psql ];
   });
 
 }
