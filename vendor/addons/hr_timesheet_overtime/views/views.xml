@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="timesheet_overtime" model="ir.ui.view">
+        <field name="name">hr_timesheet.overtime</field>
+        <field name="model">hr_timesheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/group/group[@name='dates']" position="after">
+                <group>
+                    <field name="total_duty_hours" widget="float_time" string="Expected this timesheet"/>
+                    <field name="total_time" widget="float_time" string="Total time"/>
+                    <field name="prev_timesheet_diff" widget="float_time" string="Previous balance"/>
+                    <field name="calculate_diff_hours" widget="float_time" string="Total balance"/>
+                </group>
+            </xpath>
+            <notebook position="inside">
+                <page string="Flexitime Analysis">
+                    <field name="analysis" widget="html" nolabel="1"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+
+    <record id="project_excl_from_printed_timesheets_form" model="ir.ui.view">
+        <field name="name">Add field excl_from_printed_timesheets</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority">24</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@id='rating_settings']/.." position="before">
+                <div class="row mt16 o_settings_container">
+                    <div class="col-lg-6 o_setting_box"  id="timesheet_settings_excl_pr_timesh">
+                        <div class="o_setting_left_pane">
+                            <field name="excl_from_printed_timesheets"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="excl_from_printed_timesheets" string="Exclude from printed timesheets"/>
+                            <div class="text-muted">
+                                Time written on this project will not be shown on the timesheet report
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

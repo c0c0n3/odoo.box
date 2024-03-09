@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_resource_calendar_attendance_overtime,access_resource_calendar_attendance_overtime,model_resource_calendar_attendance_overtime,base.group_user,1,0,0,0 
+access_hr_timesheet_generate_wizard,access_hr_timesheet_generate_wizard,model_hr_timesheet_generate_wizard,base.group_user,1,1,1,0 

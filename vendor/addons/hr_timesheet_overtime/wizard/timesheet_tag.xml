@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="timesheets_generate_view" model="ir.ui.view">
+            <field name="name">Generate timesheets</field>
+            <field name="model">hr_timesheet.generate_wizard</field>
+            <field name="arch" type="xml">
+              <form string="Generate timesheets">
+                <group>
+                    <separator string="Generate timesheets for employees having the following tag:"/>
+                    <field name="category_id"/>
+                    <group colspan="2">
+                        <field name="date_start" on_change="change_date(date_start, date_end)"/>
+                        <field name="date_end"  on_change="change_date(date_start, date_end)"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="open_timesheet" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+              </form>
+            </field>
+        </record>
+
+        <record id="action_generate_wizard" model="ir.actions.act_window">
+            <field name="name">Generate timesheets</field>
+            <field name="res_model">hr_timesheet.generate_wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="timesheets_generate_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Generate Timesheets"
+                  id="generate_timesheets"
+                  parent="hr_timesheet.menu_timesheets_reports"
+                  action="action_generate_wizard" />
+    </data>
+</odoo>
