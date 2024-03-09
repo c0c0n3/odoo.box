@@ -9,12 +9,13 @@
   ...
 }:
 let
-  tools = import ./cli-tools/pkg.nix { pkgs = sysPkgs; };
+  tools = import ./cli-tools { pkgs = sysPkgs; };
+  odoo = import ./odoo-14 { pkgs = sysPkgs; };
 in rec {
   packages.${system} = {
     default = tools.dev-shell;
     dev-shell = tools.dev-shell;
     linux-admin-shell = tools.linux-admin-shell;
-    odoo-14 = with sysPkgs; callPackage ./odoo-14/pkg.nix {};
+    odoo-14 = odoo;
   };
 }
