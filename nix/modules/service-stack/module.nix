@@ -50,16 +50,16 @@ with types;
         default = false;
         description = ''
           If true, install all the goodies in the the Odoo service
-          stack except for the Odoo service. The Odoo user will be
-          there as well as the `odoo` binary, but the server won't
-          run. This is useful if you want to bootstrap your Odoo DB
-          and file store yourself—think migrating data from another
-          Odoo server. In fact, it's not a good idea to have Odoo
-          kick around while you bootstrap its data as experience has
-          shown.
-          Setting this option to false (the default) makes all the
-          other options work normally—i.e. if you enable the stack,
-          everything gets installed.
+          stack except for actually running the Odoo server. The Odoo
+          user and service will be there as well as the `odoo` binary,
+          but the server won't run. This is useful if you want to
+          bootstrap your Odoo DB and file store yourself—think migrating
+          data from another Odoo server. In fact, it's not a good idea to
+          have Odoo kick around while you bootstrap its data as experience
+          has shown.
+          Setting this option to false (the default) makes all the other
+          options work normally—i.e. if you enable the stack, everything
+          gets installed and runs as you'd expect.
         '';
       };
     };
@@ -67,11 +67,10 @@ with types;
 
   config = let
     enabled = config.services.odbox-stack.enable;
-    bootstrap = config.services.odbox-stack.bootstrap-mode;
     username = "odoo";
     cfg-file = import ./odoo-config.nix {
       inherit pkgs;
-      admin-pwd = "";  # TODO should come from encrypted file---see age.
+      admin-pwd = "*";  # TODO should come from encrypted file---see age.
       db-name = config.services.odbox-stack.odoo-db-name;
       cpus = config.services.odbox-stack.odoo-cpus;
     };
@@ -80,6 +79,7 @@ with types;
     svc = import ./odoo-svc.nix {
       inherit lib username postgres-pkg odoo-pkg cfg-file;
       addons = config.services.odbox-stack.odoo-addons;
+      bootstrap = config.services.odbox-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
       domain = config.services.odbox-stack.domain;
@@ -97,7 +97,7 @@ with types;
     # Odoo system user. The Odoo server gets configured with the
     # above config file and loads the given addons. The service's
     # home will be `/var/lib/${username}`.
-    systemd.services."${username}" = mkIf (!bootstrap) svc;
+    systemd.services."${username}" = svc;
 
     # Run Nginx as a reverse proxy for Odoo.
     services.nginx = nginx;
