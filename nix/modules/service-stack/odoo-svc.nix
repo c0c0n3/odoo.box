@@ -9,10 +9,11 @@ let
   odoo-bin = "${odoo-pkg}/bin/odoo";
   addon-paths = concatMapStringsSep "," escapeShellArg addons;
   addons-opt = optionalString (addons != []) "--addons-path=${addon-paths}";
+  data-dir = "data";
   run = if bootstrap then
-          "HOME=$STATE_DIRECTORY ${odoo-bin} --help"
+          "mkdir -p $STATE_DIRECTORY/${data-dir}"
         else
-          "HOME=$STATE_DIRECTORY ${odoo-bin} ${addons-opt} -c ${cfg-file}";
+          "HOME=$STATE_DIRECTORY ${odoo-bin} ${addons-opt} -D ${data-dir} -c ${cfg-file}";
 in {
   wantedBy = [ "multi-user.target" ];
   after = [ "network.target" "postgresql.service" ];
