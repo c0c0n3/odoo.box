@@ -38,13 +38,11 @@ with types;
     # Get rid of the firewall.
     networking.firewall.enable = false;
 
-    services.odoo = {
+    services.odbox-stack = {
       enable = true;
-      package = pkgs.odbox.odoo-14;
-      domain = "localhost";
+      # bootstrap-mode = true;
+      odoo-db-name = "odoo_martel_14";
     };
-    services.nginx.enable = true;
-    environment.systemPackages = [ psql ];
   });
 
 }
