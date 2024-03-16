@@ -1,0 +1,13 @@
+diff --git a/odoo/service/server.py b/odoo/service/server.py
+index 8001616..7a7c722 100644
+--- a/odoo/service/server.py
++++ b/odoo/service/server.py
+@@ -713,7 +713,7 @@ class PreforkServer(CommonServer):
+ 
+     def long_polling_spawn(self):
+         nargs = stripped_sys_argv()
+-        cmd = [sys.executable, sys.argv[0], 'gevent'] + nargs[1:]
++        cmd = [sys.argv[0], 'gevent'] + nargs[1:]
+         popen = subprocess.Popen(cmd)
+         self.long_polling_pid = popen.pid
+ 

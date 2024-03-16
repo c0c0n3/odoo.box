@@ -7,15 +7,26 @@
       url = "github:c0c0n3/nixie";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixie }:
+  outputs = { self, nixpkgs, nixie, poetry2nix }:
   let
-    build = nixie.lib.flakes.mkOutputSetForCoreSystems nixpkgs;
+    inputPkgs = nixpkgs // {
+      mkConfig = system: {
+        permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];   # (1)
+      };
+      mkOverlays = system: [
+        poetry2nix.overlays.default
+      ];
+    };
+    build = nixie.lib.flakes.mkOutputSetForCoreSystems inputPkgs;
     pkgs = build (import ./pkgs/mkSysOutput.nix);
 
-    overlay = final: prev:
-    {
+    overlay = final: prev: {
       odbox = pkgs.packages.${prev.system} or {};
     };
 
@@ -26,3 +37,9 @@
     { inherit overlay; } // pkgs // modules;
 
 }
+# NOTE
+# ----
+# 1. qtwebkit. It shouldn't be used but Odoo indirectly depends on it---
+# see pkgs/odoo-14/pkg.nix. So we've got to override Nix's decision to
+# leave it out of the package set.
+#

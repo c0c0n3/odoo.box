@@ -21,6 +21,7 @@
     "nix-github-actions": {
       "inputs": {
         "nixpkgs": [
+          "odbox",
           "poetry2nix",
           "nixpkgs"
         ]
@@ -42,6 +43,7 @@
     "nixie": {
       "inputs": {
         "nixpkgs": [
+          "odbox",
           "nixpkgs"
         ]
       },
@@ -75,11 +77,29 @@
         "type": "github"
       }
     },
+    "odbox": {
+      "inputs": {
+        "nixie": "nixie",
+        "nixpkgs": "nixpkgs",
+        "poetry2nix": "poetry2nix"
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-YcBXHOIry/gYviDffnonOmLCIvIs2Vc7+LmzYFjl+ro=",
+        "path": "/nix/store/hxrsgivkjv60jc24r8arb16jjy0rsr18-source/nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/hxrsgivkjv60jc24r8arb16jjy0rsr18-source/nix",
+        "type": "path"
+      }
+    },
     "poetry2nix": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nix-github-actions": "nix-github-actions",
         "nixpkgs": [
+          "odbox",
           "nixpkgs"
         ],
         "systems": "systems_2",
@@ -101,9 +121,11 @@
     },
     "root": {
       "inputs": {
-        "nixie": "nixie",
-        "nixpkgs": "nixpkgs",
-        "poetry2nix": "poetry2nix"
+        "nixos": [
+          "odbox",
+          "nixpkgs"
+        ],
+        "odbox": "odbox"
       }
     },
     "systems": {
@@ -138,6 +160,7 @@
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
+          "odbox",
           "poetry2nix",
           "nixpkgs"
         ]
