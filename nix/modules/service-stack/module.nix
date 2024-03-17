@@ -7,7 +7,7 @@
 # - Odoo addons
 # - Systemd service to run Odoo (including `odoo` sys user)
 # - Non-network Postgres DB backend (Odoo connects on Unix sockets)
-# - Nginx reverse proxy to expose Odoo to the internet
+# - Nginx TLS reverse proxy to expose Odoo to the internet
 #
 # Notice this module comes with a bootstrap option to migrate an Odoo
 # DB and file store from another Odoo server. Also, this module makes
@@ -53,10 +53,15 @@ with types;
         default = 1;
         description = "Number of CPUs available to run the Odoo server.";
       };
-      domain = mkOption {
-        type = str;
-        default = "localhost";
-        description = "Odoo domain name for Nginx config.";
+      nginx-cert = mkOption {
+        type = path;
+        default = "${pkgs.odbox.localhost-cert}/cert.pem";
+        description = "Path to the server's TLS certificate.";
+      };
+      nginx-cert-key = mkOption {
+        type = path;
+        default = "${pkgs.odbox.localhost-cert}/key.pem";
+        description = "Path to the server's TLS certificate key.";
       };
       bootstrap-mode = mkOption {
         type = bool;
@@ -95,7 +100,8 @@ with types;
       bootstrap = config.services.odbox-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
-      domain = config.services.odbox-stack.domain;
+      sslCertificate = config.services.odbox-stack.nginx-cert;
+      sslCertificateKey = config.services.odbox-stack.nginx-cert-key;
     };
   in (mkIf enabled
   {
