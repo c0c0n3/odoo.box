@@ -212,6 +212,7 @@ below in a `start.sh` file and make it executable.
 
 port_fwd='hostfwd=tcp::22-:22,'
 port_fwd+='hostfwd=tcp::80-:80,'
+port_fwd+='hostfwd=tcp::443-:443,'
 port_fwd+='hostfwd=tcp::5432-:5432'
 
 qemu-system-aarch64 \

@@ -7,7 +7,7 @@
 # - Odoo addons
 # - Systemd service to run Odoo (including `odoo` sys user)
 # - Non-network Postgres DB backend (Odoo connects on Unix sockets)
-# - Nginx reverse proxy to expose Odoo to the internet
+# - Nginx TLS reverse proxy to expose Odoo to the internet
 #
 # Notice this module comes with a bootstrap option to migrate an Odoo
 # DB and file store from another Odoo server. Also, this module makes
@@ -53,10 +53,26 @@ with types;
         default = 1;
         description = "Number of CPUs available to run the Odoo server.";
       };
+      nginx-cert = mkOption {
+        type = path;
+        default = "${pkgs.odbox.localhost-cert}/cert.pem";
+        description = "Path to the server's TLS certificate.";
+      };
+      nginx-cert-key = mkOption {
+        type = path;
+        default = "${pkgs.odbox.localhost-cert}/key.pem";
+        description = "Path to the server's TLS certificate key.";
+      };
       domain = mkOption {
         type = str;
         default = "localhost";
-        description = "Odoo domain name for Nginx config.";
+        description = ''
+          Odoo domain name for Nginx's virtual host.
+          Since we make the Odoo host the default Nginx server, you won't
+          need to set this option unless you'd like to use NixOS's built-in
+          support to automatically get and renew TLS certs, in which case,
+          you should set this option to the FQDN of the host machine.
+        '';
       };
       bootstrap-mode = mkOption {
         type = bool;
@@ -95,7 +111,9 @@ with types;
       bootstrap = config.services.odbox-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
-      domain = config.services.odbox-stack.domain;
+      sslCertificate = config.services.odbox-stack.nginx-cert;
+      sslCertificateKey = config.services.odbox-stack.nginx-cert-key;
+      domain = config.services.odbox-stack.domain;             # (1)
     };
   in (mkIf enabled
   {
@@ -133,3 +151,15 @@ with types;
   });
 
 }
+# NOTE
+# ----
+# 1. TLS certs. At the moment we assume the sys admin takes care of
+# getting and renewing TLS certs. But we could automate this step too
+# since NixOS comes with ACME built-in support. In this case, the domain
+# name should be that of the host machine. Also notice that multi-domain
+# configs are also supported.
+# See:
+# - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
+# - https://nixos.wiki/wiki/Nginx
+# - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
+#
