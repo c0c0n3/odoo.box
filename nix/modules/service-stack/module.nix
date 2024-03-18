@@ -63,6 +63,17 @@ with types;
         default = "${pkgs.odbox.localhost-cert}/key.pem";
         description = "Path to the server's TLS certificate key.";
       };
+      domain = mkOption {
+        type = str;
+        default = "localhost";
+        description = ''
+          Odoo domain name for Nginx's virtual host.
+          Since we make the Odoo host the default Nginx server, you won't
+          need to set this option unless you'd like to use NixOS's built-in
+          support to automatically get and renew TLS certs, in which case,
+          you should set this option to the FQDN of the host machine.
+        '';
+      };
       bootstrap-mode = mkOption {
         type = bool;
         default = false;
@@ -102,6 +113,7 @@ with types;
     nginx = import ./nginx.nix {
       sslCertificate = config.services.odbox-stack.nginx-cert;
       sslCertificateKey = config.services.odbox-stack.nginx-cert-key;
+      domain = config.services.odbox-stack.domain;             # (1)
     };
   in (mkIf enabled
   {
@@ -139,3 +151,15 @@ with types;
   });
 
 }
+# NOTE
+# ----
+# 1. TLS certs. At the moment we assume the sys admin takes care of
+# getting and renewing TLS certs. But we could automate this step too
+# since NixOS comes with ACME built-in support. In this case, the domain
+# name should be that of the host machine. Also notice that multi-domain
+# configs are also supported.
+# See:
+# - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
+# - https://nixos.wiki/wiki/Nginx
+# - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
+#

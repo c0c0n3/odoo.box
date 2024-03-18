@@ -5,7 +5,7 @@
 # See:
 # - https://www.odoo.com/documentation/14.0/administration/install/deploy.html#https
 #
-{ sslCertificate, sslCertificateKey }:
+{ sslCertificate, sslCertificateKey, domain }:
 {
     enable = true;
 
@@ -40,7 +40,7 @@
       };
     };
 
-    virtualHosts.proxy = {
+    virtualHosts."${domain}" = {
       inherit sslCertificate sslCertificateKey;
 
       # Our Odoo stack is supposed to run on a dedicated box. So we
