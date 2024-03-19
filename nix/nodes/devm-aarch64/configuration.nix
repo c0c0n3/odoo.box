@@ -12,7 +12,7 @@
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "23.11";
 
-  odbox.devm.enable = true;
+  odbox.server.enable = true;
   odbox.swapfile = {
     enable = true;
     size = 8192;

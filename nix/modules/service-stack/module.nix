@@ -21,7 +21,7 @@ with types;
 
 {
   options = {
-    services.odbox-stack = {
+    odbox.service-stack = {
       enable = mkOption {
         type = bool;
         default = false;
@@ -95,25 +95,25 @@ with types;
   };
 
   config = let
-    enabled = config.services.odbox-stack.enable;
+    enabled = config.odbox.service-stack.enable;
     username = "odoo";
     cfg-file = import ./odoo-config.nix {
       inherit pkgs;
       admin-pwd = "*";  # TODO should come from encrypted file---see age.
-      db-name = config.services.odbox-stack.odoo-db-name;
-      cpus = config.services.odbox-stack.odoo-cpus;
+      db-name = config.odbox.service-stack.odoo-db-name;
+      cpus = config.odbox.service-stack.odoo-cpus;
     };
     postgres-pkg = config.services.postgresql.package;
-    odoo-pkg = config.services.odbox-stack.odoo-package;
+    odoo-pkg = config.odbox.service-stack.odoo-package;
     svc = import ./odoo-svc.nix {
       inherit lib username postgres-pkg odoo-pkg cfg-file;
-      addons = config.services.odbox-stack.odoo-addons;
-      bootstrap = config.services.odbox-stack.bootstrap-mode;
+      addons = config.odbox.service-stack.odoo-addons;
+      bootstrap = config.odbox.service-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
-      sslCertificate = config.services.odbox-stack.nginx-cert;
-      sslCertificateKey = config.services.odbox-stack.nginx-cert-key;
-      domain = config.services.odbox-stack.domain;             # (1)
+      sslCertificate = config.odbox.service-stack.nginx-cert;
+      sslCertificateKey = config.odbox.service-stack.nginx-cert-key;
+      domain = config.odbox.service-stack.domain;              # (1)
     };
   in (mkIf enabled
   {
