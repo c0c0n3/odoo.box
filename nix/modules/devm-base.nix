@@ -38,7 +38,7 @@ with types;
     # Get rid of the firewall.
     networking.firewall.enable = false;
 
-    services.odbox-stack = {
+    odbox.service-stack = {
       enable = true;
       # bootstrap-mode = true;
       odoo-db-name = "odoo_martel_14";
