@@ -1,8 +1,8 @@
 {
   imports = [
-    ./devm-base.nix
     ./os-base.nix
     ./service-stack
+    ./server-base.nix
     ./swap-file.nix
   ];
 }
