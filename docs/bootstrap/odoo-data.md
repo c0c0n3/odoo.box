@@ -100,10 +100,8 @@ NixOS target machine in Odoo bootstrap mode by configuring your
 target's machine Flake with the following expression:
 
 ```nix
-  services.odbox-stack = {
-    enable = true;
-    bootstrap-mode = true;
-  };
+  odbox.server.enable = true;
+  odbox.service-stack.bootstrap-mode = true;
 ```
 
 This way we get the whole Odoo stack up and running except for the
@@ -138,14 +136,16 @@ $ sudo chown odoo:odoo -R /var/lib/odoo/
 ```
 
 At this point the last thing left to do is to reconfigure NixOS
-to run the full Odoo stack:
+to run the full Odoo stack. To do that just delete the `bootstrap-mode`
+option from your config:
 
 ```nix
-  services.odbox-stack = {
-    enable = true;
-    odoo-db-name = "odoo_martel_14";
-  };
+  odbox.server.enable = true;
 ```
 
+Notice we leave the bootstrap option out so the machine starts with
+the Odoo service too. This is because `odbox.service-stack.bootstrap-mode`
+defaults to `false` so if you don't specify it explicitly, it'll
+stay `false`.
 After taking this config live, you should be able to access the
 Odoo Web UI on the target NixOS box from your local machine.
