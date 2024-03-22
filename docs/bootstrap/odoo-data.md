@@ -124,8 +124,16 @@ $ cd /tmp
 To restore the DB, run
 
 ```bash
+$ sudo -u postgres psql -c 'ALTER USER odoo WITH CREATEDB'
 $ sudo -u odoo psql -d postgres -f odoo-dump.sql
+$ sudo -u postgres psql -c 'ALTER USER odoo WITH NOCREATEDB'
 ```
+
+Notice we first allow the `odoo` user to create a DB since the dump
+file contains a statement to create the Odoo DB. But after restoring
+the DB, we revoke the create-DB permission since we want to run Odoo
+with the smallest possible set of privileges. This also means you
+won't be able to use Odoo's Web UI to create and restore DBs.
 
 To restore the file store, run
 
