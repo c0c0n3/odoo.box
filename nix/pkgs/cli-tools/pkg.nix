@@ -35,6 +35,7 @@ in rec {
 
   linux-admin-shell = mkShell "linux-admin-shell" admin.all;
   dev-shell = mkShell "dev-shell" dev.all;
+  full-shell = mkShell "full-shell" (dev.all ++ admin.all);
 
 }
 # NOTE
