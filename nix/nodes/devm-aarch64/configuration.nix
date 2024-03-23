@@ -13,6 +13,7 @@
   system.stateVersion = "23.11";
 
   odbox.server.enable = true;
+  # odbox.service-stack.bootstrap-mode = true;
   odbox.swapfile = {
     enable = true;
     size = 8192;
