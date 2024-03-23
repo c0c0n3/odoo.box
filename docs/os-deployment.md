@@ -27,12 +27,13 @@ The `nix/nodes/devm-aarch64` folder contains the following files
 * `configuration.nix`. Core system configuration. It declares
   the same one-node K8s cluster we built during the bootstrap
   procedure.
-* `flake.nix`. Wraps our NixOS config in a Nix Flake to make sure
-  we get full reproducibility.
+
+Our Flake defines a `demv` output to wrap the above NixOS config
+and make sure we get full reproducibility.
 
 So the **whole** NixOS system definition sits in our git repo and
 now we can apply it to **any** machine running NixOS. We do this
-by asking `nixos-rebuild` to build the above `flake.nix` file on
+by asking `nixos-rebuild` to build our `flake.nix` file on
 a remote machine we choose. Under the bonnet Nix logs on to that
 machine through SSH, builds the NixOS system declared in `flake.nix`
 and then replaces the current NixOS system on the remote machine
@@ -51,13 +52,11 @@ $ cd where/you/put/the/vm
 $ ./start.sh
 ```
 
-Now open another terminal, start the Nix shell and cd into
-`nix/nodes/devm-aarch64`
+Now open another terminal and start the Nix shell
 
 ```bash
 $ cd odoo.box/nix
 $ nix shell
-$ cd nodes/devm-aarch64
 ```
 
 Our Nix shell contains the `nixos-rebuild` tool we need to run. We

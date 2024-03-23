@@ -33,8 +33,13 @@
     modules = {
       nixosModules.imports = [ ./modules ];
     };
+
+    nodes = import ./nodes {
+      nixosSystem = nixpkgs.lib.nixosSystem;
+      odbox = self;
+    };
   in
-    { inherit overlay; } // pkgs // modules;
+    { inherit overlay; } // pkgs // modules // nodes;
 
 }
 # NOTE
