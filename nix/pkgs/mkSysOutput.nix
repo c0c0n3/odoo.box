@@ -15,7 +15,7 @@ let
   localhost-cert = import ./localhost-cert { pkgs = sysPkgs; };
 in rec {
   packages.${system} = {
-    default = tools.dev-shell;
+    default = tools.full-shell;
     dev-shell = tools.dev-shell;
     linux-admin-shell = tools.linux-admin-shell;
     odoo-14 = odoo;
