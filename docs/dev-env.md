@@ -33,15 +33,34 @@ $ cd odoo.box/nix
 $ nix shell
 ```
 
-Finally besides the dev shell you could also get a shell with the
-Linux sys admin tools we use to manage the AWS box. This will work
-on MacOS too, except some of the Linux-specific tools won't be there.
-Here's how to start a shell which contains both the dev and Linux sys
-admin tools:
+When you run the `nix shell` command without any arguments, you get
+into the default shell. This shell contains all the tools for local
+development plus the Linux sys admin tools we use to manage the AWS
+box. (The sys admin tools are available on MacOS too, except for a
+few of them which are Linux-specific.) Look at `nix/pkgs/cli-tools`
+to see what gets installed.
+
+If you don't need the whole tool shebang, you could just instantiate
+a shell with the dev tools like this
+
+```bash
+$ cd odoo.box/nix
+$ nix shell .#dev-shell
+```
+
+This way you won't need to download and build lots of stuff in your
+Nix store. Likewise, you could just instantiate the sys admin tools
+
+```bash
+$ cd odoo.box/nix
+$ nix shell .#linux-admin-shell
+```
+
+Finally notice that if you combine the above two
 
 ```bash
 $ cd odoo.box/nix
 $ nix shell .#dev-shell .#linux-admin-shell
 ```
 
-Look at `nix/pkgs/cli-tools` to see what gets installed.
+you get the same tools as in the default shell.
