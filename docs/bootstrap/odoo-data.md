@@ -95,13 +95,16 @@ $ kubectl -n martel delete -f pod.yaml
 
 ### Restoring data
 
-Now we're ready to feed Odoo :-) First off, you should start the
-NixOS target machine in Odoo bootstrap mode by configuring your
-target's machine Flake with the following expression:
+Now we're ready to feed Odoo :-) First off, you should transition
+the NixOS target machine into Odoo bootstrap mode. To do that, just
+deploy the `<hostname>-boot` NixOS config where `hostname` is that
+of your target machine. Here's an example with the dev VM as a target
 
-```nix
-  odbox.server.enable = true;
-  odbox.service-stack.bootstrap-mode = true;
+```bash
+$ cd odoo.box/nix
+$ nix shell
+$ nixos-rebuild switch --fast --flake .#devm-boot \
+    --target-host root@localhost --build-host root@localhost
 ```
 
 This way we get the whole Odoo stack up and running except for the
@@ -144,16 +147,16 @@ $ sudo chown odoo:odoo -R /var/lib/odoo/
 ```
 
 At this point the last thing left to do is to reconfigure NixOS
-to run the full Odoo stack. To do that just delete the `bootstrap-mode`
-option from your config:
+to run the full Odoo stack. To do that, just deploy the `<hostname>`
+NixOS config where `hostname` is that of your target machine. Here's
+an example with the dev VM as a target
 
-```nix
-  odbox.server.enable = true;
+```bash
+$ cd odoo.box/nix
+$ nix shell
+$ nixos-rebuild switch --fast --flake .#devm \
+    --target-host root@localhost --build-host root@localhost
 ```
 
-Notice we leave the bootstrap option out so the machine starts with
-the Odoo service too. This is because `odbox.service-stack.bootstrap-mode`
-defaults to `false` so if you don't specify it explicitly, it'll
-stay `false`.
 After taking this config live, you should be able to access the
 Odoo Web UI on the target NixOS box from your local machine.
