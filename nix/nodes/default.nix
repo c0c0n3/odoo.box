@@ -19,5 +19,6 @@ let
 in {
   nixosConfigurations = {
     devm = mkNode "aarch64-linux" ./devm-aarch64/configuration.nix;
+    devm-boot = mkNode "aarch64-linux" ./devm-aarch64/config-boot.nix;
   };
 }

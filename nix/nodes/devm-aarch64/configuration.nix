@@ -1,8 +1,11 @@
+#
+# NixOS config to define the Dev VM.
+# Notice this is the main config with the full Odoo service stack.
+#
 { config, pkgs, ... }:
-
 {
   imports = [
-      ./hardware-configuration.nix
+    ./hardware-configuration.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -13,7 +16,6 @@
   system.stateVersion = "23.11";
 
   odbox.server.enable = true;
-  # odbox.service-stack.bootstrap-mode = true;
   odbox.swapfile = {
     enable = true;
     size = 8192;
