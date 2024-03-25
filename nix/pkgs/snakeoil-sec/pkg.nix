@@ -7,12 +7,13 @@
 # - Localhost cert. Self-signed, 100-year valid SSL cert for testing
 #   on localhost. Pub cert: `certs/localhost-cert.pem`; Private key:
 #   `certs/localhost-key.pem`.
-# - Hashed passwords. Root and admin sys users as well as Odoo admin
-#   user get a generated password of 'abc123'. Each user gets its
-#   own password file containing a hash `chpasswd` can handle. File
+# - Passwords. Root and admin sys users as well as Odoo admin user
+#   get a generated password of 'abc123'. Root and admin get their
+#   own password files containing a hash `chpasswd` can handle, whereas
+#   Odoo admin gets a file with the clear-text password in it. File
 #   with root's hashed password: `passwords/root`; File with admin's
-#   hashed password: `passwords/admin`; File with Odoo admin's hashed
-#   password: `passwords/odoo-admin`.
+#   hashed password: `passwords/admin`; File with Odoo admin's password:
+#   `passwords/odoo-admin`.
 #
 {
   stdenv, openssl
@@ -20,7 +21,7 @@
 let
   cmd = "${openssl}/bin/openssl";
 
-  root-pass = "abc123";
+  root-pass = "abc/123";
   admin-pass = root-pass;
   odoo-admin-pass = root-pass;
 
@@ -43,7 +44,7 @@ in stdenv.mkDerivation {
       mkdir "${passwords-dir}"
       ${cmd} passwd -6 "${root-pass}" > "${passwords-dir}/root"
       ${cmd} passwd -6 "${admin-pass}" > "${passwords-dir}/admin"
-      ${cmd} passwd -6 "${odoo-admin-pass}" > "${passwords-dir}/odoo-admin"
+      echo "${odoo-admin-pass}" > "${passwords-dir}/odoo-admin"
     '';
 
     installPhase = ''
@@ -60,9 +61,9 @@ in stdenv.mkDerivation {
 # See:
 # - https://github.com/NixOS/nixpkgs/issues/23099
 #
-# 2. Security. The cert key and hashed passwords will wind up in the
-# Nix store which is world-readable. Only ever use this package for
-# testing on localhost!
+# 2. Security. Cert key and passwords will wind up in the Nix store
+# which is world-readable. Only ever use this package for testing on
+# localhost!
 #
 # 3. CA. We could improve our setup by creating our own Certificate
 # Authority and then sign our cert with that CA. This way, you could
