@@ -13,6 +13,7 @@ let
   odoo = import ./odoo-14 { pkgs = sysPkgs; };
   addons = import ./odoo-addons { pkgs = sysPkgs; };
   localhost-cert = import ./localhost-cert { pkgs = sysPkgs; };
+  snakeoil-sec = import ./snakeoil-sec { pkgs = sysPkgs; };
 in rec {
   packages.${system} = {
     default = tools.full-shell;
@@ -20,6 +21,6 @@ in rec {
     linux-admin-shell = tools.linux-admin-shell;
     odoo-14 = odoo;
     odoo-addons = addons;
-    inherit localhost-cert;
+    inherit localhost-cert snakeoil-sec;
   };
 }
