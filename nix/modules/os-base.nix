@@ -10,8 +10,11 @@
 #
 # * Emacs the default editor system-wide (`EDITOR` environment variable)
 #
-# Finally it creates an admin user with username 'admin' and sets the
-# given hashed passwords for both the admin and root users.
+# Finally, this module configures users by
+# - only allowing to change users and groups through NixOS config;
+# - creating an admin user with username 'admin' and setting its password
+#   to the given hashed password;
+# - setting the root password to the given hashed password.
 #
 { config, lib, pkgs, ... }:
 
@@ -74,6 +77,9 @@ in {
       EDITOR = "emacs";    # NOTE (1)
     };
     programs.bash.enableCompletion = true;
+
+    # Only allow to change users and groups through NixOS config.
+    users.mutableUsers = false;
 
     # Create admin user w/ name='admin' and given password.
     # Also set the given root password.
