@@ -29,7 +29,7 @@ let
   keygen = "${age}/bin/age-keygen";
   encrypt = file: ''
     ${age}/bin/age -o "${file}.age" -r $recipient "${file}"
-  '';
+  '';                                                          # (4)
   genEncScript = files: lib.strings.concatLines (map encrypt files);
 
   root-pass = "abc123";
@@ -90,4 +90,14 @@ in stdenv.mkDerivation {
 # warning when hitting localhost:443.
 # See:
 # - https://hackernoon.com/how-to-get-sslhttps-for-localhost-i11s3342
+#
+# 4. Decrypting age files. Easy:
+#
+#   $ cd odoo.box/nix
+#   $ nix shell
+#   $ nix build .#snakeoil-sec
+#   $ age -d -i result/age.key result/passwords/odoo-admin.age
+#   $ age -d -i result/age.key result/certs/localhost-key.pem.age | bat
+#
+# ...and so on.
 #
