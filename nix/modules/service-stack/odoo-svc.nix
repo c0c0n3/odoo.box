@@ -15,7 +15,7 @@ let
         else
           ''
             export HOME=$STATE_DIRECTORY
-            ${odoo-bin} ${addons-opt} -D ${data-dir} -c ${cfg-file}
+            ${odoo-bin} ${addons-opt} -D ${data-dir} -c ${cfg-file} --no-database-list
           '';
 in {
   wantedBy = [ "multi-user.target" ];
