@@ -1,5 +1,7 @@
 #
-# TODO docs.
+# This module groups together all our password and TLS settings.
+# Other modules read the values this module config holds to set up
+# passwords, TLS, etc. for services and users.
 #
 { config, lib, pkgs, ... }:
 
@@ -30,6 +32,16 @@ with types;
       description = ''
         File containing the Odoo admin user's clear-text password.
       '';
+    };
+    odbox.vault.nginx-cert = mkOption {
+      type = path;
+      default = "${pkgs.odbox.snakeoil-sec}/certs/localhost-cert.pem";
+      description = "Path to the Nginx's TLS certificate.";
+    };
+    odbox.vault.nginx-cert-key = mkOption {
+      type = path;
+      default = "${pkgs.odbox.snakeoil-sec}/certs/localhost-key.pem";
+      description = "Path to the Nginx's TLS certificate key.";
     };
   };
 }

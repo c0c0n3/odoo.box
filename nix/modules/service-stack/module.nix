@@ -53,16 +53,6 @@ with types;
         default = 1;
         description = "Number of CPUs available to run the Odoo server.";
       };
-      nginx-cert = mkOption {
-        type = path;
-        default = "${pkgs.odbox.localhost-cert}/cert.pem";
-        description = "Path to the server's TLS certificate.";
-      };
-      nginx-cert-key = mkOption {
-        type = path;
-        default = "${pkgs.odbox.localhost-cert}/key.pem";
-        description = "Path to the server's TLS certificate key.";
-      };
       domain = mkOption {
         type = str;
         default = "localhost";
@@ -111,8 +101,8 @@ with types;
       bootstrap = config.odbox.service-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
-      sslCertificate = config.odbox.service-stack.nginx-cert;
-      sslCertificateKey = config.odbox.service-stack.nginx-cert-key;
+      sslCertificate = config.odbox.vault.nginx-cert;
+      sslCertificateKey = config.odbox.vault.nginx-cert-key;
       domain = config.odbox.service-stack.domain;              # (1)
     };
   in (mkIf enabled

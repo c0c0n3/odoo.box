@@ -21,7 +21,7 @@
 let
   cmd = "${openssl}/bin/openssl";
 
-  root-pass = "abc/123";
+  root-pass = "abc123";
   admin-pass = root-pass;
   odoo-admin-pass = root-pass;
 
