@@ -89,7 +89,6 @@ with types;
     username = "odoo";
     cfg-file = import ./odoo-config.nix {
       inherit pkgs;
-      admin-pwd = "*";  # TODO should come from encrypted file---see age.
       db-name = config.odbox.service-stack.odoo-db-name;
       cpus = config.odbox.service-stack.odoo-cpus;
     };
@@ -97,6 +96,7 @@ with types;
     odoo-pkg = config.odbox.service-stack.odoo-package;
     svc = import ./odoo-svc.nix {
       inherit lib username postgres-pkg odoo-pkg cfg-file;
+      pwd-file = config.odbox.vault.odoo-admin-pwd-file;
       addons = config.odbox.service-stack.odoo-addons;
       bootstrap = config.odbox.service-stack.bootstrap-mode;
     };
