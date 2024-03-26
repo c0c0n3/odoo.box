@@ -14,12 +14,23 @@
 #   with root's hashed password: `passwords/root`; File with admin's
 #   hashed password: `passwords/admin`; File with Odoo admin's password:
 #   `passwords/odoo-admin`.
+# - Age-encrypted files. For each of the above files, except for the
+#   cert, a corresponding `.age` file in the same dir that's encrypted
+#   using `age` and an `age` key automatically generated. E.g. the content
+#   of the Odoo admin password file `passwords/odoo-admin` gets encrypted
+#   into `passwords/odoo-admin.age`. The generate `age` key gets output
+#   to `age.key` at the root of the package.
 #
 {
-  stdenv, openssl
+  stdenv, lib, openssl, age
 }:
 let
-  cmd = "${openssl}/bin/openssl";
+  ossl = "${openssl}/bin/openssl";
+  keygen = "${age}/bin/age-keygen";
+  encrypt = file: ''
+    ${age}/bin/age -o "${file}.age" -r $recipient "${file}"
+  '';
+  genEncScript = files: lib.strings.concatLines (map encrypt files);
 
   root-pass = "abc123";
   admin-pass = root-pass;
@@ -27,6 +38,11 @@ let
 
   certs-dir = "certs";
   passwords-dir = "passwords";
+  localhost-cert = "${certs-dir}/localhost-cert.pem";
+  localhost-cert-key = "${certs-dir}/localhost-key.pem";
+  root-pwd-file = "${passwords-dir}/root";
+  admin-pwd-file = "${passwords-dir}/admin";
+  odoo-admin-pwd-file = "${passwords-dir}/odoo-admin";
 in stdenv.mkDerivation {
     pname = "snakeoil-sec";
     version = "1.0.0";
@@ -35,22 +51,25 @@ in stdenv.mkDerivation {
 
     buildPhase = ''
       mkdir "${certs-dir}"
-      ${cmd} \
+      ${ossl} \
         req -x509 -newkey rsa:4096 \
         -days 36500 -nodes -subj '/CN=localhost' \
-        -keyout "${certs-dir}/localhost-key.pem" \
-        -out "${certs-dir}/localhost-cert.pem"
+        -keyout "${localhost-cert-key}" -out "${localhost-cert}"
 
       mkdir "${passwords-dir}"
-      ${cmd} passwd -6 "${root-pass}" > "${passwords-dir}/root"
-      ${cmd} passwd -6 "${admin-pass}" > "${passwords-dir}/admin"
-      echo "${odoo-admin-pass}" > "${passwords-dir}/odoo-admin"
+      ${ossl} passwd -6 "${root-pass}" > "${root-pwd-file}"
+      ${ossl} passwd -6 "${admin-pass}" > "${admin-pwd-file}"
+      echo "${odoo-admin-pass}" > "${odoo-admin-pwd-file}"
+
+      ${keygen} -o age.key
+      recipient=$(${keygen} -y age.key)
+      ${genEncScript [localhost-cert-key root-pwd-file admin-pwd-file
+                      odoo-admin-pwd-file]}
     '';
 
     installPhase = ''
       mkdir -p $out
-      mv "${certs-dir}" $out/
-      mv "${passwords-dir}" $out/
+      mv ./* $out/
     '';                                                       # (2)
 
 }
