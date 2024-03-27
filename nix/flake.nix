@@ -11,9 +11,13 @@
       url = "github:nix-community/poetry2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixie, poetry2nix }:
+  outputs = { self, nixpkgs, nixie, poetry2nix, agenix }:
   let
     inputPkgs = nixpkgs // {
       mkConfig = system: {
@@ -21,6 +25,7 @@
       };
       mkOverlays = system: [
         poetry2nix.overlays.default
+        agenix.overlays.default
       ];
     };
     build = nixie.lib.flakes.mkOutputSetForCoreSystems inputPkgs;
@@ -31,7 +36,10 @@
     };
 
     modules = {
-      nixosModules.imports = [ ./modules ];
+      nixosModules.imports = [
+        agenix.nixosModules.default
+        ./modules
+      ];
     };
 
     nodes = import ./nodes {
