@@ -6,6 +6,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./sec/vault-cleartext.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

@@ -12,7 +12,7 @@ with types;
   options = {
     odbox.vault.root-pwd-file = mkOption {
       type = path;
-      default = "${pkgs.odbox.snakeoil-sec}/passwords/root";
+      default = abort "missing root password!";
       description = ''
         File containing the root user's password hashed in a way `chpasswd`
         can handle.
@@ -20,7 +20,7 @@ with types;
     };
     odbox.vault.admin-pwd-file = mkOption {
       type = path;
-      default = "${pkgs.odbox.snakeoil-sec}/passwords/admin";
+      default = abort "missing admin password!";
       description = ''
         File containing the admin user's password hashed in a way `chpasswd`
         can handle.
@@ -28,19 +28,19 @@ with types;
     };
     odbox.vault.odoo-admin-pwd-file = mkOption {
       type = path;
-      default = "${pkgs.odbox.snakeoil-sec}/passwords/odoo-admin";
+      default = abort "missing Odoo admin password!";
       description = ''
         File containing the Odoo admin user's clear-text password.
       '';
     };
     odbox.vault.nginx-cert = mkOption {
       type = path;
-      default = "${pkgs.odbox.snakeoil-sec}/certs/localhost-cert.pem";
+      default = abort "missing Nginx's TLS certificate!";
       description = "Path to the Nginx's TLS certificate.";
     };
     odbox.vault.nginx-cert-key = mkOption {
       type = path;
-      default = "${pkgs.odbox.snakeoil-sec}/certs/localhost-key.pem";
+      default = abort "missing Nginx's TLS certificate key! ";
       description = "Path to the Nginx's TLS certificate key.";
     };
   };
