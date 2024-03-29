@@ -5,44 +5,23 @@
 #
 # In the box:
 # - Localhost cert. Self-signed, 100-year valid SSL cert for testing
-#   on localhost. Pub cert: `certs/localhost-cert.pem`; Private key:
-#   `certs/localhost-key.pem`.
+#   on localhost.
 # - Passwords. Root and admin sys users as well as Odoo admin user
-#   get a generated password of 'abc123'. Root and admin get their
-#   own password files containing a hash `chpasswd` can handle, whereas
-#   Odoo admin gets a file with the clear-text password in it. File
-#   with root's hashed password: `passwords/root`; File with admin's
-#   hashed password: `passwords/admin`; File with Odoo admin's password:
-#   `passwords/odoo-admin`.
-# - Age-encrypted files. For each of the above files, except for the
-#   cert, a corresponding `.age` file in the same dir that's encrypted
-#   using `age` and an `age` key automatically generated. E.g. the content
-#   of the Odoo admin password file `passwords/odoo-admin` gets encrypted
-#   into `passwords/odoo-admin.age`. The generate `age` key gets output
-#   to `age.key` at the root of the package.
+#   get a generated password of 'abc123'.
+#
+# We use `vaultgen` to generate all the above and put the content
+# of the `generated` dir in this package's root dir. See `vaultgen`
+# for the details of the directory structure and what files get
+# generated.
 #
 {
-  stdenv, lib, openssl, age
+  stdenv, vaultgen
 }:
 let
-  ossl = "${openssl}/bin/openssl";
-  keygen = "${age}/bin/age-keygen";
-  encrypt = file: ''
-    ${age}/bin/age -o "${file}.age" -r $recipient "${file}"
-  '';                                                          # (4)
-  genEncScript = files: lib.strings.concatLines (map encrypt files);
-
+  cmd = "${vaultgen}/bin/vaultgen";
   root-pass = "abc123";
   admin-pass = root-pass;
   odoo-admin-pass = root-pass;
-
-  certs-dir = "certs";
-  passwords-dir = "passwords";
-  localhost-cert = "${certs-dir}/localhost-cert.pem";
-  localhost-cert-key = "${certs-dir}/localhost-key.pem";
-  root-pwd-file = "${passwords-dir}/root";
-  admin-pwd-file = "${passwords-dir}/admin";
-  odoo-admin-pwd-file = "${passwords-dir}/odoo-admin";
 in stdenv.mkDerivation {
     pname = "snakeoil-sec";
     version = "1.0.0";
@@ -50,28 +29,17 @@ in stdenv.mkDerivation {
     dontUnpack = true;                                         # (1)
 
     buildPhase = ''
-      mkdir "${certs-dir}"
-      ${ossl} \
-        req -x509 -newkey rsa:4096 \
-        -days 36500 -nodes -subj '/CN=localhost' \
-        -keyout "${localhost-cert-key}" -out "${localhost-cert}"
-
-      mkdir "${passwords-dir}"
-      ${ossl} passwd -6 "${root-pass}" > "${root-pwd-file}"
-      ${ossl} passwd -6 "${admin-pass}" > "${admin-pwd-file}"
-      echo "${odoo-admin-pass}" > "${odoo-admin-pwd-file}"
-
-      ${keygen} -o age.key
-      recipient=$(${keygen} -y age.key)
-      ${genEncScript [localhost-cert-key root-pwd-file admin-pwd-file
-                      odoo-admin-pwd-file]}
+      BATCH_MODE=1 \
+      ROOT_PASSWORD="${root-pass}" \
+      ADMIN_PASSWORD="${admin-pass}" \
+      ODOO_ADMIN_PASSWORD="${odoo-admin-pass}" \
+      ${cmd}
     '';
 
     installPhase = ''
       mkdir -p $out
-      mv ./* $out/
+      mv generated/* $out/
     '';                                                       # (2)
-
 }
 # NOTE
 # ----
