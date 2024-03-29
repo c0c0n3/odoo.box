@@ -14,6 +14,7 @@ let
   addons = import ./odoo-addons { pkgs = sysPkgs; };
   localhost-cert = import ./localhost-cert { pkgs = sysPkgs; };
   snakeoil-sec = import ./snakeoil-sec { pkgs = sysPkgs; };
+  vaultgen = import ./vaultgen { pkgs = sysPkgs; };
 in rec {
   packages.${system} = {
     default = tools.full-shell;
@@ -21,6 +22,6 @@ in rec {
     linux-admin-shell = tools.linux-admin-shell;
     odoo-14 = odoo;
     odoo-addons = addons;
-    inherit localhost-cert snakeoil-sec;
+    inherit localhost-cert snakeoil-sec vaultgen;
   };
 }
