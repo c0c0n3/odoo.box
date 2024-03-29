@@ -1,7 +1,7 @@
 #
 # Tools to develop "odoo.box".
 #
-{ pkgs }:
+{ pkgs, vaultgen }:
 with pkgs;
 {
     all = [
@@ -14,5 +14,6 @@ with pkgs;
         postgresql
         python3
         qemu
+        vaultgen
     ];
 }

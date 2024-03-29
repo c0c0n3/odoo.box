@@ -9,12 +9,12 @@
   ...
 }:
 let
-  tools = import ./cli-tools { pkgs = sysPkgs; };
   odoo = import ./odoo-14 { pkgs = sysPkgs; };
   addons = import ./odoo-addons { pkgs = sysPkgs; };
   localhost-cert = import ./localhost-cert { pkgs = sysPkgs; };
   vaultgen = import ./vaultgen { pkgs = sysPkgs; };
   snakeoil-sec = import ./snakeoil-sec { pkgs = sysPkgs; inherit vaultgen; };
+  tools = import ./cli-tools { pkgs = sysPkgs; inherit vaultgen; };
 in rec {
   packages.${system} = {
     default = tools.full-shell;
