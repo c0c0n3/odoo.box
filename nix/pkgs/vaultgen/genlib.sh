@@ -67,6 +67,11 @@ encrypt() {
 # - Clear text password. The password to use. If none given, generate
 #   a strong one.
 #
+# NOTE
+# ----
+# 1. SHA512 hash alternatives. See
+# - https://github.com/c0c0n3/odoo.box/issues/8
+#
 make_password_files() {
     local file_name="$1"
     local clear_text="${2:-}"
