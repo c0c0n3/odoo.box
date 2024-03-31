@@ -6,7 +6,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./sec/vault-cleartext.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -16,9 +15,12 @@
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "23.11";
 
-  odbox.server.enable = true;
-  odbox.swapfile = {
-    enable = true;
-    size = 8192;
+  odbox = {
+    server.enable = true;
+    vault.snakeoil.enable = true;
+    swapfile = {
+      enable = true;
+      size = 8192;
+    };
   };
 }
