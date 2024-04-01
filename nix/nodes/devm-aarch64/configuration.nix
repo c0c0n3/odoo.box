@@ -20,11 +20,11 @@
     vault.snakeoil.enable = true;
     # NOTE (1)
     # vault.age = {
-    #   root-pwd = ./sec/generated/passwords/root.sha512.age;
-    #   admin-pwd = ./sec/generated/passwords/admin.sha512.age;
-    #   odoo-admin-pwd = ./sec/generated/passwords/odoo-admin.age;
-    #   nginx-cert = ./sec/generated/certs/localhost-cert.pem.age;
-    #   nginx-cert-key = ./sec/generated/certs/localhost-key.pem.age;
+    #   root-pwd = ./generated/passwords/root.sha512.age;
+    #   admin-pwd = ./generated/passwords/admin.sha512.age;
+    #   odoo-admin-pwd = ./generated/passwords/odoo-admin.age;
+    #   nginx-cert = ./generated/certs/localhost-cert.pem.age;
+    #   nginx-cert-key = ./generated/certs/localhost-key.pem.age;
     # };
     # vault.agez.enable = true;
     # vault.agenix.enable = true;
@@ -42,7 +42,7 @@
 # which module you want to test. After that
 # $ cd odoo.box/nix
 # $ nix shell
-# $ cd nodes/devm-aarch64/sec/
+# $ cd nodes/devm-aarch64/
 # $ vaultgen
 #   # make script generate everything, skip prod certs step
 # $ scp generated/age.key root@localhost:/etc/

@@ -21,7 +21,7 @@ with types;
       '';
     };
     odbox.vault.agez.key = mkOption {
-      type = str;
+      type = nonEmptyStr;
       default = "/etc/age.key";
       description = ''
         Path to the Age key to use for decrypting secrets. This must

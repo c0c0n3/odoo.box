@@ -15,9 +15,10 @@ in rec {
   # then set up a fresh one where to decrypt secrets for the current
   # NixOS activation.
   setup = ''
-    rm -rf ${ageDir} || true
-    mkdir ${ageDir}
-    chmod 0755 ${ageDir}
+    echo "[agez] setting up base dir: ${ageDir}"
+    rm -rf "${ageDir}" || true
+    mkdir "${ageDir}"
+    chmod 0755 "${ageDir}"
   '';
 
   # Extract the content of an Age-encrypted file into a clear-text file.
@@ -29,6 +30,7 @@ in rec {
     ...
   }:
   ''
+    echo "[agez] decrypting: ${encryptedFile} to: ${decryptedFile}"
     mkdir -p $(dirname "${decryptedFile}")
     LANG=${locale} ${age} \
         -d -i "${ageKey}" \
@@ -45,11 +47,12 @@ in rec {
     # The group name or ID of the group who should have access to the
     # decrypted file. Defaults to the root group.
     group ? "0",
-    # File permissions in `chmod` format. Defaults to `0440`.
-    perms ? "0440",
+    # File permissions in `chmod` format. Defaults to `0400`.
+    perms ? "0400",
     ...
   }:
   ''
+    echo "[agez] assigning ownership and permissions to: ${decryptedFile}"
     chown "${user}:${group}" "${decryptedFile}"
     chmod ${perms} "${decryptedFile}"
   '';
