@@ -18,9 +18,32 @@
   odbox = {
     server.enable = true;
     vault.snakeoil.enable = true;
+    # NOTE (1)
+    # vault.age = {
+    #   enable = true;
+    #   root-pwd = ./sec/generated/passwords/root.sha512.age;
+    #   admin-pwd = ./sec/generated/passwords/admin.sha512.age;
+    #   odoo-admin-pwd = ./sec/generated/passwords/odoo-admin.age;
+    #   nginx-cert = ./sec/generated/certs/localhost-cert.pem.age;
+    #   nginx-cert-key = ./sec/generated/certs/localhost-key.pem.age;
+    # };
     swapfile = {
       enable = true;
       size = 8192;
     };
   };
 }
+# NOTE
+# ----
+# 1. Testing Age decryption. First comment out the `vault.snakeoil`
+# option and comment in the `vault.age` stanza. Then
+# $ cd odoo.box/nix
+# $ nix shell
+# $ cd nodes/devm-aarch64/sec/
+# $ vaultgen
+#   # make script generate everything, skip prod certs step
+# $ scp generated/age.key root@localhost:/etc/
+# $ git add generated
+# $ nixos-rebuild switch --fast --flake .#devm --target-host root@localhost --build-host root@localhost
+# $ git restore --staged generated
+#
