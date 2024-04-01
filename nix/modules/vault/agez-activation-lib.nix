@@ -5,8 +5,8 @@
 { config, lib, pkgs, ... }:
 let
   age = "${pkgs.age}/bin/age";
-  ageKey = config.odbox.vault.age.key;
-  ageDir = config.odbox.vault.age.dir;
+  ageKey = config.odbox.vault.agez.key;
+  ageDir = config.odbox.vault.agez.dir;
   locale = config.i18n.defaultLocale or "C";
   join = lib.strings.concatStringsSep "\n";
 in rec {

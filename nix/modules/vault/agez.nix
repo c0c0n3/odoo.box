@@ -3,22 +3,24 @@
 # Configure the vault with passwords and certificates extracted from
 # Age-encrypted files.
 #
+# Typically you'd want to use `odbox.vault.agenix` instead of this
+# module---see comments there about it.
+#
 { config, lib, pkgs, ... }:
 
 with lib;
 with types;
 
 {
-
   options = {
-    odbox.vault.age.enable = mkOption {
+    odbox.vault.agez.enable = mkOption {
       type = bool;
       default = false;
       description = ''
         Enable it to source vault secrets from Age-encrypted files.
       '';
     };
-    odbox.vault.age.key = mkOption {
+    odbox.vault.agez.key = mkOption {
       type = str;
       default = "/etc/age.key";
       description = ''
@@ -31,9 +33,9 @@ with types;
         the `specialfs` activation script runs.
       '';
     };
-    odbox.vault.age.dir = mkOption {
+    odbox.vault.agez.dir = mkOption {
       type = str;
-      default = "/run/age";
+      default = "/run/agez";
       description = ''
         Path to the base directory where to decrypt files. Ideally it
         should sit on a `tmpfs` filesystem so decrypted files get written
@@ -43,50 +45,12 @@ with types;
         script runs.
       '';
     };
-    odbox.vault.age.root-pwd = mkOption {
-      type = path;
-      default = abort "missing root password!";
-      description = ''
-        Age-encrypted file containing the root user's password hashed
-        in a way `chpasswd` can handle.
-      '';
-    };
-    odbox.vault.age.admin-pwd = mkOption {
-      type = path;
-      default = abort "missing admin password!";
-      description = ''
-        Age-encrypted file containing the admin user's password hashed
-        in a way `chpasswd` can handle.
-      '';
-    };
-    odbox.vault.age.odoo-admin-pwd = mkOption {
-      type = path;
-      default = abort "missing Odoo admin password!";
-      description = ''
-        Age-encrypted file containing the Odoo admin user's clear-text
-        password.
-      '';
-    };
-    odbox.vault.age.nginx-cert = mkOption {
-      type = path;
-      default = abort "missing Nginx's TLS certificate!";
-      description = ''
-        Age-encrypted file containing the Nginx's TLS certificate.
-      '';
-    };
-    odbox.vault.age.nginx-cert-key = mkOption {
-      type = path;
-      default = abort "missing Nginx's TLS certificate key! ";
-      description = ''
-        Age-encrypted file containing the Nginx's TLS certificate key.
-      '';
-    };
   };
 
   config = let
-    enabled = config.odbox.vault.age.enable;
-    dir = config.odbox.vault.age.dir;
-    activation = import ./age-activation-lib.nix {
+    enabled = config.odbox.vault.agez.enable;
+    dir = config.odbox.vault.agez.dir;
+    activation = import ./agez-activation-lib.nix {
         inherit config pkgs lib;
     };
 
