@@ -17,19 +17,22 @@
 # │  └── prod-cert.pem.age      # Age-encrypted prod pub cert
 # │  └── prod-key.pem           # imported prod cert key
 # │  └── prod-key.pem.age       # Age-encrypted prod cert key
-# └── passwords
-#    ├── admin                  # clear-text admin pwd (generated or entered)
-#    ├── admin.age              #   Age-encrypted clear-text pwd
-#    ├── admin.sha512           #   hashed pwd that `chpasswd` can handle
-#    ├── admin.sha512.age       #   Age-encrypted hashed pwd
-#    ├── odoo-admin             # clear-text Odoo admin pwd (generated or entered)
-#    ├── odoo-admin.age         #   Age-encrypted clear-text pwd
-#    ├── odoo-admin.sha512      #   hashed pwd that `chpasswd` can handle
-#    ├── odoo-admin.sha512.age  #   Age-encrypted hashed pwd
-#    ├── root                   # clear-text root pwd (generated or entered)
-#    ├── root.age               #   Age-encrypted clear-text pwd
-#    ├── root.sha512            #   hashed pwd that `chpasswd` can handle
-#    └── root.sha512.age        #   Age-encrypted hashed pwd
+# ├── passwords
+# │  ├── admin                  # clear-text admin pwd (generated or entered)
+# │  ├── admin.age              #   Age-encrypted clear-text pwd
+# │  ├── admin.sha512           #   hashed pwd that `chpasswd` can handle
+# │  ├── admin.sha512.age       #   Age-encrypted hashed pwd
+# │  ├── odoo-admin             # clear-text Odoo admin pwd (generated or entered)
+# │  ├── odoo-admin.age         #   Age-encrypted clear-text pwd
+# │  ├── odoo-admin.sha512      #   hashed pwd that `chpasswd` can handle
+# │  ├── odoo-admin.sha512.age  #   Age-encrypted hashed pwd
+# │  ├── root                   # clear-text root pwd (generated or entered)
+# │  ├── root.age               #   Age-encrypted clear-text pwd
+# │  ├── root.sha512            #   hashed pwd that `chpasswd` can handle
+# │  └── root.sha512.age        #   Age-encrypted hashed pwd
+# └── ssh
+#   ├── id_ed25519              # generated ED25519 identity
+#   └── id_ed25519.pub          # corresponding public key
 #
 # Notice `generated/age.key` contains the pub/private key pair to encrypt
 # and decrypt all the Age files.
@@ -118,6 +121,7 @@ batch_pwds=("${ROOT_PASSWORD}" "${ADMIN_PASSWORD}" "${ODOO_ADMIN_PASSWORD}")
 run_batch_mode() {
     make_dirs
     make_age_key
+    make_ssh_id
 
     for k in "${!pwd_files[@]}"; do
         make_password_files "${pwd_files[k]}" "${batch_pwds[k]}"
@@ -132,6 +136,7 @@ run_batch_mode() {
 run_interactive_mode() {
     make_dirs
     make_age_key
+    make_ssh_id
 
     for f in "${pwd_files[@]}"; do
         read -s -p "${f}'s password [leave empty to generate one]: " password

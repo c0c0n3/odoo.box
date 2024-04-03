@@ -8,8 +8,9 @@
 
 passwords_dir="${BASE_DIR}/passwords"
 certs_dir="${BASE_DIR}/certs"
+ssh_dir="${BASE_DIR}/ssh"
 age_key_file="${BASE_DIR}/age.key"
-
+ssh_id="${ssh_dir}/id_ed25519"
 
 #
 # Create the directories where to output all the generated files.
@@ -17,7 +18,25 @@ age_key_file="${BASE_DIR}/age.key"
 make_dirs() {
     mkdir -p "${passwords_dir}"
     mkdir -p "${certs_dir}"
+    mkdir -p "${ssh_dir}"
 }
+
+#
+# Generate an ED25519 key pair with no comment and passphrase.
+#
+make_ssh_id() {
+    ssh-keygen -t ed25519 -C '' -q -N '' -f "${ssh_id}"
+}
+# NOTE
+# ----
+# 1. Pub key. The above command generates a `.pub` key file with the
+# pub key in it. You can always extract the pub key from the private
+# with `ssh-keygen -y -f your_pvt_key`.
+# 2. OpenSSL. You could use OpenSSL to generate keys too. E.g.
+#   $ openssl genpkey -algorithm ed25519 -out id.pem
+#   $ openssl pkey -in id.pem -pubout -out id-pub.pem
+# But the pub key won't be in the same OpenSSH format, which is why
+# we use `ssh-keygen` instead.
 
 #
 # Generate an Age key (identity) to encrtypt/decrypt data.

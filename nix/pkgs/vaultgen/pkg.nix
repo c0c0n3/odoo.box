@@ -4,7 +4,7 @@
 # See `gen.sh` for the details of what the script does.
 #
 {
-  stdenv, lib, makeWrapper, openssl, age
+  stdenv, lib, makeWrapper, openssl, openssh, age
 }:
 let
   inherit (lib) makeBinPath;
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   src = ./.;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ openssl age ];
+  buildInputs = [ openssl openssh age ];
 
   installPhase = ''
     install -Dm755 gen.sh $out/bin/vaultgen

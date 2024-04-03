@@ -8,6 +8,7 @@
 #   on localhost.
 # - Passwords. Root and admin sys users as well as Odoo admin user
 #   get a generated password of 'abc123'.
+# - SSH keys. ED25519 identity and corresponding public key.
 #
 # We use `vaultgen` to generate all the above and put the content
 # of the `generated` dir in this package's root dir. See `vaultgen`
