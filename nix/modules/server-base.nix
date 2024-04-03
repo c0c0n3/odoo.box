@@ -43,7 +43,7 @@ with types;
     # Allow remote access through SSH, even for root.
     services.openssh = {
       enable = true;
-      settings.PermitRootLogin = "yes";                        # (1)
+      settings.PermitRootLogin = mkForce "yes";                # (1)
     };
 
     # Set up a firewall to let in only SSH and HTTP traffic.
@@ -71,3 +71,16 @@ with types;
 # the various workarounds suggested on the interwebs.
 # See:
 # - https://discourse.nixos.org/t/remote-nixos-rebuild-sudo-askpass-problem
+#
+# As a slight improvement, we could configure SSH to only let in root
+# through a password-less login with an SSH key. (Set `PermitRootLogin`
+# to `prohibit-password`.) But for now we'd like to keep the convenience.
+# Notice we've got to use `mkForce` because the AWS image expression sets
+# `PermitRootLogin` to `prohibit-password`:
+# # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/virtualisation/amazon-image.nix#L84
+# Since we'd also like to run on EC2 and to do that we need to import the
+# AWS image expression, we've got to force our setting to stop Nix from
+# moaning about
+# > The option `services.openssh.settings.PermitRootLogin' has conflicting
+# > definition values
+#
