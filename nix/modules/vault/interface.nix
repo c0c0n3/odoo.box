@@ -24,12 +24,30 @@ with types;
         can handle.
       '';
     };
+    odbox.vault.root-ssh-file = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        File containing the root user's SSH public key. If specified the
+        key gets added to the authorised SSH keys so the user can log in
+        through SSH with their private key instead of using a password.
+      '';
+    };
     odbox.vault.admin-pwd-file = mkOption {
       type = path;
       default = abort "missing admin password!";
       description = ''
         File containing the admin user's password hashed in a way `chpasswd`
         can handle.
+      '';
+    };
+    odbox.vault.admin-ssh-file = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        File containing the admin user's SSH public key. If specified the
+        key gets added to the authorised SSH keys so the user can log in
+        through SSH with their private key instead of using a password.
       '';
     };
     odbox.vault.odoo-admin-pwd-file = mkOption {
