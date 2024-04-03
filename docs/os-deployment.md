@@ -70,6 +70,9 @@ $ nixos-rebuild switch --fast --flake .#devm \
 
 # Enter the VM's root password when prompted—unless you changed the
 # default config, the password is `abc123`.
+# If you've configured the dev VM to use SSH keys, you could run
+# `NIX_SSHOPTS='-i path/to/id_ed25519' nixos-rebuild ...` instead
+# to avoid the password prompt.
 ```
 
 Now the Qemu VM runs the NixOS system declared in the local `flake.nix`
