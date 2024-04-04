@@ -90,7 +90,7 @@ encrypt() {
 #   the corresponding Age files will be `admin.age`, `admin.sha512.age`,
 #   and `admin.yesc.age`, respectively.
 # - Clear text password. The password to use. If none given, generate
-#   a strong one.
+#   a strong, memorable one.
 #
 make_password_files() {
     local file_name="$1"
@@ -98,7 +98,7 @@ make_password_files() {
     local base_file="${passwords_dir}/${file_name}"
 
     if [ -z "${clear_text}" ]; then
-      clear_text=$(openssl rand -base64 16)
+      clear_text=$(diceware)
     fi
     echo "${clear_text}" > "${base_file}"
     printf "${clear_text}" | mkpasswd -m sha-512 -s > "${base_file}.sha512"
