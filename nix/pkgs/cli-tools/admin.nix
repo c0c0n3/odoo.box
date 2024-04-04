@@ -75,9 +75,10 @@ in rec {
     jq
   ];
 
-  misc = ifLinux [
-    lesspipe
+  misc = [
     mkpasswd
+  ] ++ ifLinux [
+    lesspipe
   ];
 
   all = core ++ devices ++ disk ++ filesystem ++ processes ++ network ++

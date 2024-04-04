@@ -77,7 +77,7 @@ with types;
 # to `prohibit-password`.) But for now we'd like to keep the convenience.
 # Notice we've got to use `mkForce` because the AWS image expression sets
 # `PermitRootLogin` to `prohibit-password`:
-# # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/virtualisation/amazon-image.nix#L84
+# - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/virtualisation/amazon-image.nix#L84
 # Since we'd also like to run on EC2 and to do that we need to import the
 # AWS image expression, we've got to force our setting to stop Nix from
 # moaning about
