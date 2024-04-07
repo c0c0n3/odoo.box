@@ -40,8 +40,12 @@
 #   ├── id_ed25519              # generated ED25519 identity
 #   └── id_ed25519.pub          # corresponding public key
 #
-# Notice `generated/age.key` contains the pub/private key pair to encrypt
-# and decrypt all the Age files.
+# Notice `generated/age.key` contains the pub/private key pair (identity)
+# to encrypt and decrypt all the Age files. If the file already exist,
+# this script will use it to encrypt. This way you can easily encrypt
+# different passwords and certs with a previously generated Age identity.
+# Similarly, if the SSH identity file already exists, this script won't
+# override it with a newly generated one.
 #
 # There's a set of four password files for each built-in user: The NixOS
 # root and admin users as well as the Odoo Web UI admin. Each set incudes

@@ -22,10 +22,13 @@ make_dirs() {
 }
 
 #
-# Generate an ED25519 key pair with no comment and passphrase.
+# Generate an ED25519 key pair (identity) with no comment and passphrase.
+# Skip if the identity file already exists.
 #
 make_ssh_id() {
-    ssh-keygen -t ed25519 -C '' -q -N '' -f "${ssh_id}"
+    if [ ! -f "${ssh_id}" ]; then
+        ssh-keygen -t ed25519 -C '' -q -N '' -f "${ssh_id}"
+    fi
 }
 # NOTE
 # ----
@@ -39,10 +42,13 @@ make_ssh_id() {
 # we use `ssh-keygen` instead.
 
 #
-# Generate an Age key (identity) to encrtypt/decrypt data.
+# Generate an Age key (identity) to encrypt/decrypt data.
+# Skip if the identity file already exists.
 #
 make_age_key() {
-    age-keygen -o "${age_key_file}"
+    if [ ! -f "${age_key_file}" ]; then
+        age-keygen -o "${age_key_file}"
+    fi
 }
 
 #
@@ -98,7 +104,7 @@ make_password_files() {
     local base_file="${passwords_dir}/${file_name}"
 
     if [ -z "${clear_text}" ]; then
-      clear_text=$(diceware)
+        clear_text=$(diceware)
     fi
     echo "${clear_text}" > "${base_file}"
     printf "${clear_text}" | mkpasswd -m sha-512 -s > "${base_file}.sha512"
