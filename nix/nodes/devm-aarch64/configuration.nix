@@ -22,8 +22,8 @@
 
       # NOTE (1)
       # age = {
-      #   root-pwd = ./generated/passwords/root.sha512.age;
-      #   admin-pwd = ./generated/passwords/admin.sha512.age;
+      #   root-pwd = ./generated/passwords/root.yesc.age;
+      #   admin-pwd = ./generated/passwords/admin.yesc.age;
       #   odoo-admin-pwd = ./generated/passwords/odoo-admin.age;
       #   nginx-cert = ./generated/certs/localhost-cert.pem.age;
       #   nginx-cert-key = ./generated/certs/localhost-key.pem.age;
