@@ -7,6 +7,7 @@
 # listed below.
 #
 # generated
+# ├── .gitignore                # make git track only encrypted or pub files
 # ├── age.key                   # generated Age identity
 # ├── certs
 # │  ├── localhost-cert.pem     # generated localhost pub cert
@@ -82,6 +83,10 @@
 # encrypts the private key and writes it to a corresponding `.age`
 # file.
 #
+# Finally notice this script also generates a safety-net `.gitignore`
+# file. The file tells git to ignore any file this script may output
+# except for Age-encrypted and public key files.
+#
 # You can run this script in either interactive or batch mode. In
 # interactive mode, the script asks you to enter passwords for the
 # root, admin and Odoo admin users. If you don't enter a password
@@ -136,6 +141,7 @@ batch_pwds=("${ROOT_PASSWORD}" "${ADMIN_PASSWORD}" "${ODOO_ADMIN_PASSWORD}")
 # Run the script in batch mode.
 run_batch_mode() {
     make_dirs
+    make_gitignore
     make_age_key
     make_ssh_id
 
@@ -151,6 +157,7 @@ run_batch_mode() {
 # Run the script in interactive mode.
 run_interactive_mode() {
     make_dirs
+    make_gitignore
     make_age_key
     make_ssh_id
 

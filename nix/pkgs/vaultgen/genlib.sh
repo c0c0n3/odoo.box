@@ -160,3 +160,28 @@ import_cert_files() {
     encrypt "${certs_dir}/${cert_basename}"
     encrypt "${certs_dir}/${key_basename}"
 }
+
+make_gitignore() {
+    local age_identity=$(basename "${age_key_file}")
+    local certs=$(basename "${certs_dir}")
+    local passwords=$(basename "${passwords_dir}")
+    local ssh=$(basename "${ssh_dir}")
+
+    cat <<EOF > "${BASE_DIR}/.gitignore"
+# Ignore the Age identity
+/${age_identity}
+
+# Ignore everything in ${certs} except for Age-encrypted files.
+/${certs}/*
+!/${certs}/*.age
+
+# Ignore everything in ${passwords} except for Age-encrypted files.
+/${passwords}/*
+!/${passwords}/*.age
+
+# Ignore everything in ${ssh} except for public key files.
+/${ssh}/*
+!/${ssh}/*.pub
+
+EOF
+}
