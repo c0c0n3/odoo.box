@@ -20,17 +20,17 @@
       snakeoil.enable = true;
 
       # age = {
-      #   root-pwd = ./generated/passwords/root.yesc.age;
-      #   admin-pwd = ./generated/passwords/admin.yesc.age;
-      #   odoo-admin-pwd = ./generated/passwords/odoo-admin.age;
-      #   nginx-cert = ./generated/certs/localhost-cert.pem.age;
-      #   nginx-cert-key = ./generated/certs/localhost-key.pem.age;
+      #   root-pwd = ./vault/passwords/root.yesc.age;
+      #   admin-pwd = ./vault/passwords/admin.yesc.age;
+      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
+      #   nginx-cert = ./vault/certs/localhost-cert.pem.age;
+      #   nginx-cert-key = ./vault/certs/localhost-key.pem.age;
       # };
       # agez.enable = true;
       # agenix.enable = true;
 
-      root-ssh-file = ./id_rsa.pub;                            # (1)
-      admin-ssh-file = ./id_rsa.pub;                           # (1)
+      root-ssh-file = ./vault/ssh/id_rsa.pub;                  # (1)
+      admin-ssh-file = ./vault/ssh/id_rsa.pub;                 # (1)
     };
     service-stack.odoo-cpus = 4;
     swapfile = {
