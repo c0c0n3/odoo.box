@@ -53,16 +53,6 @@ with types;
         default = 1;
         description = "Number of CPUs available to run the Odoo server.";
       };
-      nginx-cert = mkOption {
-        type = path;
-        default = "${pkgs.odbox.localhost-cert}/cert.pem";
-        description = "Path to the server's TLS certificate.";
-      };
-      nginx-cert-key = mkOption {
-        type = path;
-        default = "${pkgs.odbox.localhost-cert}/key.pem";
-        description = "Path to the server's TLS certificate key.";
-      };
       domain = mkOption {
         type = str;
         default = "localhost";
@@ -99,7 +89,6 @@ with types;
     username = "odoo";
     cfg-file = import ./odoo-config.nix {
       inherit pkgs;
-      admin-pwd = "*";  # TODO should come from encrypted file---see age.
       db-name = config.odbox.service-stack.odoo-db-name;
       cpus = config.odbox.service-stack.odoo-cpus;
     };
@@ -107,12 +96,13 @@ with types;
     odoo-pkg = config.odbox.service-stack.odoo-package;
     svc = import ./odoo-svc.nix {
       inherit lib username postgres-pkg odoo-pkg cfg-file;
+      pwd-file = config.odbox.vault.odoo-admin-pwd-file;
       addons = config.odbox.service-stack.odoo-addons;
       bootstrap = config.odbox.service-stack.bootstrap-mode;
     };
     nginx = import ./nginx.nix {
-      sslCertificate = config.odbox.service-stack.nginx-cert;
-      sslCertificateKey = config.odbox.service-stack.nginx-cert-key;
+      sslCertificate = config.odbox.vault.nginx-cert;
+      sslCertificateKey = config.odbox.vault.nginx-cert-key;
       domain = config.odbox.service-stack.domain;              # (1)
     };
   in (mkIf enabled

@@ -1,0 +1,1 @@
+{ pkgs, vaultgen }: pkgs.callPackage ./pkg.nix { inherit vaultgen; }

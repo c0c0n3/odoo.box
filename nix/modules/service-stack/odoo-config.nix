@@ -5,13 +5,11 @@
 #
 # TODO email!!
 #
-{ pkgs, admin-pwd, db-name, cpus }:
+{ pkgs, db-name, cpus }:
 let
   ini = pkgs.formats.ini {};
   config = {
-    options = {
-      admin_passwd = admin-pwd;
-
+    options = {                                                # (1)
       db_name = db-name;
       dbfilter = ".*";
 
@@ -21,13 +19,21 @@ let
       limit_time_real = 1200;
 
       max_cron_threads = 1;
-      workers = cpus * 2 + 1;                                  # (1)
+      workers = cpus * 2 + 1;                                  # (2)
     };
   };
 in
   ini.generate "odoo.cfg" config
 
 # NOTE
-# 1. Performance. See:
+# ----
+# 1. Admin password. Never put the admin password here, e.g.
+#     admin_passwd = "my secret";
+# since the actual ini file gets generated in the Nix store.
+# The function to generate the Odoo systemd entry (`odoo-svc.nix`)
+# takes care of the password, making sure it won't wind up in the
+# Nix store.
+#
+# 2. Performance. See:
 # - https://www.odoo.com/documentation/14.0/administration/install/deploy.html#id5
 #

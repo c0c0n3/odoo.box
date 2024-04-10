@@ -75,12 +75,17 @@ in rec {
     jq
   ];
 
-  misc = ifLinux [
-    lesspipe
+  passwords = [
+    diceware
     mkpasswd
   ];
 
+  misc = ifLinux [
+    lesspipe
+  ];
+
   all = core ++ devices ++ disk ++ filesystem ++ processes ++ network ++
-        version-control ++ compression ++ text-processing ++ misc;
+        version-control ++ compression ++ text-processing ++ passwords ++
+        misc;
 
 }

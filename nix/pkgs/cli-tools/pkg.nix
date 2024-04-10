@@ -16,10 +16,10 @@
 #
 # That gets you the whole shebang.
 #
-{ pkgs }:
+{ pkgs, vaultgen }:
 let
   admin = import ./admin.nix { inherit pkgs; };
-  dev = import ./dev.nix { inherit pkgs; };
+  dev = import ./dev.nix { inherit pkgs vaultgen; };
 in rec {
 
   # Make a shell env with all the given programs.
