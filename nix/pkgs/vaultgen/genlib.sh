@@ -4,7 +4,7 @@
 # and TLS certificates. See functions below.
 #
 
-: "${BASE_DIR:=generated}"
+: "${BASE_DIR:=vault}"
 
 passwords_dir="${BASE_DIR}/passwords"
 certs_dir="${BASE_DIR}/certs"
