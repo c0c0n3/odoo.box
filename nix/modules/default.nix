@@ -1,8 +1,9 @@
 {
   imports = [
+    ./login
     ./os-base.nix
-    ./service-stack
     ./server-base.nix
+    ./service-stack
     ./swap-file.nix
     ./vault
   ];

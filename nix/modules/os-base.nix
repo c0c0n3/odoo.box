@@ -12,22 +12,18 @@
 #
 # Finally, this module configures users by
 # - only allowing to change users and groups through NixOS config;
-# - creating an admin (wheel) user with username 'admin' and setting its
-#   password to the hashed password specified through the vault module;
-# - setting the root password to the hashed password specified through
-#   the vault module;
-# - setting an SSH login key for the admin user if one was specified
-#   through the vault module;
-# - setting an SSH login key for the root user if one was specified
-#   through the vault module;
+# - creating an admin (wheel) user with username 'admin';
 # - letting wheel users run `sudo` without a password.
 #
 # Because wheel users don't have to enter a password to `sudo`, you
 # could have wheel users without passwords if you wanted to. In this
 # setup, a wheel user would be configured with an SSH key to log in
 # but no system password. Obviously, this kind of arrangement works
-# as long as those users only ever log in through SSH, which is why,
-# as a sane default, we also set root and admin passwords.
+# as long as those users only ever log in through SSH.
+#
+# Finally notice the `odbox.login` module takes care of setting up
+# access for the admin and root users.
+#
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -55,11 +51,6 @@ with types;
   config = let
     enabled = config.odbox.base.enable;
     tools = config.odbox.base.cli-tools;
-    admin-pwd = config.odbox.vault.admin-pwd-file;
-    admin-ssh = config.odbox.vault.admin-ssh-file;
-    root-pwd = config.odbox.vault.root-pwd-file;
-    root-ssh = config.odbox.vault.root-ssh-file;
-    maybe = key: if key == null then [] else [key];
   in (mkIf enabled
   {
     # Enable Flakes.
@@ -86,17 +77,12 @@ with types;
       isNormalUser = true;
       group = "users";
       extraGroups = [ "wheel" ];
-      hashedPasswordFile = admin-pwd;
-      openssh.authorizedKeys.keyFiles = maybe admin-ssh;
-    };
-    users.users.root = {
-      hashedPasswordFile = root-pwd;
-      openssh.authorizedKeys.keyFiles = maybe root-ssh;
     };
 
     # Let wheel users run `sudo` without a password.
     security.sudo.wheelNeedsPassword = false;
   });
+
 }
 # NOTE
 # ----
