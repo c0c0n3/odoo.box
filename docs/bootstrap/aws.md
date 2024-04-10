@@ -14,7 +14,7 @@ $ NIX_SSHOPTS='-i nodes/ec2-aarch64/vault/ssh/id_rsa' \
 ```
 
 ```bash
-$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/odoo-dump.sql root@:34.254.91.221/tmp/
+$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/odoo-dump.sql root@34.254.91.221:/tmp/
 $ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/filestore.tgz root@34.254.91.221:/tmp/
 $ ssh -i nodes/ec2-aarch64/vault/ssh/id_rsa root@34.254.91.221
 $ cd /tmp
