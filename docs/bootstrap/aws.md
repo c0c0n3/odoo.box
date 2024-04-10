@@ -10,13 +10,13 @@ $ cd odoo.box/nix
 $ nix shell
 $ NIX_SSHOPTS='-i nodes/ec2-aarch64/vault/ssh/id_rsa' \
   nixos-rebuild switch --fast --flake .#ec2-boot \
-      --target-host root@34.244.18.124 --build-host root@34.244.18.124
+      --target-host root@34.254.91.221 --build-host root@34.254.91.221
 ```
 
 ```bash
-$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/odoo-dump.sql root@:34.244.18.124/tmp/
-$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/filestore.tgz root@34.244.18.124:/tmp/
-$ ssh -i nodes/ec2-aarch64/vault/ssh/id_rsa root@34.244.18.124
+$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/odoo-dump.sql root@:34.254.91.221/tmp/
+$ scp -i nodes/ec2-aarch64/vault/ssh/id_rsa ../_tmp/filestore.tgz root@34.254.91.221:/tmp/
+$ ssh -i nodes/ec2-aarch64/vault/ssh/id_rsa root@34.254.91.221
 $ cd /tmp
 ```
 
@@ -37,5 +37,5 @@ $ cd odoo.box/nix
 $ nix shell
 $ NIX_SSHOPTS='-i nodes/ec2-aarch64/vault/ssh/id_rsa' \
   nixos-rebuild switch --fast --flake .#ec2 \
-      --target-host root@34.244.18.124 --build-host root@34.244.18.124
+      --target-host root@34.254.91.221 --build-host root@34.254.91.221
 ```

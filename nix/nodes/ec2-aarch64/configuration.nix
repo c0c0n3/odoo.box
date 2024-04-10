@@ -1,7 +1,7 @@
 #
 # NixOS config to define the on-demand EC2 Graviton VM (c6g.xlarge):
-# - public FQDN: ec2-34-244-18-124.eu-west-1.compute.amazonaws.com
-# - hostname: ip-172-31-7-116.eu-west-1.compute.internal
+# - public FQDN: ec2-34-254-91-221.eu-west-1.compute.amazonaws.com
+# - hostname: ip-172-31-3-61.eu-west-1.compute.internal
 #
 # Notice this is the main config with the full Odoo service stack.
 #
