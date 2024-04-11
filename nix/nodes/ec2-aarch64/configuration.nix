@@ -1,7 +1,7 @@
 #
-# NixOS config to define the on-demand EC2 Graviton VM (c6g.xlarge):
-# - public FQDN: ec2-34-254-91-221.eu-west-1.compute.amazonaws.com
-# - hostname: ip-172-31-3-61.eu-west-1.compute.internal
+# NixOS config to define the on-demand EC2 Graviton VM.
+# We tested this config works on: m6g.xlarge, m6g.2xlarge, c6g.xlarge,
+# c6g.2xlarge, and t4g.2xlarge.
 #
 # Notice this is the main config with the full Odoo service stack.
 #
@@ -10,7 +10,11 @@
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
   ec2.efi = true;
 
-  # hostname automatically set, so we leave it be.
+  # The `amazon-image` module automatically sets the hostname from
+  # dynamically retrieved EC2 metadata, so we leave it be. Those
+  # EC2 hostnames all follow the same pattern:
+  #     <addr>.<region>.compute.internal
+  # e.g. `ip-172-31-3-61.eu-west-1.compute.internal`.
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "23.11";
 
