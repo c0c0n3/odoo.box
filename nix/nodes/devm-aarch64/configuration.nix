@@ -23,18 +23,18 @@
 
       # NOTE (1)
       # age = {
-      #   root-pwd = ./generated/passwords/root.yesc.age;
-      #   admin-pwd = ./generated/passwords/admin.yesc.age;
-      #   odoo-admin-pwd = ./generated/passwords/odoo-admin.age;
-      #   nginx-cert = ./generated/certs/localhost-cert.pem.age;
-      #   nginx-cert-key = ./generated/certs/localhost-key.pem.age;
+      #   root-pwd = ./vault/passwords/root.yesc.age;
+      #   admin-pwd = ./vault/passwords/admin.yesc.age;
+      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
+      #   nginx-cert = ./vault/certs/localhost-cert.pem.age;
+      #   nginx-cert-key = ./vault/certs/localhost-key.pem.age;
       # };
       # agez.enable = true;
       # agenix.enable = true;
 
       # NOTE (2)
-      # root-ssh-file = ./generated/ssh/id_ed25519.pub;
-      # admin-ssh-file = ./generated/ssh/id_ed25519.pub;
+      # root-ssh-file = ./vault/ssh/id_ed25519.pub;
+      # admin-ssh-file = ./vault/ssh/id_ed25519.pub;
     };
     swapfile = {
       enable = true;
@@ -53,11 +53,11 @@
 # $ cd nodes/devm-aarch64/
 # $ vaultgen
 #   # make script generate everything, skip prod certs step
-# $ scp generated/age.key root@localhost:/etc/
-# $ git add generated
+# $ scp vault/age.key root@localhost:/etc/
+# $ git add vault
 # $ nixos-rebuild switch --fast --flake .#devm \
 #       --target-host root@localhost --build-host root@localhost
-# $ git restore --staged generated
+# $ git restore --staged vault
 #
 # 2. Testing SSH keys. First comment in the `vault.root-ssh-file` and
 # `vault.admin-ssh-file` options. Then
@@ -66,13 +66,13 @@
 # $ cd nodes/devm-aarch64/
 # $ vaultgen
 #   # make script generate everything, skip prod certs step
-# $ git add generated/ssh/id_ed25519.pub
+# $ git add vault/ssh/id_ed25519.pub
 # $ nixos-rebuild switch --fast --flake .#devm \
 #       --target-host root@localhost --build-host root@localhost
-# $ git restore --staged generated
+# $ git restore --staged vault
 # Now try logging in through SSH using the generated SSH identity:
-# $ ssh root@localhost -i generated/ssh/id_ed25519
-# $ ssh admin@localhost -i generated/ssh/id_ed25519
+# $ ssh root@localhost -i vault/ssh/id_ed25519
+# $ ssh admin@localhost -i vault/ssh/id_ed25519
 #
 # 3. Testing cloud login. Comment out the `login.mode` option so you
 # get the default login mode which is the cloud mode. Then follow the
@@ -81,7 +81,7 @@
 # login mode, comment back in the `login.mode` option, comment out the
 # `*-ssh-file` option, cd to the base `nix` dir and then redeploy using
 # the current SSH identity:
-# $ NIX_SSHOPTS='-i nodes/devm-aarch64/generated/ssh/id_ed25519' \
+# $ NIX_SSHOPTS='-i nodes/devm-aarch64/vault/ssh/id_ed25519' \
 #   nixos-rebuild switch --fast --flake .#devm \
 #       --target-host root@localhost --build-host root@localhost
 #

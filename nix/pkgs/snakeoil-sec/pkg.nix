@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
 
     installPhase = ''
       mkdir -p $out
-      mv generated/* $out/
+      mv vault/* $out/
     '';                                                       # (2)
 }
 # NOTE

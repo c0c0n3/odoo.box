@@ -3,10 +3,10 @@
 
 #
 # Generate `odbox.vault` secrets.
-# This script typically creates a `generated` directory with the files
+# This script typically creates a `vault` directory with the files
 # listed below.
 #
-# generated
+# vault
 # ├── .gitignore                # make git track only encrypted or pub files
 # ├── age.key                   # generated Age identity
 # ├── certs
@@ -41,7 +41,7 @@
 #   ├── id_ed25519              # generated ED25519 identity
 #   └── id_ed25519.pub          # corresponding public key
 #
-# Notice `generated/age.key` contains the pub/private key pair (identity)
+# Notice `vault/age.key` contains the pub/private key pair (identity)
 # to encrypt and decrypt all the Age files. If the file already exist,
 # this script will use it to encrypt. This way you can easily encrypt
 # different passwords and certs with a previously generated Age identity.
@@ -79,7 +79,7 @@
 # valid, RSA SSL certificate in PEM format. This certificate is for
 # the localhost CN by default, but you can change the CN to something
 # else---see below. This script can also import the prod pub cert and
-# private key into the `generated/certs` directory. On importing, it
+# private key into the `vault/certs` directory. On importing, it
 # encrypts the private key and writes it to a corresponding `.age`
 # file.
 #
@@ -107,9 +107,9 @@
 # - `DOMAIN`. CN for the self-signed cert. Defaults to localhost if
 #   not set.
 # - `PROD_CERT`. Path to a prod public certificate file to copy over
-#   to `generated/certs`. Don't set, if you don't have a cert.
+#   to `vault/certs`. Don't set, if you don't have a cert.
 # - `PROD_CERT_KEY`. Path to the corresponding key file to copy over
-#   to `generated/certs`. Don't set, if you don't have a cert.
+#   to `vault/certs`. Don't set, if you don't have a cert.
 #
 # Notice the script will start in interactive mode unless you set
 # the `BATCH_MODE` env var to `1`. Here's an example batch mode
