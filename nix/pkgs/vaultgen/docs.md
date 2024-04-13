@@ -128,7 +128,7 @@ invocation with all the parameters set
 $ BATCH_MODE=1 \
   ROOT_PASSWORD=abc123 ADMIN_PASSWORD=xy ODOO_ADMIN_PASSWORD=123 \
   PROD_CERT=c.pem PROD_CERT_KEY=k.pem \
- ./vaultgen
+  vaultgen
 ```
 
 
