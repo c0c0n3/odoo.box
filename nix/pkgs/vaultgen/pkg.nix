@@ -1,7 +1,5 @@
 #
-# Nixify the script to generate `odbox.vault` secrets.
-# Tie the script to the `vaultgen` command.
-# See `gen.sh` for the details of what the script does.
+# See `docs.md` for package documentation.
 #
 {
   stdenv, lib, makeWrapper, openssl, openssh, age, mkpasswd, diceware
