@@ -38,7 +38,7 @@ to cloud. Your dev VM vault config should be similar to this
 
 ```nix
 odbox = {
-  login.mode = "standard";
+  login.mode = "cloud";
   vault = {
     snakeoil.enable = true;
     root-ssh-file = ./vault/ssh/id_ed25519.pub;
