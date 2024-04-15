@@ -1,18 +1,5 @@
 #
-# Service stack to run Odoo.
-#
-# This module configures the whole service stack to run Odoo on a
-# single machine:
-# - Odoo multi-processing server (including LiveChat gevent process)
-# - Odoo addons
-# - Systemd service to run Odoo (including `odoo` sys user)
-# - Non-network Postgres DB backend (Odoo connects on Unix sockets)
-# - Nginx TLS reverse proxy to expose Odoo to the internet
-#
-# Notice this module comes with a bootstrap option to migrate an Odoo
-# DB and file store from another Odoo server. Also, this module makes
-# psql and the Odoo CLI available system-wide to help with maintenance
-# tasks.
+# See `docs.md` for module documentation.
 #
 { config, lib, pkgs, ... }:
 
