@@ -1,11 +1,5 @@
 #
-# Snake oil vault.
-# Configure the vault with clear-text passwords and certs for testing
-# with the dev VM. The values come from the snake oil security package,
-# see there for the details.
-#
-# WARNING: only ever enable this module for testing locally with the
-# dev VM.
+# See `docs.md` for module documentation.
 #
 { config, lib, pkgs, ... }:
 

@@ -20,7 +20,9 @@ admin users
 
 Then it makes SSH + identity key the only way to log in.
 
+
 ### Standard mode
+
 On the other hand, in standard mode, this module configures each
 of these two users by
 - setting the user's password to the respective hashed password

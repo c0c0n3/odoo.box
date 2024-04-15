@@ -1,12 +1,5 @@
 #
-# Agenix-backed vault.
-# Configure the vault with passwords and certificates extracted from
-# Age-encrypted files.
-#
-# Notice Agenix is a better and more flexible solution than the one
-# we developed ourselves---see `odbox.vault.age`. So you should use
-# Agenix and only resort to `odbox.vault.age` if you need to debug
-# something. (In fact, that's the reason why we developed it.)
+# See `docs.md` for module documentation.
 #
 { config, lib, pkgs, ... }:
 

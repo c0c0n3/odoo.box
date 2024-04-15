@@ -1,10 +1,5 @@
 #
-# Age-backed vault.
-# Configure the vault with passwords and certificates extracted from
-# Age-encrypted files.
-#
-# Typically you'd want to use `odbox.vault.agenix` instead of this
-# module---see comments there about it.
+# See `docs.md` for module documentation.
 #
 { config, lib, pkgs, ... }:
 
