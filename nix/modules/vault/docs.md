@@ -17,7 +17,7 @@ extracting the needed secrets.
 
 Age-backed vault. This module configures the vault with passwords
 and certificates extracted from Age-encrypted files. You specify
-which Age-encrypted files to use through the `odbox.vault.age.*`
+which Age-encrypted files to use through the [odbox.vault.age][age-files]
 options and deploy the Age identity file to the target machine at
 `/etc/age.key`—this is the default path where Agez expects the file
 to be, but you can change it with the `odbox.vault.agez.key` option.
@@ -39,8 +39,8 @@ First off you need to prep the secrets you'd like to use. Typically
 you do that by running the [vaultgen][vaultgen] command, but there's
 nothing stopping you from doing it in any other way you fancy. Once
 you have generated Age-encrypted files, you tell Agez where to find
-them using the `odbox.vault.age.*` options and then enable the Agez
-implementation as in the example below.
+them using the [odbox.vault.age][age-files] options and then enable
+the Agez implementation as in the example below.
 
 ```nix
 odbox = {
@@ -71,7 +71,7 @@ $ scp vault/age.key root@target.machine:/etc/
 
 Agenix-backed vault. This module configures the vault with passwords
 and certificates extracted from Age-encrypted files. You specify
-which Age-encrypted files to use through the `odbox.vault.age.*`
+which Age-encrypted files to use through the [odbox.vault.age][age-files]
 options and deploy the Age identity file to the target machine at
 `/etc/age.key`—this is the default path where Agez expects the file
 to be, but you can change it with the `odbox.vault.agenix.key` option.
@@ -91,8 +91,8 @@ First off you need to prep the secrets you'd like to use. Typically
 you do that by running the [vaultgen][vaultgen] command, but there's
 nothing stopping you from doing it in any other way you fancy. Once
 you have generated Age-encrypted files, you tell Agenix where to find
-them using the `odbox.vault.age.*` options and then enable the Agenix
-implementation as in the example below.
+them using the [odbox.vault.age][age-files] options and then enable
+the Agenix implementation as in the example below.
 
 ```nix
 odbox = {
@@ -142,6 +142,7 @@ them from the [snake oil security package][snake].
 
 
 
+[age-files]: ./age-files.nix
 [iface]: ./interface.nix
 [snake]: ../../pkgs/snakeoil-sec/docs.md
 [vaultgen]: ../../pkgs/vaultgen/docs.md
