@@ -20,6 +20,18 @@ admin users
 
 Then it makes SSH + identity key the only way to log in.
 
+#### Example usage
+
+```nix
+odbox = {
+  login.mode = "cloud";    # default, can omit if you like
+  vault = {
+    root-ssh-file = ./path/to/root/id_ed25519.pub;
+    admin-ssh-file = ./path/to/admin/id_ed25519.pub;
+  };
+};
+```
+
 
 ### Standard mode
 
@@ -34,6 +46,19 @@ and then lets users log in both through TTY and SSH using their
 passwords, or, in the case of SSH, their SSH identity if one was
 set in the [vault][vault] module.
 
+#### Example usage
+
+```nix
+odbox = {
+  login.mode = "standard";
+  vault = {
+    snakeoil.enable = true;    # can use Agez or Agenix instead
+    # omit keys if you don't care about SSH key login
+    root-ssh-file = ./vault/ssh/id_ed25519.pub;
+    admin-ssh-file = ./vault/ssh/id_ed25519.pub;
+  };
+};
+```
 
 
 
