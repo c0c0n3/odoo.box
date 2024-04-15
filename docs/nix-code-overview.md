@@ -96,7 +96,7 @@ We've developed the following Nix packages:
 [nix-dir]: ../nix/
 [odoo]: ../nix/pkgs/odoo-14/docs.md
 [os-base]: ../nix/modules/os-base.nix
-[snakeoil-sec]
+[snakeoil-sec]: ../nix/pkgs/snakeoil-sec/docs.md
 [svc-stack]: ../nix/modules/service-stack/docs.md
 [svr-base]: ../nix/modules/server-base.nix
 [swap]: ../nix/modules/swap-file.nix
