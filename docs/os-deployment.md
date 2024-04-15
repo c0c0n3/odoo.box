@@ -1,4 +1,4 @@
-NixOS deployment
+NixOS Deployment
 ----------------
 > Nix's GitOps' best buddy!
 

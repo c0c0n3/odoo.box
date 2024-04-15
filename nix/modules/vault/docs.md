@@ -22,7 +22,7 @@ options and deploy the Age identity file to the target machine at
 `/etc/age.key`—this is the default path where Agez expects the file
 to be, but you can change it with the `odbox.vault.agez.key` option.
 On NixOS config deployment, Agez uses the given Age identity to decrypt
-your secrets on a `tempfs` file system so other modules can access
+your secrets on a `tmpfs` file system so other modules can access
 them but they never wind up in permanent storage. Also Agez assigns
 proper permissions so only the users who actually need the secrets
 have access to them.
@@ -76,7 +76,7 @@ options and deploy the Age identity file to the target machine at
 `/etc/age.key`—this is the default path where Agez expects the file
 to be, but you can change it with the `odbox.vault.agenix.key` option.
 On NixOS config deployment, Agenix uses the given Age identity to
-decrypt your secrets on a `tempfs` file system so other modules can
+decrypt your secrets on a `tmpfs` file system so other modules can
 access them but they never wind up in permanent storage. Also Agenix
 assigns proper permissions so only the users who actually need the
 secrets have access to them.
