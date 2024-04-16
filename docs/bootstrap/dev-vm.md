@@ -224,8 +224,38 @@ qemu-system-aarch64 \
 ```
 
 
+### Odoo
+
+With a freshly minted NixOS VM in our hands, installing our Odoo
+stack is a no brainer. All you need to do is deploy the `devm` NixOS
+config our Flake provides. Assuming you have the VM running in its
+own terminal, open a new terminal and run
+
+```bash
+$ cd odoo.box/nix
+$ nix shell
+$ nixos-rebuild switch --fast --flake .#devm \
+    --target-host root@localhost --build-host root@localhost
+```
+
+The last command deploys the `devm` NixOS config to the NixOS host
+you specify—`localhost` in this case, but it could be a remote host
+too, see [NixOS Deployment][deploy] for the details. This deployment
+will take a while because under the bonnet Nix will have to build a
+lot of packages from source—some of the Odoo deps aren't included in
+the Nix binary cache. Anyway, at the end of the process, you'll have
+a fully-fledged Odoo server with all the bells and whistles.
+
+After getting familiar with your new server, you may want to load it
+with prod data so you can experiment with a realistic set-up. Follow
+the steps in [Loading Odoo Data][odoo] to turn your VM in almost an
+exact prod clone.
 
 
+
+
+[deploy]: ../os-deployment.md
 [dev-env]: ../dev-env.md
 [nixos-anywhere]: https://github.com/numtide/nixos-anywhere
+[odoo]: ./odoo-data.md
 [qemu-snippets]: ../qemu.md
