@@ -1,20 +1,5 @@
 #
-# CLI tools to manage a Linux "odoo.box" machine as well as tools to
-# develop "odoo.box". There's two shells you can use:
-#
-# - linux-admin-shell: widely-used Linux sys-admin tools.
-# - dev-shell: dev tools.
-#
-# The dev shell is the default package, so `nix shell` will drop you
-# into a shell with the tools you need to develop "odoo.box". The admin
-# shell contains all the sys admin tools we install on "odoo.box".
-#
-# If you're on MacOS and would also like to get (most of) the admin
-# tools with your dev shell, just run
-#
-# $ nix shell .#dev-shell .#linux-admin-shell
-#
-# That gets you the whole shebang.
+# See `docs.md` for package documentation.
 #
 { pkgs, vaultgen }:
 let

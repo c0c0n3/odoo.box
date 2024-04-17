@@ -44,44 +44,10 @@
 }
 # NOTE
 # ----
-# 1. Testing Age decryption. First comment out the `vault.snakeoil`
-# option and comment in the `vault.age` stanza. Then comment in
-# either the `vault.agez` or `vault.agenix` option, depending on
-# which module you want to test. After that
-# $ cd odoo.box/nix
-# $ nix shell
-# $ cd nodes/devm-aarch64/
-# $ vaultgen
-#   # make script generate everything, skip prod certs step
-# $ scp vault/age.key root@localhost:/etc/
-# $ git add vault
-# $ nixos-rebuild switch --fast --flake .#devm \
-#       --target-host root@localhost --build-host root@localhost
-# $ git restore --staged vault
-#
-# 2. Testing SSH keys. First comment in the `vault.root-ssh-file` and
-# `vault.admin-ssh-file` options. Then
-# $ cd odoo.box/nix
-# $ nix shell
-# $ cd nodes/devm-aarch64/
-# $ vaultgen
-#   # make script generate everything, skip prod certs step
-# $ git add vault/ssh/id_ed25519.pub
-# $ nixos-rebuild switch --fast --flake .#devm \
-#       --target-host root@localhost --build-host root@localhost
-# $ git restore --staged vault
-# Now try logging in through SSH using the generated SSH identity:
-# $ ssh root@localhost -i vault/ssh/id_ed25519
-# $ ssh admin@localhost -i vault/ssh/id_ed25519
-#
-# 3. Testing cloud login. Comment out the `login.mode` option so you
-# get the default login mode which is the cloud mode. Then follow the
-# same procedure as in NOTE #2 above. Also, password logins (either at
-# the TTY or through SSH) will fail. Finally, to get back to standard
-# login mode, comment back in the `login.mode` option, comment out the
-# `*-ssh-file` option, cd to the base `nix` dir and then redeploy using
-# the current SSH identity:
-# $ NIX_SSHOPTS='-i nodes/devm-aarch64/vault/ssh/id_ed25519' \
-#   nixos-rebuild switch --fast --flake .#devm \
-#       --target-host root@localhost --build-host root@localhost
+# 1. Testing Age decryption. See the *Age Secrets* section of the
+# *Vault and Login Configs* docs.
+# 2. Testing SSH keys. See the *SSH Keys* section of the
+# *Vault and Login Configs* docs.
+# 3. Testing cloud login. See the *Cloud Login* section of the
+# *Vault and Login Configs* docs.
 #

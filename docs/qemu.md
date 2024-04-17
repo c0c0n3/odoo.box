@@ -1,4 +1,4 @@
-Qemu snippets
+Qemu Snippets
 -------------
 > Copy-paste if you like but don't forget to read up about Qemu!
 

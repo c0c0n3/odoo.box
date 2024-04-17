@@ -1,9 +1,5 @@
 #
-# Martel's Odoo addons collection.
-# This package provides the source of each addon Martel uses in prod.
-# Sources are conveniently laid out in the package output dir so you
-# can simply add the output dir to your Odoo server's addons path to
-# make them available to the server.
+# See `docs.md` for package documentation.
 #
 {
     stdenv, fetchFromGitHub

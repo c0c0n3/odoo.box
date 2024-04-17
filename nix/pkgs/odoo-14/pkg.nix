@@ -1,7 +1,5 @@
 #
-# Odoo 14 package. There's no 14 package in Nixpkgs so we've got to build
-# our own. We take version 15 as a starting point and then tweak as needed:
-# - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/applications/finance/odoo/odoo15.nix
+# See `docs.md` for package documentation.
 #
 {
   lib, stdenv, fetchzip, fetchFromGitHub,

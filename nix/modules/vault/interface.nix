@@ -1,13 +1,5 @@
 #
-# This module groups together all our password and TLS settings.
-# Other modules read the values this module config holds to set up
-# passwords, TLS, etc. for services and users. As such, this module
-# defines an interface to access secrets.
-#
-# Typically, you don't set directly yourself the options this module
-# defines. Rather you enable one of the implementation modules (snake
-# oil, age, etc.) which actually set this module's options after
-# retrieving and extracting the needed secrets.
+# See `docs.md` for module documentation.
 #
 { config, lib, pkgs, ... }:
 
