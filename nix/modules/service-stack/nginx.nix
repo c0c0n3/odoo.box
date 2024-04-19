@@ -1,9 +1,11 @@
 #
 # Generate the NixOS systemd entry for the Nginx service.
 # We start off with the Nginx SSL example config in the Odoo 14 docs
-# and then bolt on recommended Nginx settings.
+# and then bolt on recommended Nginx settings. Then we do the same
+# for PgAdmin.
 # See:
 # - https://www.odoo.com/documentation/14.0/administration/install/deploy.html#https
+# - https://www.pgadmin.org/docs/pgadmin4/8.5/server_deployment.html
 #
 { sslCertificate, sslCertificateKey, domain }:
 {
@@ -38,6 +40,9 @@
       odoochat.servers = {
         "127.0.0.1:8072" = {};
       };
+      pgadmin.servers = {
+        "127.0.0.1:5050" = {};
+      };
     };
 
     virtualHosts."${domain}" = {
@@ -63,6 +68,21 @@
             proxy_redirect off;
           '';
         };
+        "/pgadmin" = {                                         # (1)
+          proxyPass = "http://pgadmin";
+          extraConfig = ''
+            proxy_set_header X-Script-Name /pgadmin;
+          '';
+        };
       };
   };
 }
+# NOTE
+# ----
+# 1. Proxing PgAdmin. Our setup is conceptually the same as the one
+# the PgAdmin docs recommend, but not exactly the same in terms of
+# implementation. We skip `include proxy_params` since we already
+# turned on `recommendedProxySettings` for the whole server. Plus,
+# traffic is over the loopback interface instead of a Unix socket.
+# Same same but different.
+#
