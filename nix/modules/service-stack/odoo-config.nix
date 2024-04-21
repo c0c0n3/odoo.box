@@ -5,12 +5,12 @@
 #
 # TODO email!!
 #
-{ pkgs, db-name, cpus }:
+{ pkgs, odoo-db, cpus }:
 let
   ini = pkgs.formats.ini {};
   config = {
     options = {                                                # (1)
-      db_name = db-name;
+      db_name = odoo-db;
       dbfilter = ".*";
 
       proxy_mode = true;

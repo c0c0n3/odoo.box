@@ -73,24 +73,36 @@ with types;
 
   config = let
     enabled = config.odbox.service-stack.enable;
-    username = "odoo";
-    cfg-file = import ./odoo-config.nix {
-      inherit pkgs;
-      db-name = config.odbox.service-stack.odoo-db-name;
-      cpus = config.odbox.service-stack.odoo-cpus;
-    };
+
+    # User and DB names.
+    odoo-usr = "odoo";                                         # (2)
+    odoo-db = config.odbox.service-stack.odoo-db-name;
+    pgadmin-usr = "pgadmin";                                   # (2)
+    pgadmin-db = "pgadmin";                                    # (2)
+
+    # Packages.
     postgres-pkg = config.services.postgresql.package;
-    postgres = import ./postgres.nix {
-      odoo-user = username;
+    odoo-pkg = config.odbox.service-stack.odoo-package;
+
+    # DB.
+    db-init = import ./db-init.nix {
+      inherit odoo-usr odoo-db pgadmin-usr pgadmin-db;
     };
     pgadmin = import ./pgadmin.nix {};
-    odoo-pkg = config.odbox.service-stack.odoo-package;
+
+    # Odoo.
+    cfg-file = import ./odoo-config.nix {
+      inherit pkgs odoo-db;
+      cpus = config.odbox.service-stack.odoo-cpus;
+    };
     svc = import ./odoo-svc.nix {
-      inherit lib username postgres-pkg odoo-pkg cfg-file;
+      inherit lib odoo-usr postgres-pkg odoo-pkg cfg-file;
       pwd-file = config.odbox.vault.odoo-admin-pwd-file;
       addons = config.odbox.service-stack.odoo-addons;
       bootstrap = config.odbox.service-stack.bootstrap-mode;
     };
+
+    # Nginx.
     nginx = import ./nginx.nix {
       sslCertificate = config.odbox.vault.nginx-cert;
       sslCertificateKey = config.odbox.vault.nginx-cert-key;
@@ -99,24 +111,33 @@ with types;
   in (mkIf enabled
   {
     # Set up the Odoo system user with no privileges.
-    users.users."${username}" = {
+    users.users."${odoo-usr}" = {
       isSystemUser = true;
-      group = username;
+      group = odoo-usr;
     };
-    users.groups."${username}" = {};
+    users.groups."${odoo-usr}" = {};
 
     # Start the Odoo server as a systemd service running under the
     # Odoo system user. The Odoo server gets configured with the
     # above config file and loads the given addons. The service's
-    # home will be `/var/lib/${username}`.
-    systemd.services."${username}" = svc;
+    # home will be `/var/lib/${odoo-usr}`.
+    systemd.services."${odoo-usr}" = svc;
 
     # Run Nginx as a reverse proxy for Odoo.
     services.nginx = nginx;
 
-    # Run Postgres with the roles and DBs we need for Odoo and
-    # PgAdmin.
-    services.postgresql = postgres;
+    # Run Postgres with the security and DBs we need for Odoo and
+    # PgAdmin. Notice our DB init script gets merged with the
+    # post-start one of the NixOS Postgres service and executed
+    # after it. This is cool as the original post-start script
+    # waits for Postgres to be up and running.
+    services.postgresql = {
+      enable = true;
+      authentication = lib.mkForce ''
+        local all all              peer
+      '';
+    };
+    systemd.services.postgresql.postStart = db-init;
 
     # Run PgAdmin with a built-in connection to the Odoo DB and only
     # R/W perms on Odoo tables, plus read access to Postgres stats.
@@ -139,4 +160,8 @@ with types;
 # - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
 # - https://nixos.wiki/wiki/Nginx
 # - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
+#
+# 2. Hardcoded user and DB names. We could make them configurable
+# thru module options if ever needed. But for now we don't since
+# it's more effort than is worth it.
 #

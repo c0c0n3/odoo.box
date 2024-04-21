@@ -13,7 +13,7 @@
   # Nixpkgs lib.
   lib,
   # Odoo system username.
-  username,
+  odoo-usr,
   # Postgres package where Odoo can get `psql` from.
   postgres-pkg,
   # Odoo package to use.
@@ -64,7 +64,7 @@ in {
 
   serviceConfig = {
     DynamicUser = true;
-    User = username;
-    StateDirectory = username;
+    User = odoo-usr;
+    StateDirectory = odoo-usr;
   };
 }
