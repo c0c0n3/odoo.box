@@ -80,6 +80,10 @@ with types;
       cpus = config.odbox.service-stack.odoo-cpus;
     };
     postgres-pkg = config.services.postgresql.package;
+    postgres = import ./postgres.nix {
+      odoo-user = username;
+    };
+    pgadmin = import ./pgadmin.nix {};
     odoo-pkg = config.odbox.service-stack.odoo-package;
     svc = import ./odoo-svc.nix {
       inherit lib username postgres-pkg odoo-pkg cfg-file;
@@ -110,17 +114,13 @@ with types;
     # Run Nginx as a reverse proxy for Odoo.
     services.nginx = nginx;
 
-    # Start Postgres and create a DB user with the same username as
-    # the Odoo system user. This way the Odoo service, which runs
-    # under the Odoo system user, can connect to Postgres on the
-    # Unix socket. Notice we don't create an Odoo DB since most
-    # likely you'd want to import your own.
-    services.postgresql = {
-      enable = true;
-      ensureUsers = [{
-        name = username;
-      }];
-    };
+    # Run Postgres with the roles and DBs we need for Odoo and
+    # PgAdmin.
+    services.postgresql = postgres;
+
+    # Run PgAdmin with a built-in connection to the Odoo DB and only
+    # R/W perms on Odoo tables, plus read access to Postgres stats.
+    services.pgadmin = pgadmin;
 
     # Make psql and odoo CLI available system wide for maintenance
     # tasks.
