@@ -12,7 +12,7 @@
 #
 # Finally, this module configures users by
 # - only allowing to change users and groups through NixOS config;
-# - creating an admin (wheel) user with username 'admin';
+# - creating an admin (wheel) user;
 # - letting wheel users run `sudo` without a password.
 #
 # Because wheel users don't have to enter a password to `sudo`, you
@@ -39,6 +39,13 @@ with types;
         Enable it to install this system base.
       '';
     };
+    odbox.base.admin-username = mkOption {
+      type = str;
+      default = "admin";
+      description = ''
+        The name of the sys admin user.
+      '';
+    };
     odbox.base.cli-tools = mkOption {
       type = listOf package;
       default = [];
@@ -50,6 +57,7 @@ with types;
 
   config = let
     enabled = config.odbox.base.enable;
+    admin-usr = config.odbox.base.admin-username;
     tools = config.odbox.base.cli-tools;
   in (mkIf enabled
   {
@@ -70,10 +78,9 @@ with types;
     # Only allow to change users and groups through NixOS config.
     users.mutableUsers = false;
 
-    # Create admin user w/ name='admin', given password and SSH login
-    # key if one was set. Also set the give root password and root's
-    # SSH key of one was set.
-    users.users.admin = {
+    # Create the admin user but leave the setting of credentials
+    # to other modules.
+    users.users."${admin-usr}" = {
       isNormalUser = true;
       group = "users";
       extraGroups = [ "wheel" ];
