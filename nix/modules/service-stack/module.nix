@@ -75,6 +75,7 @@ with types;
     enabled = config.odbox.service-stack.enable;
 
     # User and DB names.
+    admin-usr = config.odbox.base.admin-username;
     odoo-usr = "odoo";                                         # (2)
     odoo-db = config.odbox.service-stack.odoo-db-name;
     pgadmin-usr = "pgadmin";                                   # (2)
@@ -86,7 +87,7 @@ with types;
 
     # DB.
     db-init = import ./db-init.nix {
-      inherit odoo-usr odoo-db pgadmin-usr pgadmin-db;
+      inherit pkgs admin-usr odoo-usr odoo-db pgadmin-usr pgadmin-db;
     };
     pgadmin = import ./pgadmin.nix {};
 
