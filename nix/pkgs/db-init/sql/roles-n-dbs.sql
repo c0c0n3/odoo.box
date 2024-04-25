@@ -45,6 +45,33 @@ WHERE NOT EXISTS (
 
 
 --
+-- PgAdmin connection params for the built-in connection we install.
+--
+
+SELECT setting AS sockets
+FROM pg_settings
+WHERE name = 'unix_socket_directories'
+\gset
+
+SELECT setting AS port
+FROM pg_settings
+WHERE name = 'port'
+\gset
+
+SELECT current_database() AS pgdb_name
+\gset
+
+\set fn_body 'SELECT ''local'', ' :'sockets' ', ' :port ', ' :'pgdb_name' ', ' :'pgadmin_role' ';'
+
+\connect :pgadmin_db
+
+CREATE OR REPLACE FUNCTION connection_params()
+    RETURNS record
+    LANGUAGE sql
+AS :'fn_body';
+
+
+--
 -- PgAdmin perms for Odoo DB.
 --
 
