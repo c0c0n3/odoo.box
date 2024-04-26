@@ -17,6 +17,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 sh/pgtest.sh $out/bin/pgtest
+    install -Dm755 sh/pgadmin-boot.sh $out/bin/pgadmin-boot
     mv sql $out/
 
     wrapProgram $out/bin/pgtest --prefix PATH : '${makeBinPath buildInputs}'

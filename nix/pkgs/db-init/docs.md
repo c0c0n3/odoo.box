@@ -13,9 +13,9 @@ The [roles and databases script][roles-n-dbs] creates the roles and
 DBs we need to run the Odoo service stack.
 
 - Create a Postgres admin role with super-cow powers. This is
-  an extra Postgres super user to represent the DB admin which
-  we create in addition to the custom built-in `postgres` super
-  user. This role can login but has no password.
+  an extra Postgres superuser to represent the DB admin which
+  we create in addition to the custom built-in `postgres`
+  superuser. This role can login but has no password.
 - Create Odoo and PgAdmin roles with login but grant no other
   perms. Both roles can login but have no password.
 - Create Odoo and PgAdmin DBs if not there; when creating a DB,
@@ -136,7 +136,32 @@ $ sudo -u pgadmin psql -f pgadmin-local-conn.sql
 
 ### PgAdmin bootstrap
 
-**TODO**
+The [pgadmin-boot][boot] command creates all the required tables in
+the PgAdmin DB, populates them and sets up a Unix socket connection
+to Postgres for the PgAdmin UI by running the local connection SQL
+script.
+
+Since this script is mainly useful when called from a systemd setup
+service, we've made a few assumptions. Specifically, the caller must
+
+- have already run the roles & databases script successfully;
+- have `/etc/pgadmin/config_system.py` with the `CONFIG_DATABASE_URI`
+  var set to `"postgresql:///"`;
+- have `psql` and `pgadmin4-setup` (from the `pgadmin4` Nix package)
+  in their path;
+- run the script as the PgAdmin user.
+
+The script takes two unnamed, positional arguments: the name of the
+PgAdmin superuser and the path to a file containing the superuser's
+login password. Notice this is just the UI superuser, that is the
+built-in user that can login and create more users, *not* a Postgres
+superuser with DB super-cow powers.
+
+Example usage:
+
+```bash
+$ sudo -u pgadmin pgadmin-boot admin /run/age/pgadmin-ui
+```
 
 
 ### Postgres readiness check
@@ -180,6 +205,7 @@ $ PG_SVC_USR=postmaster pgtest ready
 
 
 
+[boot]: ./sh/pgadmin-boot.sh
 [local-conn]: ./sql/pgadmin-local-conn.sql
 [pg-roles]: https://www.postgresql.org/docs/15/predefined-roles.html
 [pgtest]: ./sh/pgtest.sh
