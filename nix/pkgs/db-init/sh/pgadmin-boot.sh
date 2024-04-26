@@ -71,3 +71,4 @@ setup_local_connection() {
 # Let the show begin...
 setup_db
 setup_local_connection
+systemd-notify --ready --status='DB bootstrap completed.'

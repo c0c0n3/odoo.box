@@ -149,7 +149,7 @@ service, we've made a few assumptions. Specifically, the caller must
   var set to connect to Postgres PgAdmin DB over Unix sockets;
 - have `psql` and `pgadmin4-setup` (from the `pgadmin4` Nix package)
   in their path;
-- run the script as the PgAdmin user.
+- run the script as a systemd service under the PgAdmin user.
 
 Notice the URI to set in `CONFIG_DATABASE_URI` should have the
 format `postgresql:///<pgadmin-db-name>`. If the PgAdmin username
