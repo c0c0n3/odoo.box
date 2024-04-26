@@ -146,21 +146,30 @@ service, we've made a few assumptions. Specifically, the caller must
 
 - have already run the roles & databases script successfully;
 - have `/etc/pgadmin/config_system.py` with the `CONFIG_DATABASE_URI`
-  var set to `"postgresql:///"`;
+  var set to connect to Postgres PgAdmin DB over Unix sockets;
 - have `psql` and `pgadmin4-setup` (from the `pgadmin4` Nix package)
   in their path;
 - run the script as the PgAdmin user.
 
-The script takes two unnamed, positional arguments: the name of the
-PgAdmin superuser and the path to a file containing the superuser's
-login password. Notice this is just the UI superuser, that is the
+Notice the URI to set in `CONFIG_DATABASE_URI` should have the
+format `postgresql:///<pgadmin-db-name>`. If the PgAdmin username
+is the same as the PgAdmin DB name, then `<pgadmin-db-name>` can be
+the empty string: `postgresql:///`. Otherwise, you'll have to add
+the DB name, e.g. `postgresql:///my-pgadmin-db`. In any case, the
+host part of the URI should be empty as Postgres interprets that
+as you wanting a [Unix socket connection][pg-uri].
+
+The script takes three unnamed, positional arguments: the name of
+the PgAdmin superuser, the path to a file containing the superuser's
+login password, and the exact same URI in `CONFIG_DATABASE_URI`.
+Notice the PgAdmin superuser is just the UI superuser, that is the
 built-in user that can login and create more users, *not* a Postgres
 superuser with DB super-cow powers.
 
 Example usage:
 
 ```bash
-$ sudo -u pgadmin pgadmin-boot admin /run/age/pgadmin-ui
+$ sudo -u pgadmin pgadmin-boot admin /run/age/pgadmin-ui postgresql:///
 ```
 
 
@@ -208,5 +217,6 @@ $ PG_SVC_USR=postmaster pgtest ready
 [boot]: ./sh/pgadmin-boot.sh
 [local-conn]: ./sql/pgadmin-local-conn.sql
 [pg-roles]: https://www.postgresql.org/docs/15/predefined-roles.html
+[pg-uri]: https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING
 [pgtest]: ./sh/pgtest.sh
 [roles-n-dbs]: ./sql/roles-n-dbs.sql

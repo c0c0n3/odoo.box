@@ -11,6 +11,7 @@ set -ueo pipefail
 # Read input args.
 superuser_email="$1"
 initial_password_file="$2"
+db_uri="$3"
 
 # Locate the local connection SQL script.
 script_dir=$(dirname "$0")
@@ -42,7 +43,9 @@ read_password() {
 # to the DB, which isn't great. You've got to have a PgAdmin config
 # in `/etc/pgadmin/config_system.py` with the `CONFIG_DATABASE_URI`
 # var set to the connection string you'd like to use. In our case,
-# since we're using Unix sockets, it should be "postgresql:///".
+# since we're using Unix sockets, it should be "postgresql:///" or
+# "postgresql:///x" where `x` is the PgAdmin DB name if that's not
+# the same name as the PgAdmin role name.
 # Sadly, there's no other sane way of doing this.
 # Code tweaked from:
 # - https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/services/admin/pgadmin.nix#L140
@@ -61,7 +64,7 @@ setup_db() {
 # Run our SQL script to set up a Unix socket server connection for
 # the PgAdmin UI.
 setup_local_connection() {
-    psql postgresql:/// -f "${local_conn_script}"
+    psql "${db_uri}" -f "${local_conn_script}"
 }
 
 
