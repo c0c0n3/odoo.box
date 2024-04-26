@@ -1,5 +1,8 @@
 #
-# See `docs.md` for module documentation.
+# Implementation of the core functionality declared in the interface.
+# We set up Odoo, Postgres, Nginx & friends here while we leave the
+# PgAdmin outside of the core---see `pgadmin.nix` for the PgAdmin
+# implementation.
 #
 { config, lib, pkgs, ... }:
 
@@ -7,79 +10,16 @@ with lib;
 with types;
 
 {
-  options = {
-    odbox.service-stack = {
-      enable = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Enable it to install the Odoo service stack.
-          The stack is made of a fronting Nginx reverse proxy,
-          the Odoo Web service and the Postgres DB backend.
-        '';
-      };
-      odoo-package = mkOption {
-        type = package;
-        default = pkgs.odbox.odoo-14;
-        description = "Odoo package to use.";
-      };
-      odoo-addons = mkOption {
-        type = listOf package;
-        default = [ pkgs.odbox.odoo-addons ];
-        description = ''
-          Nix-packaged Odoo addons to include in the Odoo server.
-        '';
-      };
-      odoo-db-name = mkOption {
-        type = str;
-        default = "odoo";
-        description = "Name of the Odoo Postgres DB.";
-      };
-      odoo-cpus = mkOption {
-        type = ints.positive;
-        default = 1;
-        description = "Number of CPUs available to run the Odoo server.";
-      };
-      domain = mkOption {
-        type = str;
-        default = "localhost";
-        description = ''
-          Odoo domain name for Nginx's virtual host.
-          Since we make the Odoo host the default Nginx server, you won't
-          need to set this option unless you'd like to use NixOS's built-in
-          support to automatically get and renew TLS certs, in which case,
-          you should set this option to the FQDN of the host machine.
-        '';
-      };
-      bootstrap-mode = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          If true, install all the goodies in the the Odoo service
-          stack except for actually running the Odoo server. The Odoo
-          user and service will be there as well as the `odoo` binary,
-          but the server won't run. This is useful if you want to
-          bootstrap your Odoo DB and file store yourself—think migrating
-          data from another Odoo server. In fact, it's not a good idea to
-          have Odoo kick around while you bootstrap its data as experience
-          has shown.
-          Setting this option to false (the default) makes all the other
-          options work normally—i.e. if you enable the stack, everything
-          gets installed and runs as you'd expect.
-        '';
-      };
-    };
-  };
 
   config = let
     enabled = config.odbox.service-stack.enable;
 
     # User and DB names.
     admin-usr = config.odbox.base.admin-username;
-    odoo-usr = "odoo";                                         # (2)
+    odoo-usr = config.odbox.service-stack.odoo-username;
     odoo-db = config.odbox.service-stack.odoo-db-name;
-    pgadmin-usr = "pgadmin";                                   # (2)
-    pgadmin-db = "pgadmin";                                    # (2)
+    pgadmin-usr = config.odbox.service-stack.pgadmin-username;
+    pgadmin-db = config.odbox.service-stack.pgadmin-db-name;
 
     # Packages.
     postgres-pkg = config.services.postgresql.package;
@@ -89,7 +29,6 @@ with types;
     db-init = import ./db-init.nix {
       inherit pkgs admin-usr odoo-usr odoo-db pgadmin-usr pgadmin-db;
     };
-    pgadmin = import ./pgadmin.nix {};
 
     # Odoo.
     cfg-file = import ./odoo-config.nix {
@@ -140,10 +79,6 @@ with types;
     };
     systemd.services.postgresql.postStart = db-init;
 
-    # Run PgAdmin with a built-in connection to the Odoo DB and only
-    # R/W perms on Odoo tables, plus read access to Postgres stats.
-    services.pgadmin = pgadmin;
-
     # Make psql and odoo CLI available system wide for maintenance
     # tasks.
     environment.systemPackages = [ postgres-pkg  odoo-pkg ];
@@ -161,8 +96,4 @@ with types;
 # - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
 # - https://nixos.wiki/wiki/Nginx
 # - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
-#
-# 2. Hardcoded user and DB names. We could make them configurable
-# thru module options if ever needed. But for now we don't since
-# it's more effort than is worth it.
 #

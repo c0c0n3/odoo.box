@@ -54,6 +54,7 @@ with types;
     # Bring in our Odoo service stack.
     odbox.service-stack = {
       enable = true;
+      pgadmin-enable = true;
       # bootstrap-mode = true;
       odoo-db-name = "odoo_martel_14";
     };
