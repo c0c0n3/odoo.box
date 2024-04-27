@@ -14,10 +14,11 @@ with lib;
     enabled = config.odbox.service-stack.enable &&
               config.odbox.service-stack.pgadmin-enable;
 
-    # Username, DB name and connection string.
+    # Username, DB name, connection string and admin password.
     pgadmin-usr = config.odbox.service-stack.pgadmin-username;
     pgadmin-db = config.odbox.service-stack.pgadmin-db-name;
     pgadmin-db-uri = "postgresql:///${pgadmin-db}";
+    admin-pwd-file = config.odbox.vault.pgadmin-admin-pwd-file;
 
     # Packages.
     postgres-pkg = config.services.postgresql.package;
@@ -38,7 +39,7 @@ with lib;
 
       restartTriggers = [
         "/etc/pgadmin/config_system.py"
-        # TODO add password file
+        admin-pwd-file
       ];
 
       serviceConfig = {
@@ -82,7 +83,8 @@ with lib;
         deps = [ "postgresql.service" ];
         path = [ pgadmin-pkg postgres-pkg ];
         command = ''
-          ${pgadmin-boot} dumb@dumb.er /var/lib/pgadmin/pwd.txt \
+          ${pgadmin-boot} dumb@dumb.er \
+              ${escapeShellArg admin-pwd-file} \
               ${escapeShellArg pgadmin-db-uri}
         '';
         extraConfig = {
@@ -145,12 +147,9 @@ with lib;
 # that signal after the whole bootstrap procedure has completed
 # successfully.
 #
-# 3. DB junk. Even if our PgAdmin feature is disabled, the roles
-# and DBs script will still run. This script creates a PgAdmin
-# role and empty DB, a function to retrieve connection params in
-# the newly created PgAdmin DB and also grants the PgAdmin role
-# read/write access to the Odoo DB. Ideally, none of the above
-# should happen if PgAdmin is disabled, which is not a big deal,
-# but we should improve the implementation at some point to make
-# the PgAdmin module self-contained.
+# 3. DB junk. See:
+# - https://github.com/c0c0n3/odoo.box/issues/14
+#
+# 4. Possibly simpler bootstrap procedure. See:
+# - https://github.com/c0c0n3/odoo.box/issues/15
 #
