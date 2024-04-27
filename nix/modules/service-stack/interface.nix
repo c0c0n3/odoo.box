@@ -32,6 +32,16 @@ with types;
           you should set this option to the FQDN of the host machine.
         '';
       };
+      autocerts = mkOption {
+        type = bool;
+        default = false;
+        description = ''
+          If true, automatically acquire and renew Ngnix TLS certs from
+          Let's Encrypt. Notice for this to work you've got to set the
+          `odbox.service-stack.domain` option to the FQDN of the host
+          machine.
+        '';
+      };
       bootstrap-mode = mkOption {
         type = bool;
         default = false;

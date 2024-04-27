@@ -9,8 +9,8 @@ with types;
 {
   options = {
     odbox.vault.root-pwd-file = mkOption {
-      type = path;
-      default = abort "missing root password!";
+      type = nullOr path;
+      default = null;
       description = ''
         File containing the root user's password hashed in a way `chpasswd`
         can handle.
@@ -26,8 +26,8 @@ with types;
       '';
     };
     odbox.vault.admin-pwd-file = mkOption {
-      type = path;
-      default = abort "missing admin password!";
+      type = nullOr path;
+      default = null;
       description = ''
         File containing the admin user's password hashed in a way `chpasswd`
         can handle.
@@ -50,14 +50,51 @@ with types;
       '';
     };
     odbox.vault.nginx-cert = mkOption {
-      type = path;
-      default = abort "missing Nginx's TLS certificate!";
+      type = nullOr path;
+      default = null;
       description = "Path to the Nginx's TLS certificate.";
     };
     odbox.vault.nginx-cert-key = mkOption {
-      type = path;
-      default = abort "missing Nginx's TLS certificate key! ";
+      type = nullOr path;
+      default = null;
       description = "Path to the Nginx's TLS certificate key.";
     };
   };
+
+  assertions =
+  [
+    { assertion = config.odbox.vault.root-pwd-file == null &&
+                  config.odbox.vault.root-ssh-file == null;
+      message = ''
+        The NixOS root user has no login credentials. You must set
+        either a password or an SSH public key, or set both.
+      '';
+    }
+    { assertion = config.odbox.vault.admin-pwd-file == null &&
+                  config.odbox.vault.admin-ssh-file == null;
+      message = ''
+        The NixOS admin user has no login credentials. You must set
+        either a password or an SSH public key, or set both.
+      '';
+    }
+    { assertion = !config.odbox.service-stack.autocerts &&
+                  config.odbox.vault.nginx-cert == null;
+      message = ''
+        Missing Nginx's TLS certificate.
+      '';
+    }
+    { assertion = !config.odbox.service-stack.autocerts &&
+                  config.odbox.vault.nginx-cert-key == null;
+      message = ''
+        Missing Nginx's TLS certificate key.
+      '';
+    }
+  ];
 }
+# NOTE
+# ----
+# 1. Redundant cred checks. For each regular user, NixOS actually
+# already checks that at least of password or SSH key is set. Even
+# though our assertions are redundant, we keep them there for the
+# sake of better documentation.
+#
