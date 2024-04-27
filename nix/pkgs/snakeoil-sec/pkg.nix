@@ -9,6 +9,7 @@ let
   root-pass = "abc123";
   admin-pass = root-pass;
   odoo-admin-pass = root-pass;
+  pgadmin-admin-pass = root-pass;
 in stdenv.mkDerivation {
     pname = "snakeoil-sec";
     version = "1.0.0";
@@ -20,6 +21,7 @@ in stdenv.mkDerivation {
       ROOT_PASSWORD="${root-pass}" \
       ADMIN_PASSWORD="${admin-pass}" \
       ODOO_ADMIN_PASSWORD="${odoo-admin-pass}" \
+      PGADMIN_ADMIN_PASSWORD="${pgadmin-admin-pass}" \
       ${cmd}
     '';
 
