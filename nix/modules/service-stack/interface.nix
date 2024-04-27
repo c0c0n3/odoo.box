@@ -111,6 +111,11 @@ with types;
         default = "pgadmin";
         description = "Name of the PgAdmin Postgres DB.";
       };
+      pgadmin-admin-email = mkOption {
+        type = str;
+        default = "admin@lo.kl";
+        description = "Email address of the PgAdmin Web UI admin user.";
+      };
     };
   };
 }

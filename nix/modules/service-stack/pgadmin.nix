@@ -14,10 +14,11 @@ with lib;
     enabled = config.odbox.service-stack.enable &&
               config.odbox.service-stack.pgadmin-enable;
 
-    # Username, DB name, connection string and admin password.
+    # Username, DB name, connection string, email and admin password.
     pgadmin-usr = config.odbox.service-stack.pgadmin-username;
     pgadmin-db = config.odbox.service-stack.pgadmin-db-name;
     pgadmin-db-uri = "postgresql:///${pgadmin-db}";
+    admin-email = config.odbox.service-stack.pgadmin-admin-email;
     admin-pwd-file = config.odbox.vault.pgadmin-admin-pwd-file;
 
     # Packages.
@@ -83,7 +84,8 @@ with lib;
         deps = [ "postgresql.service" ];
         path = [ pgadmin-pkg postgres-pkg ];
         command = ''
-          ${pgadmin-boot} dumb@dumb.er \
+          ${pgadmin-boot} \
+              ${escapeShellArg admin-email} \
               ${escapeShellArg admin-pwd-file} \
               ${escapeShellArg pgadmin-db-uri}
         '';
