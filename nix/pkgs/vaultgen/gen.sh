@@ -15,13 +15,15 @@ source $(dirname "$0")/genlib.sh
 : "${ROOT_PASSWORD:=}"
 : "${ADMIN_PASSWORD:=}"
 : "${ODOO_ADMIN_PASSWORD:=}"
+: "${PGADMIN_ADMIN_PASSWORD:=}"
 : "${DOMAIN:=localhost}"
 : "${PROD_CERT:=}"
 : "${PROD_CERT_KEY:=}"
 
 # Password file names and corresponding password values for batch mode.
-pwd_files=("root" "admin" "odoo-admin")
-batch_pwds=("${ROOT_PASSWORD}" "${ADMIN_PASSWORD}" "${ODOO_ADMIN_PASSWORD}")
+pwd_files=("root" "admin" "odoo-admin" "pgadmin-admin")
+batch_pwds=("${ROOT_PASSWORD}" "${ADMIN_PASSWORD}" "${ODOO_ADMIN_PASSWORD}" \
+            "${PGADMIN_ADMIN_PASSWORD}")
 
 # Run the script in batch mode.
 run_batch_mode() {

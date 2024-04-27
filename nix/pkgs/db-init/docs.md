@@ -169,7 +169,7 @@ superuser with DB super-cow powers.
 Example usage:
 
 ```bash
-$ sudo -u pgadmin pgadmin-boot admin /run/age/pgadmin-ui postgresql:///
+$ sudo -u pgadmin pgadmin-boot admin /run/age/pgadmin-admin postgresql:///
 ```
 
 
