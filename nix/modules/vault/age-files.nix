@@ -37,6 +37,14 @@ with types;
         password.
       '';
     };
+    odbox.vault.age.pgadmin-admin-pwd = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Age-encrypted file containing the PgAdmin Web UI admin user's
+        clear-text password.
+      '';
+    };
     odbox.vault.age.nginx-cert = mkOption {
       type = nullOr path;
       default = null;

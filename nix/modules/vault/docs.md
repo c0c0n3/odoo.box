@@ -49,6 +49,7 @@ odbox = {
       root-pwd = ./vault/passwords/root.yesc.age;
       admin-pwd = ./vault/passwords/admin.yesc.age;
       odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
+      pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.age;
       nginx-cert = ./vault/certs/localhost-cert.pem.age;
       nginx-cert-key = ./vault/certs/localhost-key.pem.age;
     };
@@ -101,6 +102,7 @@ odbox = {
       root-pwd = ./vault/passwords/root.yesc.age;
       admin-pwd = ./vault/passwords/admin.yesc.age;
       odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
+      pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.age;
       nginx-cert = ./vault/certs/localhost-cert.pem.age;
       nginx-cert-key = ./vault/certs/localhost-key.pem.age;
     };

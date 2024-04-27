@@ -35,8 +35,18 @@ with types;
   };
 
   config = let
+    # Feature flags.
     enabled = config.odbox.vault.agenix.enable;
+    has-pgadmin = config.odbox.service-stack.pgadmin-enable;
+
+    # Age identity.
     key = config.odbox.vault.agenix.key;
+
+    # Users and groups.
+    odoo = config.odbox.service-stack.odoo-username;
+    pgadmin = config.odbox.service-stack.pgadmin-username;
+    nginx = config.users.users.nginx.name;
+
   in (mkIf enabled
   {
     age = {
@@ -46,18 +56,24 @@ with types;
         admin-pwd.file = config.odbox.vault.age.admin-pwd;
         odoo-admin-pwd = {
           file = config.odbox.vault.age.odoo-admin-pwd;
-          owner = "odoo";
-          group = "odoo";
+          owner = odoo;
+          group = odoo;
         };
         nginx-cert = {
           file = config.odbox.vault.age.nginx-cert;
-          owner = "nginx";
-          group = "nginx";
+          owner = nginx;
+          group = nginx;
         };
         nginx-cert-key = {
           file = config.odbox.vault.age.nginx-cert-key;
-          owner = "nginx";
-          group = "nginx";
+          owner = nginx;
+          group = nginx;
+        };
+      } // optionalAttrs has-pgadmin {
+        pgadmin-admin-pwd = {
+          file = config.odbox.vault.age.pgadmin-admin-pwd;
+          owner = pgadmin;
+          group = pgadmin;
         };
       };
     };
@@ -65,6 +81,9 @@ with types;
       root-pwd-file = config.age.secrets.root-pwd.path;
       admin-pwd-file = config.age.secrets.admin-pwd.path;
       odoo-admin-pwd-file = config.age.secrets.odoo-admin-pwd.path;
+      pgadmin-admin-pwd-file = if has-pgadmin
+                               then config.age.secrets.pgadmin-admin-pwd.path
+                               else null;
       nginx-cert = config.age.secrets.nginx-cert.path;
       nginx-cert-key = config.age.secrets.nginx-cert-key.path;
     };
