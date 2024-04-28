@@ -55,11 +55,12 @@ let
 in {
   wantedBy = [ "multi-user.target" ];
   after = [ "network.target" "postgresql.service" ];
+  requires = [ "postgresql.service" ];
+  restartTriggers = [ pwd-file ];
 
   # pg_dump
   path = [ postgres-pkg ];
 
-  requires = [ "postgresql.service" ];
   script = run;
 
   serviceConfig = {
