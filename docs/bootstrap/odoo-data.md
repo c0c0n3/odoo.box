@@ -35,19 +35,25 @@ your local host like in the example below.
 
 ```bash
 $ kubectl -n martel exec -it acid-martel-0 -- sh
-$ pg_dump -U postgres -f odoo-dump.sql -C -O -n public odoo_martel_14
+$ pg_dump -U postgres -f odoo-dump.sql -O -n public odoo_martel_14
 $ exit
 $ kubectl -n martel cp acid-martel-0:/home/postgres/odoo-dump.sql odoo-dump.sql
 ```
 
 Notice the `pg_dump` flags above. You should use the same flags to
 make sure the SQL commands output in the file
-- create the current Odoo DB with the same name;
 - don't assign ownership—so the owner will be the role used when
   restoring;
 - and only export stuff in the `public` schema—this is all we need
   since the other two schemas got set up and populated by Patroni/Spilo
   and we won't need them in the new DB.
+
+Also notice we don't use the `-C` flag. This flag outputs a command
+to create the DB itself from `template0`, DB comments, any DB config
+settings and a command to connect to the newly created DB. We don't
+need any of this. In fact, we've got our own script to create the DB
+from `template0` and there's no DB config we need to export.
+
 
 #### File store tarball
 The Odoo pod keeps its file store under `/bitnami/odoo` which is a
@@ -127,16 +133,13 @@ $ cd /tmp
 To restore the DB, run
 
 ```bash
-$ sudo -u postgres psql -c 'ALTER USER odoo WITH CREATEDB'
-$ sudo -u odoo psql -d postgres -f odoo-dump.sql
-$ sudo -u postgres psql -c 'ALTER USER odoo WITH NOCREATEDB'
+$ sudo -u odoo psql -d odoo_martel_14 -f odoo-dump.sql
 ```
 
-Notice we first allow the `odoo` user to create a DB since the dump
-file contains a statement to create the Odoo DB. But after restoring
-the DB, we revoke the create-DB permission since we want to run Odoo
-with the smallest possible set of privileges. This also means you
-won't be able to use Odoo's Web UI to create and restore DBs.
+Notice our DB init scripts create the Odoo DB upfront and the `odoo`
+user has no create-DB permission. In fact, we want to run Odoo with
+the smallest possible set of privileges. This also means you won't
+be able to use Odoo's Web UI to create and restore DBs.
 
 To restore the file store, run
 

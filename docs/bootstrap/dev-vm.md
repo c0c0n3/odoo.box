@@ -14,9 +14,10 @@ At the end of the procedure detailed below, you should end up with
 a NixOS machine having
 
 - All the services you'd expect in a full-blown Odoo installation.
-  Namely: Nginx, Odoo, Postgres, module extensions, etc.
-- No firewall. You can turn it on if you really want it, but most
-  likely it's not needed for a dev box?
+  Namely: Nginx, Odoo, module extensions, Postgres, PgAdmin, etc.
+- Firewall. You can easily turn it off if it really comes in your
+  way, but at least you start off with a VM that's basically a
+  prod clone.
 - An admin user named `admin` with a password of `abc123`. (You
   can change the password later.)
 - Remote access through SSH.

@@ -5,7 +5,8 @@
 # - build our base OS (`odbox.base`);
 # - enable SSH;
 # - only open the ports we actually need;
-# - run the Odoo service stack (`odbox.service-stack`).
+# - run the Odoo service stack (`odbox.service-stack`),
+#   including PgAdmin.
 #
 # Each machine we build (dev VM, staging, prod) enables this module
 # to bring in the bulk of the required functionality and then bolts
@@ -54,6 +55,7 @@ with types;
     # Bring in our Odoo service stack.
     odbox.service-stack = {
       enable = true;
+      pgadmin-enable = true;
       # bootstrap-mode = true;
       odoo-db-name = "odoo_martel_14";
     };

@@ -43,12 +43,22 @@ with types;
   };
 
   config = let
+    # Feature flags.
     enabled = config.odbox.vault.agez.enable;
+    has-pgadmin = config.odbox.service-stack.pgadmin-enable;
+
+    # Users and groups.
+    odoo = config.odbox.service-stack.odoo-username;
+    pgadmin = config.odbox.service-stack.pgadmin-username;
+    nginx = config.users.users.nginx.name;
+
+    # Activation lib.
     dir = config.odbox.vault.agez.dir;
     activation = import ./agez-activation-lib.nix {
-        inherit config pkgs lib;
+      inherit config pkgs lib;
     };
 
+    # Age files.
     root = {
       encryptedFile = config.odbox.vault.age.root-pwd;
       decryptedFile = "${dir}/passwords/root.hash";
@@ -60,28 +70,37 @@ with types;
     odoo-admin = {
       encryptedFile = config.odbox.vault.age.odoo-admin-pwd;
       decryptedFile = "${dir}/passwords/odoo-admin.txt";
-      user = "odoo";
-      group = "odoo";
+      user = odoo;
+      group = odoo;
+    };
+    pgadmin-admin = {
+      encryptedFile = config.odbox.vault.age.pgadmin-admin-pwd;
+      decryptedFile = "${dir}/passwords/pgadmin-admin.txt";
+      user = pgadmin;
+      group = pgadmin;
     };
     cert = {
       encryptedFile = config.odbox.vault.age.nginx-cert;
       decryptedFile = "${dir}/certs/nginx-cert.pem";
-      user = "nginx";
-      group = "nginx";
+      user = nginx;
+      group = nginx;
     };
     cert-key = {
       encryptedFile = config.odbox.vault.age.nginx-cert-key;
       decryptedFile = "${dir}/certs/nginx-cert-key.pem";
-      user = "nginx";
-      group = "nginx";
+      user = nginx;
+      group = nginx;
     };
-    ageFiles = [ root admin odoo-admin cert cert-key ];
+    ageFiles = [ root admin odoo-admin cert cert-key ] ++ (
+      if has-pgadmin then [ pgadmin-admin ] else []
+    );
   in (mkIf enabled
   {
     odbox.vault = {
       root-pwd-file = root.decryptedFile;
       admin-pwd-file = admin.decryptedFile;
       odoo-admin-pwd-file = odoo-admin.decryptedFile;
+      pgadmin-admin-pwd-file = pgadmin-admin.decryptedFile;
       nginx-cert = cert.decryptedFile;
       nginx-cert-key = cert-key.decryptedFile;
     };

@@ -18,15 +18,26 @@ in the [docs][docs].
 
 A fully-fledged, multi-architecture (x86-64 and ARM64) service stack
 to run Odoo on a single machine:
-- Odoo multi-processing server, including LiveChat gevent process;
-- sane, automatically generated Odoo config;
-- Nix-packaged Odoo addons;
-- systemd service to run Odoo, including an Odoo system user
-  and safe handling of Odoo admin password;
-- Non-network Postgres DB backend (Odoo connects on Unix sockets);
-- Nginx TLS reverse proxy to expose Odoo to the internet;
-- CLI tools to help with maintenance tasks;
-- minimal NixOS base system with firewall and SSH.
+- Odoo multi-processing server, including LiveChat gevent process.
+- Sane, automatically generated Odoo config.
+- Nix-packaged Odoo addons.
+- systemd service to run Odoo, including daemon user and secure
+  handling of Odoo admin password.
+- systemd service to run PgAdmin, including daemon user, zero-config
+  DB init with automatic connection to Postgres from the Web UI,
+  and secure handling of PgAdmin Web UI admin password.
+- Non-network Postgres DB backend (both Odoo and PgAdmin connect
+  to Unix sockets) with automatic creation of Odoo & PgAdmin DBs
+  and roles as well as strict security policies.
+- Nginx TLS reverse proxy to safely expose Odoo and PgAdmin to the
+  internet.
+- CLI tools to help with maintenance tasks.
+- Minimal NixOS base system with firewall and SSH.
+
+From DBs to services to security, we wire everything together to
+make the whole service stack work out of the box without any extra
+manual config. As for security, we stick to Least Privilege and Zero
+Trust principles.
 
 
 ### Operations

@@ -1,10 +1,10 @@
 #
 # See `docs.md` for package documentation.
 #
-{ pkgs, vaultgen }:
+{ pkgs, db-init, vaultgen }:
 let
   admin = import ./admin.nix { inherit pkgs; };
-  dev = import ./dev.nix { inherit pkgs vaultgen; };
+  dev = import ./dev.nix { inherit pkgs db-init vaultgen; };
 in rec {
 
   # Make a shell env with all the given programs.

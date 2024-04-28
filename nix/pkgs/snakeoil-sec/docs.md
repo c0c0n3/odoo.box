@@ -9,8 +9,8 @@ Snake oil security for the careless soul.
 ### In the box
 - Localhost cert. Self-signed, 100-year valid SSL cert for testing
   on localhost.
-- Passwords. Root and admin sys users as well as Odoo admin user
-  get a generated password of 'abc123'.
+- Passwords. All our built-in users (NixOS root & admin, Odoo Web UI
+  admin, PgAdmin Web UI admin) get a generated password of 'abc123'.
 - SSH keys. ED25519 identity and corresponding public key.
 
 We use `vaultgen` to generate all the above and put the content

@@ -39,6 +39,12 @@ listed below.
  │  ├── odoo-admin.sha512.age  #   corresponding Age-encrypted hashed pwd
  │  ├── odoo-admin.yesc        #   Yescrypt-hashed pwd `chpasswd` can handle
  │  ├── odoo-admin.yesc.age    #   corresponding Age-encrypted hashed pwd
+ │  ├── pgadmin-admin          # clear-text PgAdmin UI admin pwd (generated or entered)
+ │  ├── pgadmin-admin.age      #   Age-encrypted clear-text pwd
+ │  ├── pgadmin-admin.sha512   #   SHA512-hashed pwd `chpasswd` can handle
+ │  ├── pgadmin-admin.sha512.age #   corresponding Age-encrypted hashed pwd
+ │  ├── pgadmin-admin.yesc     #   Yescrypt-hashed pwd `chpasswd` can handle
+ │  ├── pgadmin-admin.yesc.age #   corresponding Age-encrypted hashed pwd
  │  ├── root                   # clear-text root pwd (generated or entered)
  │  ├── root.age               #   Age-encrypted clear-text pwd
  │  ├── root.sha512            #   hashed pwd that `chpasswd` can handle
@@ -57,9 +63,9 @@ different passwords and certs with a previously generated Age identity.
 Similarly, if the SSH identity file already exists, this script won't
 override it with a newly generated one.
 
-There's a set of four password files for each built-in user: The NixOS
-root and admin users as well as the Odoo Web UI admin. Each set incudes
-the following files:
+There's a set of four password files for each built-in user: NixOS
+root user, NixOS admin user, Odoo Web UI admin, and PgAdmin Web UI
+admin. Each set incudes the following files:
 - Clear text. A file containing the password in clear text. This is
   either the password you specified or the (strong, memorable) one
   the script automatically generated if you didn't specify one.
@@ -113,6 +119,9 @@ Instead, you use env vars to specify those values:
   set this var to have the script generate one for you.
 - `ODOO_ADMIN_PASSWORD`. Clear-text password for the Odoo admin
   user. Don't set this var to have the script generate one for you.
+- `PGADMIN_ADMIN_PASSWORD`. Clear-text password for the PgAdmin Web
+  UI admin user. Don't set this var to have the script generate one
+  for you.
 - `DOMAIN`. CN for the self-signed cert. Defaults to localhost if
   not set.
 - `PROD_CERT`. Path to a prod public certificate file to copy over
@@ -126,7 +135,8 @@ invocation with all the parameters set
 
 ```bash
 $ BATCH_MODE=1 \
-  ROOT_PASSWORD=abc123 ADMIN_PASSWORD=xy ODOO_ADMIN_PASSWORD=123 \
+  ROOT_PASSWORD=abc123 ADMIN_PASSWORD=xy \
+  ODOO_ADMIN_PASSWORD=123 PGADMIN_ADMIN_PASSWORD=foo \
   PROD_CERT=c.pem PROD_CERT_KEY=k.pem \
   vaultgen
 ```
