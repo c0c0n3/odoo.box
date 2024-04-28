@@ -25,7 +25,9 @@ We've implemented the following NixOS modules:
 - [Service Stack][svc-stack]. Fully-fledged service stack to run
   Odoo on a single machine. Includes our Odoo addons, Postgres DB,
   Nginx TLS reverse proxy as well as other tools to help with Odoo
-  admin and maintenance tasks.
+  admin and maintenance tasks like CLI utils and a secure PgAdmin
+  Web UI. The whole service stack gets configured with security in
+  mind, according to Least Privilege and Zero Trust principles.
 - [Server Base][svr-base]. Strings together the two modules above,
   enables SSH and sets up a firewall to let in only SSH and HTTP
   traffic.
@@ -78,6 +80,9 @@ We've developed the following Nix packages:
 - [Odoo Addons][addons]. Martel's Odoo addons collection. This too
   is a full-on GitOps enabler:we keep everything to get a running
   system, except for the Odoo DB and file store, in source control.
+- [DB Init Scripts][db-init]. Scripts to initialise the Postgres,
+  Odoo and PgAdmin DBs so the respective services can work out of
+  the box without any extra manual config.
 - [Vaultgen][vaultgen]. This package provides the `vaultgen` command
   you typically use to populate the files (secrets) the vault module
   requires.
@@ -90,6 +95,7 @@ We've developed the following Nix packages:
 
 [addons]: ../nix/pkgs/odoo-addons/docs.md
 [cli]: ../nix/pkgs/cli-tools/docs.md
+[db-init]: ../nix/pkgs/db-init/docs.md
 [devm]: ../nix/nodes/devm-aarch64/
 [ec2]: ../nix/nodes/ec2-aarch64/
 [login]: ../nix/modules/login/docs.md

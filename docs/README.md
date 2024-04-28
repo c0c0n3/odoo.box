@@ -17,8 +17,9 @@ developed. Here's what's available:
   securely keep all that stuff in source control. Complete with
   deployment scenarios.
 - [Odoo Box From Scratch][boot]. How to bootstrap a fully-fledged
-  Odoo server (Nginx, Odoo, Postgres, module extensions, etc.) on
-  NixOS using our Nix flake, including data migration from K8s.
+  Odoo server (Nginx, Odoo, module extensions, Postgres, PgAdmin,
+  etc.) on NixOS using our Nix flake, including data migration
+  from K8s.
 - [NixOS Deployment][deploy]. Doing GitOps at the OS-level. Keep
   the code that defines OS deployments in a git repo and then apply
   it to a remote set of machines to update their configuration,

@@ -47,9 +47,7 @@ $ cd /tmp
 In the VM, restore the DB.
 
 ```bash
-$ sudo -u postgres psql -c 'ALTER USER odoo WITH CREATEDB'
 $ sudo -u odoo psql -d postgres -f odoo-dump.sql
-$ sudo -u postgres psql -c 'ALTER USER odoo WITH NOCREATEDB'
 ```
 
 Still in the VM, recreate the file store.
