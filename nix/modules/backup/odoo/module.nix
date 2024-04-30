@@ -8,48 +8,23 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-with types;
 
 {
-
   config = let
     # Feature flag.
     enabled = config.odbox.backup.odoo.enable;
 
-    # User, DB names and schedules.
-    odoo-usr = config.odbox.service-stack.odoo-username;
-    odoo-db = config.odbox.service-stack.odoo-db-name;
-    hot-schedule = config.odbox.backup.odoo.hot-schedule;
-
-    # Packages.
-    sudo = pkgs.sudo;
-    postgres = config.services.postgresql.package;
-    rsync = pkgs.rsync;
-
-    # Backup base dir.
-    basedir = config.odbox.backup.basedir;
-
+    # Service template function.
+    mksvc = import ./mksvc.nix;
   in (mkIf enabled
   {
-    systemd.services.odoo-hot-backup = {
-      description = "Odoo DB and filestore hot backup to ${basedir}";
-
-      requires = [ "postgresql.service" ];
-
-      path = [ sudo postgres rsync ];
-
-      script = import ./backup-script.nix {
-        inherit odoo-usr odoo-db basedir;
-      };
-
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-      };
-
-      startAt = hot-schedule;
+    systemd.services.odoo-hot-backup = mksvc {
+      inherit config pkgs;
+      hot = true;
     };
-
+    systemd.services.odoo-cold-backup = mksvc {
+      inherit config pkgs;
+      hot = false;
+    };
   });
-
 }

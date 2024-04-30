@@ -68,5 +68,18 @@ with types;
             systemd-analyze calendar "11,14,16:00:00" --iterations 9
       '';
     };
+    odbox.backup.odoo.cold-schedule = mkOption {
+      type = listOf str;
+      default = [ "02:00:00" ];
+      description = ''
+        Schedule for the cold Odoo backups, i.e. backups performed
+        while Odoo has been stopped. Typically you'd make a cold
+        backup once a day in the dead of the night. For example:
+        daily at 2AM.
+
+        Each schedule entry is a string in the systemd time format,
+        see systemd.time(7) for the details.
+      '';
+    };
   };
 }
