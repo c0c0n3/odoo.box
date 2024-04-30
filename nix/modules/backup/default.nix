@@ -1,6 +1,6 @@
 {
   imports = [
     ./interface.nix
-    ./odoo.nix
+    ./odoo/module.nix
   ];
 }

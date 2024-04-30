@@ -26,32 +26,21 @@ with types;
     postgres = config.services.postgresql.package;
     rsync = pkgs.rsync;
 
-    # Backup sources and targets.
-    dst-basedir = "${config.odbox.backup.basedir}/odoo";
-    src-filestore = "/var/lib/${odoo-usr}/data/filestore";
-    dst-db-dump = "${dst-basedir}/${odoo-db}.dump.sql";
+    # Backup base dir.
+    basedir = config.odbox.backup.basedir;
 
   in (mkIf enabled
   {
     systemd.services.odoo-hot-backup = {
-      description = "Odoo DB and filestore hot backup to ${dst-basedir}";
+      description = "Odoo DB and filestore hot backup to ${basedir}";
 
       requires = [ "postgresql.service" ];
 
       path = [ sudo postgres rsync ];
 
-      script = ''
-        umask 0077    # ensure only root can access backup files
-
-        mkdir -p '${dst-basedir}'
-
-        rm -f '${dst-db-dump}'
-        sudo -u '${odoo-usr}' \
-          pg_dump -U '${odoo-usr}' -O -n public '${odoo-db}' \
-                  > '${dst-db-dump}'
-
-        rsync -av --delete '${src-filestore}' '${dst-basedir}/'
-      '';
+      script = import ./backup-script.nix {
+        inherit odoo-usr odoo-db basedir;
+      };
 
       serviceConfig = {
         Type = "oneshot";
