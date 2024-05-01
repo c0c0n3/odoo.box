@@ -44,28 +44,10 @@ with types;
       default = [ "11:00:00" "14:00:00" "16:00:00" ];
       description = ''
         Schedule for the hot Odoo backups, i.e. backups performed
-        while Odoo is running. Typically you'd back up a few times
-        daily during business hours. For example: daily at 11AM,
-        2PM and 4PM.
-
-        Each schedule entry is a string in the systemd time format,
-        see systemd.time(7) for the details. For each schedule entry
-        you add to the list, there'll be a corresponding `OnCalendar`
-        directive in the systemd unit file. This way you can easily
-        schedule multiple runs in an intuitive way, e.g.
-
-            hot-schedule = [ "11:00:00" "14:00:00" "16:00:00" ];
-
-        for three daily runs at 11AM, 2PM and 4PM, instead of using
-        the more cryptic
-
-            hot-schedule = [ "11,14,16:00:00" ];
-
-        Notice you can use `systemd-analyze` to check your schedule
-        spec is valid and also display the actual schedule systemd
-        will follow, e.g.
-
-            systemd-analyze calendar "11,14,16:00:00" --iterations 9
+        while Odoo is running. Each schedule entry is a string in
+        the systemd time format and for each entry you add to the
+        list, there'll be a corresponding `OnCalendar` directive
+        in the systemd unit file.
       '';
     };
     odbox.backup.odoo.cold-schedule = mkOption {
@@ -73,12 +55,13 @@ with types;
       default = [ "02:00:00" ];
       description = ''
         Schedule for the cold Odoo backups, i.e. backups performed
-        while Odoo has been stopped. Typically you'd make a cold
-        backup once a day in the dead of the night. For example:
-        daily at 2AM.
+        while Odoo has been stopped. Each schedule entry is a string
+        in the systemd time format and for each entry you add to the
+        list, there'll be a corresponding `OnCalendar` directive in
+        the systemd unit file.
 
-        Each schedule entry is a string in the systemd time format,
-        see systemd.time(7) for the details.
+        Notice the cold backup procedure also cleans up stale Odoo
+        session files.
       '';
     };
   };

@@ -70,6 +70,14 @@ bit easier:
 - Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
   `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
   instance types.
+- Backups. Automatic hot and cold backups with flexible schedules.
+  Notice that thanks to our Nix-powered GitOps approach, backing
+  up and restoring a machine is a breeze. We just need to back up
+  the Odoo DB and file store since our repo contains everything
+  else you need to instantiate our Odoo Box. With a snapshot of
+  the Odoo DB and file store at a point in time, you can restore
+  your machine to the exact same state it was at that point in
+  time with just a couple of commands.
 
 
 ### Development & Testing
