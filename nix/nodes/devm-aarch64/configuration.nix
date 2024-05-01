@@ -18,6 +18,7 @@
   odbox = {
     server.enable = true;
     login.mode = "standard";    # NOTE (3)
+
     vault = {
       snakeoil.enable = true;
 
@@ -37,6 +38,16 @@
       # root-ssh-file = ./vault/ssh/id_ed25519.pub;
       # admin-ssh-file = ./vault/ssh/id_ed25519.pub;
     };
+
+    backup = {
+      basedir = "/backup";
+      odoo = {
+        enable = false;                                        # (4)
+        hot-schedule = [ "14:50:00" ];
+        cold-schedule = [ "14:57:00" ];
+      };
+    };
+
     swapfile = {
       enable = true;
       size = 8192;
@@ -51,4 +62,6 @@
 # *Vault and Login Configs* docs.
 # 3. Testing cloud login. See the *Cloud Login* section of the
 # *Vault and Login Configs* docs.
+# 4. Testing backups. Set the schedules you like and then enable
+# the feature. Check service logs and backup dir after each run.
 #

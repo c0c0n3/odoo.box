@@ -1,5 +1,6 @@
 {
   imports = [
+    ./backup
     ./login
     ./os-base.nix
     ./server-base.nix
