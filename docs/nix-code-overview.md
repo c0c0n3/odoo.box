@@ -20,7 +20,7 @@ Read on for a bit more detail about each part of the Nix code.
 We've implemented the following NixOS modules:
 
 - [OS Base][os-base]. Convenience module to configure a simple
-  system base with CLI tools, Emacs, admin user and password-less
+  system base with CLI tools, Emacs, and password-less wheel
   sudoers.
 - [Service Stack][svc-stack]. Fully-fledged service stack to run
   Odoo on a single machine. Includes our Odoo addons, Postgres DB,

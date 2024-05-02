@@ -7,6 +7,7 @@
 
   config = let
     mode = config.odbox.login.mode;
+    admin-usr = config.odbox.login.admin-username;
     admin-ssh = config.odbox.vault.admin-ssh-file;
     root-ssh = config.odbox.vault.root-ssh-file;
     require = file: assert file != null; [ file ];
@@ -14,7 +15,7 @@
 
     # Make root and admin accounts password-less and only allow them
     # to log in over SSH with their respective SSH identities.
-    users.users.admin = {
+    users.users."${admin-usr}" = {
       hashedPassword = "!";                                    # (1)
       openssh.authorizedKeys.keyFiles = require admin-ssh;     # (2)
     };
