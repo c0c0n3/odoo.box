@@ -45,6 +45,8 @@ We've implemented the following NixOS modules:
   to get a running system, except for the Odoo DB and file store,
   in source control.
 - [Swap File][swap]. Enables swapping on a swap file.
+- [Backup][backup]. Automatic backups of the Odoo DB and file
+  store.
 
 
 ### Nodes
@@ -94,6 +96,7 @@ We've developed the following Nix packages:
 
 
 [addons]: ../nix/pkgs/odoo-addons/docs.md
+[backup]: ../nix/modules/backup/docs.md
 [cli]: ../nix/pkgs/cli-tools/docs.md
 [db-init]: ../nix/pkgs/db-init/docs.md
 [devm]: ../nix/nodes/devm-aarch64/
