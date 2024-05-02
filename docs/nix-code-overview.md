@@ -12,6 +12,11 @@ code is organised in three parts, each in its own subdirectory:
 - Packages. Software we have packaged to support our modules and
   make our life easier.
 
+You can think of this code as a program to build an Odoo Box machine
+which, when deployed, looks like this
+
+![Deployment diagram][dia.deployment]
+
 Read on for a bit more detail about each part of the Nix code.
 
 
@@ -97,6 +102,7 @@ We've developed the following Nix packages:
 
 [addons]: ../nix/pkgs/odoo-addons/docs.md
 [backup]: ../nix/modules/backup/docs.md
+[dia.deployment]: ./diagrams/deployment.greyscale.png
 [cli]: ../nix/pkgs/cli-tools/docs.md
 [db-init]: ../nix/pkgs/db-init/docs.md
 [devm]: ../nix/nodes/devm-aarch64/

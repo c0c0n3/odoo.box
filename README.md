@@ -8,8 +8,10 @@ that wasn't easy to implement in our old K8s setup and which resulted
 in slashing IT Ops and hardware costs while improving reliability and
 performance at the same time.
 
-Below is an overview of the main features, read up about the details
-in the [docs][docs].
+Below is an UML-ish deployment diagram followed by an overview of
+the main features, read up about the details in the [docs][docs].
+
+![Deployment diagram][dia.deployment]
 
 
 ## Features
@@ -96,4 +98,5 @@ bit easier:
 
 
 
+[dia.deployment]: ./docs/diagrams/deployment.colour.png
 [docs]: ./docs/README.md
