@@ -15,7 +15,7 @@ with types;
     enabled = config.odbox.service-stack.enable;
 
     # User and DB names.
-    admin-usr = config.odbox.base.admin-username;
+    admin-usr = config.odbox.login.admin-username;
     odoo-usr = config.odbox.service-stack.odoo-username;
     odoo-db = config.odbox.service-stack.odoo-db-name;
     pgadmin-usr = config.odbox.service-stack.pgadmin-username;

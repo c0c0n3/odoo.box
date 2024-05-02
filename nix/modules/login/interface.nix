@@ -21,6 +21,13 @@ with types;
         SSH keys are set in the vault.
       '';
     };
+    odbox.login.admin-username = mkOption {
+      type = str;
+      default = "admin";
+      description = ''
+        The name of the sys admin user.
+      '';
+    };
   };
 
 }

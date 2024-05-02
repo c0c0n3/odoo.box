@@ -39,13 +39,6 @@ with types;
         Enable it to install this system base.
       '';
     };
-    odbox.base.admin-username = mkOption {
-      type = str;
-      default = "admin";
-      description = ''
-        The name of the sys admin user.
-      '';
-    };
     odbox.base.cli-tools = mkOption {
       type = listOf package;
       default = [];
@@ -57,7 +50,7 @@ with types;
 
   config = let
     enabled = config.odbox.base.enable;
-    admin-usr = config.odbox.base.admin-username;
+    admin-usr = config.odbox.login.admin-username;
     tools = config.odbox.base.cli-tools;
   in (mkIf enabled
   {
