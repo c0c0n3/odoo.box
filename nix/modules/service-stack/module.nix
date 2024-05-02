@@ -12,10 +12,13 @@ with types;
 {
 
   config = let
+    # Feature flags.
     enabled = config.odbox.service-stack.enable;
+    autocerts = config.odbox.service-stack.autocerts;
 
     # User and DB names.
     admin-usr = config.odbox.login.admin-username;
+    admin-email = config.odbox.login.admin-email;
     odoo-usr = config.odbox.service-stack.odoo-username;
     odoo-db = config.odbox.service-stack.odoo-db-name;
     pgadmin-usr = config.odbox.service-stack.pgadmin-username;
@@ -44,9 +47,10 @@ with types;
 
     # Nginx.
     nginx = import ./nginx.nix {
+      inherit autocerts;
       sslCertificate = config.odbox.vault.nginx-cert;
       sslCertificateKey = config.odbox.vault.nginx-cert-key;
-      domain = config.odbox.service-stack.domain;              # (1)
+      domain = config.odbox.service-stack.domain;
     };
   in (mkIf enabled
   {
@@ -64,7 +68,12 @@ with types;
     systemd.services."${odoo-usr}" = svc;
 
     # Run Nginx as a reverse proxy for Odoo.
+    # Also accept ACME terms and set the admin email as a reg email,
+    # just in case autocerts is turned on. If it's turned off these
+    # values won't be used anyway, so we don't care.
     services.nginx = nginx;
+    security.acme.acceptTerms = true;
+    security.acme.defaults.email = admin-email;
 
     # Run Postgres with the security and DBs we need for Odoo and
     # PgAdmin. Notice our DB init script gets merged with the
@@ -85,15 +94,3 @@ with types;
   });
 
 }
-# NOTE
-# ----
-# 1. TLS certs. At the moment we assume the sys admin takes care of
-# getting and renewing TLS certs. But we could automate this step too
-# since NixOS comes with ACME built-in support. In this case, the domain
-# name should be that of the host machine. Also notice that multi-domain
-# configs are also supported.
-# See:
-# - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
-# - https://nixos.wiki/wiki/Nginx
-# - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
-#

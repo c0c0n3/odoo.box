@@ -37,6 +37,7 @@ with types;
   config = let
     # Feature flags.
     enabled = config.odbox.vault.agenix.enable;
+    has-autocerts = config.odbox.service-stack.autocerts;
     has-pgadmin = config.odbox.service-stack.pgadmin-enable;
 
     # Age identity.
@@ -59,6 +60,7 @@ with types;
           owner = odoo;
           group = odoo;
         };
+      } // optionalAttrs (!has-autocerts) {
         nginx-cert = {
           file = config.odbox.vault.age.nginx-cert;
           owner = nginx;
@@ -84,8 +86,12 @@ with types;
       pgadmin-admin-pwd-file = if has-pgadmin
                                then config.age.secrets.pgadmin-admin-pwd.path
                                else null;
-      nginx-cert = config.age.secrets.nginx-cert.path;
-      nginx-cert-key = config.age.secrets.nginx-cert-key.path;
+      nginx-cert = if has-autocerts
+                   then null
+                   else config.age.secrets.nginx-cert.path;
+      nginx-cert-key = if has-autocerts
+                       then null
+                       else config.age.secrets.nginx-cert-key.path;
     };
   });
 }

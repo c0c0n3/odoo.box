@@ -45,6 +45,7 @@ with types;
   config = let
     # Feature flags.
     enabled = config.odbox.vault.agez.enable;
+    has-autocerts = config.odbox.service-stack.autocerts;
     has-pgadmin = config.odbox.service-stack.pgadmin-enable;
 
     # Users and groups.
@@ -91,9 +92,12 @@ with types;
       user = nginx;
       group = nginx;
     };
-    ageFiles = [ root admin odoo-admin cert cert-key ] ++ (
-      if has-pgadmin then [ pgadmin-admin ] else []
-    );
+    ageFiles = [ root admin odoo-admin ] ++
+      (
+        if has-autocerts then [] else [ cert cert-key ]
+      ) ++ (
+        if has-pgadmin then [ pgadmin-admin ] else []
+      );
   in (mkIf enabled
   {
     odbox.vault = {

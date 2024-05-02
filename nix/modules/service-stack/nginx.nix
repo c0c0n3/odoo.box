@@ -7,7 +7,7 @@
 # - https://www.odoo.com/documentation/14.0/administration/install/deploy.html#https
 # - https://www.pgadmin.org/docs/pgadmin4/8.5/server_deployment.html
 #
-{ sslCertificate, sslCertificateKey, domain }:
+{ autocerts, sslCertificate, sslCertificateKey, domain }:
 {
     enable = true;
 
@@ -46,8 +46,6 @@
     };
 
     virtualHosts."${domain}" = {
-      inherit sslCertificate sslCertificateKey;
-
       # Our Odoo stack is supposed to run on a dedicated box. So we
       # only need this one Nginx server which is why we make it the
       # the default server.
@@ -75,7 +73,11 @@
           '';
         };
       };
-  };
+    } // (if autocerts then {
+        enableACME = true;                                     # (2)
+    } else {
+        inherit sslCertificate sslCertificateKey;
+    });
 }
 # NOTE
 # ----
@@ -85,4 +87,13 @@
 # turned on `recommendedProxySettings` for the whole server. Plus,
 # traffic is over the loopback interface instead of a Unix socket.
 # Same same but different.
+#
+# 2. TLS certs. When using ACME we stick with the default provider,
+# which is Let's Encrypt. In this case, the domain name should be
+# that of the host machine. Also notice that multi-domain configs
+# are supported.
+# See:
+# - https://nixos.org/manual/nixos/stable/#module-security-acme-nginx
+# - https://nixos.wiki/wiki/Nginx
+# - https://discourse.nixos.org/t/nixos-nginx-acme-ssl-certificates-for-multiple-domains
 #

@@ -28,6 +28,17 @@ with types;
         The name of the sys admin user.
       '';
     };
+    odbox.login.admin-email = mkOption {
+      type = str;
+      default = "admin@lo.kl";
+      description = ''
+        The email of the sys admin user. This is only used if you turn
+        on something that requires sending email notifications or an
+        email address for registration purposes. For example, if you
+        turn on automatic Let's Encrypt certs in Nginx, then this is
+        the address that'll be used.
+      '';
+    };
   };
 
 }
