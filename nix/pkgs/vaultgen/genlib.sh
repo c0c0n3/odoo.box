@@ -106,7 +106,7 @@ make_password_files() {
     if [ -z "${clear_text}" ]; then
         clear_text=$(diceware)
     fi
-    echo "${clear_text}" > "${base_file}"
+    printf "${clear_text}" > "${base_file}"
     printf "${clear_text}" | mkpasswd -m sha-512 -s > "${base_file}.sha512"
     printf "${clear_text}" | mkpasswd -m yescrypt -s > "${base_file}.yesc"
 
