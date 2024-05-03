@@ -18,30 +18,26 @@
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "23.11";
 
-
   odbox = {
     server.enable = true;
     vault = {
-      snakeoil.enable = true;
-
-      # age = {
-      #   root-pwd = ./vault/passwords/root.yesc.age;
-      #   admin-pwd = ./vault/passwords/admin.yesc.age;
-      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
-      #   pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.age;
-      #   nginx-cert = ./vault/certs/localhost-cert.pem.age;
-      #   nginx-cert-key = ./vault/certs/localhost-key.pem.age;
-      # };
-      # agez.enable = true;
-      # agenix.enable = true;
-
+      agez.enable = true;
+      age = {
+        odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
+        pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.age;
+      };
       root-ssh-file = ./vault/ssh/id_rsa.pub;                  # (1)
       admin-ssh-file = ./vault/ssh/id_rsa.pub;                 # (1)
     };
-    service-stack.odoo-cpus = 4;
+    login.admin-email = "andrea.falconi@martel-innovate.com";
+    service-stack = {
+      autocerts = true;
+      domain = "test-odoo.martel-innovate.com";
+      odoo-cpus = 4;
+    };
     swapfile = {
       enable = true;
-      size = 16384;
+      size = 32768;
     };
   };
 }
