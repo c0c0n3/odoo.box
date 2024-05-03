@@ -92,12 +92,14 @@ with types;
       user = nginx;
       group = nginx;
     };
-    ageFiles = [ root admin odoo-admin ] ++
-      (
-        if has-autocerts then [] else [ cert cert-key ]
-      ) ++ (
-        if has-pgadmin then [ pgadmin-admin ] else []
-      );
+    addIf = cond: x: if cond then [ x ] else [];
+    ageFiles = [ odoo-admin ]
+            ++ addIf (root.encryptedFile != null) root
+            ++ addIf (admin.encryptedFile != null) admin
+            ++ addIf (!has-autocerts) cert
+            ++ addIf (!has-autocerts) cert-key
+            ++ addIf has-pgadmin pgadmin-admin
+            ;
   in (mkIf enabled
   {
     odbox.vault = {

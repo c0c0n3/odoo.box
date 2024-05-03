@@ -53,13 +53,15 @@ with types;
     age = {
       identityPaths = mkIf (key != null) [ key ];
       secrets = {
-        root-pwd.file = config.odbox.vault.age.root-pwd;
-        admin-pwd.file = config.odbox.vault.age.admin-pwd;
         odoo-admin-pwd = {
           file = config.odbox.vault.age.odoo-admin-pwd;
           owner = odoo;
           group = odoo;
         };
+      } // optionalAttrs (config.odbox.vault.age.root-pwd != null) {
+        root-pwd.file = config.odbox.vault.age.root-pwd;
+      } // optionalAttrs (config.odbox.vault.age.admin-pwd != null) {
+        admin-pwd.file = config.odbox.vault.age.admin-pwd;
       } // optionalAttrs (!has-autocerts) {
         nginx-cert = {
           file = config.odbox.vault.age.nginx-cert;
