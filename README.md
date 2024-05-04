@@ -67,11 +67,10 @@ bit easier:
   (`tmpfs`) to avoid storing them on disk. This way even secrets can
   be safely kept in Git and in the Nix store, all of which enables a
   full-on GitOps approach.
+- TLS certificates. Automatic request, installation and renewal of
+  TLS certs. We use Let's Encrypt as a CA.
 - Odoo data migration. Support to migrate an Odoo DB and file store
   from another Odoo server. Complete with K8s migration scripts.
-- Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
-  `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
-  instance types.
 - Backups. Automatic hot and cold backups with flexible schedules.
   Notice that thanks to our Nix-powered GitOps approach, backing
   up and restoring a machine is a breeze. We just need to back up
@@ -80,6 +79,9 @@ bit easier:
   the Odoo DB and file store at a point in time, you can restore
   your machine to the exact same state it was at that point in
   time with just a couple of commands.
+- Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
+  `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
+  instance types.
 
 
 ### Development & Testing

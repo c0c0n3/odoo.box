@@ -31,8 +31,10 @@ We've implemented the following NixOS modules:
   Odoo on a single machine. Includes our Odoo addons, Postgres DB,
   Nginx TLS reverse proxy as well as other tools to help with Odoo
   admin and maintenance tasks like CLI utils and a secure PgAdmin
-  Web UI. The whole service stack gets configured with security in
-  mind, according to Least Privilege and Zero Trust principles.
+  Web UI. Plus, you can have Odoo Box automatically get and renew
+  TLS certs from Let's Encrypt. The whole service stack gets configured
+  with security in mind, according to Least Privilege and Zero Trust
+  principles.
 - [Server Base][svr-base]. Strings together the two modules above,
   enables SSH and sets up a firewall to let in only SSH and HTTP
   traffic.

@@ -61,7 +61,7 @@ should do is deploy the Age key to the EC2 VM. Below is the short
 version which assumes your key is in your local `odoo.box` clone
 under `nodes/ec2-aarch64/vault`. If that's not the case or you'd
 like to see some example scenarios first, read the [Vault and Login
-Configs][vault] page.
+Configs][vault-eg] page.
 
 ```bash
 $ cd odoo.box/nix
