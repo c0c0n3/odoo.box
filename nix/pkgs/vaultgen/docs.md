@@ -18,14 +18,18 @@ listed below.
  ├── .gitignore                # make git track only encrypted or pub files
  ├── age.key                   # generated Age identity
  ├── certs
- │  ├── localhost-cert.pem     # generated localhost pub cert
- │  └── localhost-cert.pem.age # Age-encrypted localhost pub cert
+ │  ├── localhost-cert.pem     # generated localhost pub cert signed w/ vault-ca
+ │  ├── localhost-cert.pem.age # Age-encrypted localhost pub cert
  │  ├── localhost-key.pem      # generated localhost cert key
- │  └── localhost-key.pem.age  # Age-encrypted localhost cert key
- │  └── prod-cert.pem          # imported prod pub cert
- │  └── prod-cert.pem.age      # Age-encrypted prod pub cert
- │  └── prod-key.pem           # imported prod cert key
- │  └── prod-key.pem.age       # Age-encrypted prod cert key
+ │  ├── localhost-key.pem.age  # Age-encrypted localhost cert key
+ │  ├── prod-cert.pem          # imported prod pub cert
+ │  ├── prod-cert.pem.age      # Age-encrypted prod pub cert
+ │  ├── prod-key.pem           # imported prod cert key
+ │  ├── prod-key.pem.age       # Age-encrypted prod cert key
+ │  ├── vault-ca-cert.pem      # self-signed CA pub cert
+ │  ├── vault-ca-cert.pem.age  # Age-encrypted CA pub cert
+ │  ├── vault-ca-key.pem       # generated CA cert key
+ │  └── vault-ca-key.pem.age   # Age-encrypted CA cert key
  ├── passwords
  │  ├── admin                  # clear-text admin pwd (generated or entered)
  │  ├── admin.age              #   Age-encrypted clear-text pwd
@@ -48,7 +52,7 @@ listed below.
  │  ├── root                   # clear-text root pwd (generated or entered)
  │  ├── root.age               #   Age-encrypted clear-text pwd
  │  ├── root.sha512            #   hashed pwd that `chpasswd` can handle
- │  └── root.sha512.age        #   Age-encrypted hashed pwd
+ │  ├── root.sha512.age        #   Age-encrypted hashed pwd
  │  ├── root.yesc              #   Yescrypt-hashed pwd `chpasswd` can handle
  │  └── root.yesc.age          #   corresponding Age-encrypted hashed pwd
  └── ssh
@@ -91,12 +95,25 @@ certificate we need:
 - Age key file. Contains the Age-encrypted certificate's private key.
 
 This script automatically generates a basic self-signed, 100-year
-valid, RSA SSL certificate in PEM format. This certificate is for
+valid, RSA TLS certificate in PEM format for a CA and then uses it
+to sign all the other certs. There's only one other certificate for
 the localhost CN by default, but you can change the CN to something
 else—see below. This script can also import the prod pub cert and
 private key into the `vault/certs` directory. On importing, it
 encrypts the private key and writes it to a corresponding `.age`
 file.
+If the CA files are there already the script won't generate them
+again. Ditto for certificates. This way you can easily add new certs
+to your vault and sign them with the existing CA. But keep in mind
+if you remove the CA files, then you should zap all the certs that
+were signed with that CA too as we don't check that. For example, if
+you delete the CA files but keep a certificate for `my.dom`, the CA
+files get generated again, but the `my.dom` files will still be the
+ones signed with the old CA. Read the articles below for a quick
+intro to CAs, certs and how to add a CA to your browser to make it
+validate the certificates we generate:
+- https://gist.github.com/soarez/9688998
+- https://hackernoon.com/how-to-get-sslhttps-for-localhost-i11s3342
 
 Finally notice this script also generates a safety-net `.gitignore`
 file. The file tells git to ignore any file this script may output
@@ -122,8 +139,8 @@ Instead, you use env vars to specify those values:
 - `PGADMIN_ADMIN_PASSWORD`. Clear-text password for the PgAdmin Web
   UI admin user. Don't set this var to have the script generate one
   for you.
-- `DOMAIN`. CN for the self-signed cert. Defaults to localhost if
-  not set.
+- `DOMAIN`. List of space-separated CN names, one for each domain
+  certificate to generate. Defaults to localhost if not set.
 - `PROD_CERT`. Path to a prod public certificate file to copy over
   to `vault/certs`. Don't set, if you don't have a cert.
 - `PROD_CERT_KEY`. Path to the corresponding key file to copy over
@@ -137,6 +154,7 @@ invocation with all the parameters set
 $ BATCH_MODE=1 \
   ROOT_PASSWORD=abc123 ADMIN_PASSWORD=xy \
   ODOO_ADMIN_PASSWORD=123 PGADMIN_ADMIN_PASSWORD=foo \
+  DOMAIN='localhost test.com' \
   PROD_CERT=c.pem PROD_CERT_KEY=k.pem \
   vaultgen
 ```

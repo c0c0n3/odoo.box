@@ -35,7 +35,10 @@ run_batch_mode() {
     for k in "${!pwd_files[@]}"; do
         make_password_files "${pwd_files[k]}" "${batch_pwds[k]}"
     done
-    make_cert_files "${DOMAIN}"
+
+    read -ra parsed_dom <<< "${DOMAIN}"
+    make_cert_files "vault-ca" "${parsed_dom[@]}"
+
     if [ "${PROD_CERT}" != "" ] && [ "${PROD_CERT_KEY}" != "" ]; then
         import_cert_files "${PROD_CERT}" "${PROD_CERT_KEY}"
     fi
@@ -54,8 +57,8 @@ run_interactive_mode() {
         make_password_files "${f}" "${password}"
     done
 
-    read -p "self-signed certificate's domain [localhost]: " domain
-    make_cert_files "${domain:-localhost}"
+    read -p "space-separated list of domains, one for each certificate [localhost]: " -ra domain
+    make_cert_files "vault-ca" "${domain[@]:-localhost}"
 
     read -p "prod pub certificate [press enter to skip]: " cert
     if [ "${cert}" != "" ]; then
