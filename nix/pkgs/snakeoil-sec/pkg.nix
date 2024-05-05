@@ -41,10 +41,3 @@ in stdenv.mkDerivation {
 # which is world-readable. Only ever use this package for testing on
 # localhost!
 #
-# 3. CA. We could improve our setup by creating our own Certificate
-# Authority and then sign our cert with that CA. This way, you could
-# import the CA in e.g. your browser and get rid of the annoying sec
-# warning when hitting localhost:443.
-# See:
-# - https://hackernoon.com/how-to-get-sslhttps-for-localhost-i11s3342
-#
