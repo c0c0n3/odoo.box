@@ -26,9 +26,8 @@ in {
       basedir = backup-mount-dir;
       odoo = {
         enable = true;
-        # hot-schedule = [ "11:00:00" "14:00:00" "16:00:00" ];
-        cold-schedule = [ "18:51:00" ];
-        # cold-schedule = [ "02:00:00" ];
+        hot-schedule = [ "11:00:00" "14:00:00" "16:00:00" ];
+        cold-schedule = [ "02:00:00" ];
       };
     };
     vault = {
