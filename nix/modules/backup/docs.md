@@ -165,6 +165,7 @@ Normalized form: *-*-* 11,14,16:00:00
 ### AWS Lifecycle Manager - Volume snapshots
 
 As we described on the **Backup Area** section, an EBS Volume (`vol-0200287c009a32cdd`) is mounted on the `/backup` directory.
+
 On the AWS console we created a `Data Lifecycle Rule (policy-07d599ae024e674c7)` which basically defines a policy for snapshotting the volume on a schedule basis.
 The first snapshot taken is a FULL clone of the volume, then, all the other snapshots are incremental.
 
