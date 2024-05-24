@@ -68,14 +68,23 @@ ca_cert := ${certs_dir}/${CA_CN}-cert.pem
 gitignore := ${BASE_DIR}/.gitignore
 
 # Dynamic targets we generate according to input variables.
+# Notice we also pick up certs that were generated or imported in a
+# previous run but are not listed in `DOMAINS` for the current run.
+# This way we can re-encrypt them if the Age key has changed since
+# the time when the certs were generated or imported. (Notice `sort`
+# removes dups, so we avoid the "target given more than once in the
+# same rule" warning.)
 domain_certs := $(foreach d, ${DOMAINS}, \
                              ${certs_dir}/${d}-key.pem \
                              ${certs_dir}/${d}-cert.pem)
-age_tls_files := $(foreach f, ${domain_certs} ${ca_key} ${ca_cert}, ${f}.age)
+existing_certs := $(filter-out %.age, $(wildcard ${certs_dir}/*))
+age_tls_files := $(sort $(foreach f, \
+                    ${existing_certs} ${domain_certs} ${ca_key} ${ca_cert}, \
+                    ${f}.age))
 pwd_files := $(foreach p, ${PASSWORDS}, \
                           ${passwords_dir}/${p}.txt \
-						  ${passwords_dir}/${p}.sha512 \
-						  ${passwords_dir}/${p}.yesc)
+                          ${passwords_dir}/${p}.sha512 \
+                          ${passwords_dir}/${p}.yesc)
 age_pwd_files := $(foreach f, ${pwd_files}, ${f}.age)
 
 
