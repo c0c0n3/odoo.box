@@ -17,12 +17,11 @@ in stdenv.mkDerivation {
     dontUnpack = true;                                         # (1)
 
     buildPhase = ''
-      BATCH_MODE=1 \
-      ROOT_PASSWORD="${root-pass}" \
-      ADMIN_PASSWORD="${admin-pass}" \
-      ODOO_ADMIN_PASSWORD="${odoo-admin-pass}" \
-      PGADMIN_ADMIN_PASSWORD="${pgadmin-admin-pass}" \
-      ${cmd}
+      ${cmd} root "${root-pass}"
+      ${cmd} admin "${admin-pass}"
+      ${cmd} odoo-admin "${odoo-admin-pass}"
+      ${cmd} pgadmin-admin "${pgadmin-admin-pass}"
+      ${cmd} certs
     '';
 
     installPhase = ''

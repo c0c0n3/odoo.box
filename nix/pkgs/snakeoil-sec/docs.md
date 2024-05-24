@@ -38,7 +38,7 @@ Easy:
 $ cd odoo.box/nix
 $ nix shell
 $ nix build .#snakeoil-sec
-$ age -d -i result/age.key result/passwords/odoo-admin.age
+$ age -d -i result/age.key result/passwords/odoo-admin.txt.age
 $ age -d -i result/age.key result/certs/localhost-key.pem.age | bat
 ```
 

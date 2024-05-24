@@ -26,8 +26,8 @@
       # age = {
       #   root-pwd = ./vault/passwords/root.yesc.age;
       #   admin-pwd = ./vault/passwords/admin.yesc.age;
-      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.age;
-      #   pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.age;
+      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.txt.age;
+      #   pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.txt.age;
       #   nginx-cert = ./vault/certs/localhost-cert.pem.age;
       #   nginx-cert-key = ./vault/certs/localhost-key.pem.age;
       # };

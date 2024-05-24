@@ -25,8 +25,8 @@ with types;
     odbox.vault = {
       root-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/root.yesc";
       admin-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/admin.yesc";
-      odoo-admin-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/odoo-admin";
-      pgadmin-admin-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/pgadmin-admin";
+      odoo-admin-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/odoo-admin.txt";
+      pgadmin-admin-pwd-file = "${pkgs.odbox.snakeoil-sec}/passwords/pgadmin-admin.txt";
       nginx-cert = "${pkgs.odbox.snakeoil-sec}/certs/localhost-cert.pem";
       nginx-cert-key = "${pkgs.odbox.snakeoil-sec}/certs/localhost-key.pem";
     };
