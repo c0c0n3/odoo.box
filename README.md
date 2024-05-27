@@ -68,7 +68,9 @@ bit easier:
   be safely kept in Git and in the Nix store, all of which enables a
   full-on GitOps approach.
 - TLS certificates. Automatic request, installation and renewal of
-  TLS certs. We use Let's Encrypt as a CA.
+  TLS certs. We use Let's Encrypt as a CA in prod, but we've also
+  rolled out our own Smallstep CA to test locally and in non-prod
+  envs.
 - Odoo data migration. Support to migrate an Odoo DB and file store
   from another Odoo server. Complete with K8s migration scripts.
 - Backups. Automatic hot and cold backups with flexible schedules.
@@ -85,6 +87,14 @@ bit easier:
 
 
 ### Development & Testing
+
+We believe in local-first and reproducible development. Each dev
+should be able to install all the tools they need with a single
+command and the tool chain should be exactly the same for everyone
+in the team. Also, every dev should be able to test and tinker with
+Odoo Box locally without affecting other devs, prod or having to
+rely on cloud providers, not even for tricky scenarios like getting
+or renewing TLS certificates.
 
 - Dev Env. Nix shell to get proper, isolated and reproducible dev
   envs. This is a sort of virtual shell env on steroids which has

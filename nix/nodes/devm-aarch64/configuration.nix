@@ -19,6 +19,10 @@
     server.enable = true;
     login.mode = "standard";    # NOTE (3)
 
+    # NOTE (5)
+    # service-stack.autocerts = true;
+    # local-ca.enable = true;
+
     vault = {
       snakeoil.enable = true;
 
@@ -64,4 +68,4 @@
 # *Vault and Login Configs* docs.
 # 4. Testing backups. Set the schedules you like and then enable
 # the feature. Check service logs and backup dir after each run.
-#
+# 5. Testing ACME TLS certs. See `local-ca` module docs.

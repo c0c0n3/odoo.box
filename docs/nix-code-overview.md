@@ -54,6 +54,10 @@ We've implemented the following NixOS modules:
 - [Swap File][swap]. Enables swapping on a swap file.
 - [Backup][backup]. Automatic backups of the Odoo DB and file
   store.
+- [Local CA][local-ca]. Provides a service to issue and renew TLS
+  certificates through the ACME protocol. This way you can test
+  getting and renewing TLS certs locally, without having to connect
+  to Let's Encrypt and be bogged down by rate limits, etc.
 
 
 ### Nodes
@@ -109,6 +113,7 @@ We've developed the following Nix packages:
 [db-init]: ../nix/pkgs/db-init/docs.md
 [devm]: ../nix/nodes/devm-aarch64/
 [ec2]: ../nix/nodes/ec2-aarch64/
+[local-ca]: ../nix/modules/local-ca/docs.md
 [login]: ../nix/modules/login/docs.md
 [nix-dir]: ../nix/
 [odoo]: ../nix/pkgs/odoo-14/docs.md
