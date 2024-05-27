@@ -1,6 +1,7 @@
 {
   imports = [
     ./backup
+    ./local-ca
     ./login
     ./os-base.nix
     ./server-base.nix
