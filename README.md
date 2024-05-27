@@ -8,8 +8,10 @@ that wasn't easy to implement in our old K8s setup and which resulted
 in slashing IT Ops and hardware costs while improving reliability and
 performance at the same time.
 
-Below is an overview of the main features, read up about the details
-in the [docs][docs].
+Below is an UML-ish deployment diagram followed by an overview of
+the main features, read up about the details in the [docs][docs].
+
+![Deployment diagram][dia.deployment]
 
 
 ## Features
@@ -65,11 +67,12 @@ bit easier:
   (`tmpfs`) to avoid storing them on disk. This way even secrets can
   be safely kept in Git and in the Nix store, all of which enables a
   full-on GitOps approach.
+- TLS certificates. Automatic request, installation and renewal of
+  TLS certs. We use Let's Encrypt as a CA in prod, but we've also
+  rolled out our own Smallstep CA to test locally and in non-prod
+  envs.
 - Odoo data migration. Support to migrate an Odoo DB and file store
   from another Odoo server. Complete with K8s migration scripts.
-- Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
-  `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
-  instance types.
 - Backups. Automatic hot and cold backups with flexible schedules.
   Notice that thanks to our Nix-powered GitOps approach, backing
   up and restoring a machine is a breeze. We just need to back up
@@ -78,9 +81,20 @@ bit easier:
   the Odoo DB and file store at a point in time, you can restore
   your machine to the exact same state it was at that point in
   time with just a couple of commands.
+- Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
+  `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
+  instance types.
 
 
 ### Development & Testing
+
+We believe in local-first and reproducible development. Each dev
+should be able to install all the tools they need with a single
+command and the tool chain should be exactly the same for everyone
+in the team. Also, every dev should be able to test and tinker with
+Odoo Box locally without affecting other devs, prod or having to
+rely on cloud providers, not even for tricky scenarios like getting
+or renewing TLS certificates.
 
 - Dev Env. Nix shell to get proper, isolated and reproducible dev
   envs. This is a sort of virtual shell env on steroids which has
@@ -96,4 +110,5 @@ bit easier:
 
 
 
+[dia.deployment]: ./docs/diagrams/deployment.colour.png
 [docs]: ./docs/README.md

@@ -7,6 +7,7 @@
 
   config = let
     mode = config.odbox.login.mode;
+    admin-usr = config.odbox.login.admin-username;
     admin-pwd = config.odbox.vault.admin-pwd-file;
     admin-ssh = config.odbox.vault.admin-ssh-file;
     root-pwd = config.odbox.vault.root-pwd-file;
@@ -17,7 +18,7 @@
     # Set admin user's password and SSH login key if one was given.
     # Also set the given root password and root's SSH key if one was
     # specified.
-    users.users.admin = {
+    users.users."${admin-usr}" = {
       hashedPasswordFile = admin-pwd;
       openssh.authorizedKeys.keyFiles = maybe admin-ssh;
     };

@@ -9,11 +9,17 @@ through TTY and SSH using passwords. Plus, they can also log in
 over SSH using their respective identities. Have a look at the
 [interface][iface] file for the available module options.
 
+Notice that NixOS automatically creates a root user, so we do the
+same for the [admin user][builtin]. That is, we create the admin
+user unconditionally. We do this because we'd also like to have a
+built-in user who is normally a regular user but can get super-cow
+powers through `sudo` when needed.
+
 
 ### Cloud mode
 
-In detail, for cloud mode, this module configures the root and
-admin users
+In detail, for [cloud mode][cloud], this module configures the root
+and admin users
 - with no passwords;
 - with the (required) SSH login key specified through the
   [vault][vault] module.
@@ -35,8 +41,8 @@ odbox = {
 
 ### Standard mode
 
-On the other hand, in standard mode, this module configures each
-of these two users by
+On the other hand, in [standard mode][standard], this module configures
+each of these two users by
 - setting the user's password to the respective hashed password
   specified through the [vault][vault] module;
 - setting the user's SSH login key if one was specified through
@@ -62,5 +68,9 @@ odbox = {
 
 
 
+
+[builtin]: ./builtin-users.nix
+[cloud]: ./cloud.nix
 [iface]: ./interface.nix
+[standard]: ./standard.nix
 [vault]: ../vault/docs.md

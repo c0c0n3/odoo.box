@@ -17,12 +17,11 @@ in stdenv.mkDerivation {
     dontUnpack = true;                                         # (1)
 
     buildPhase = ''
-      BATCH_MODE=1 \
-      ROOT_PASSWORD="${root-pass}" \
-      ADMIN_PASSWORD="${admin-pass}" \
-      ODOO_ADMIN_PASSWORD="${odoo-admin-pass}" \
-      PGADMIN_ADMIN_PASSWORD="${pgadmin-admin-pass}" \
-      ${cmd}
+      ${cmd} root "${root-pass}"
+      ${cmd} admin "${admin-pass}"
+      ${cmd} odoo-admin "${odoo-admin-pass}"
+      ${cmd} pgadmin-admin "${pgadmin-admin-pass}"
+      ${cmd} certs
     '';
 
     installPhase = ''
@@ -40,11 +39,4 @@ in stdenv.mkDerivation {
 # 2. Security. Cert key and passwords will wind up in the Nix store
 # which is world-readable. Only ever use this package for testing on
 # localhost!
-#
-# 3. CA. We could improve our setup by creating our own Certificate
-# Authority and then sign our cert with that CA. This way, you could
-# import the CA in e.g. your browser and get rid of the annoying sec
-# warning when hitting localhost:443.
-# See:
-# - https://hackernoon.com/how-to-get-sslhttps-for-localhost-i11s3342
 #

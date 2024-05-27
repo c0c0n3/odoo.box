@@ -1,5 +1,5 @@
 #
-# A simple system base with CLI tools, Emacs and admin user.
+# A simple system base with CLI tools and Emacs.
 # This module installs:
 #
 # * Emacs (built w/o X11 deps)
@@ -12,7 +12,6 @@
 #
 # Finally, this module configures users by
 # - only allowing to change users and groups through NixOS config;
-# - creating an admin (wheel) user;
 # - letting wheel users run `sudo` without a password.
 #
 # Because wheel users don't have to enter a password to `sudo`, you
@@ -39,13 +38,6 @@ with types;
         Enable it to install this system base.
       '';
     };
-    odbox.base.admin-username = mkOption {
-      type = str;
-      default = "admin";
-      description = ''
-        The name of the sys admin user.
-      '';
-    };
     odbox.base.cli-tools = mkOption {
       type = listOf package;
       default = [];
@@ -57,7 +49,6 @@ with types;
 
   config = let
     enabled = config.odbox.base.enable;
-    admin-usr = config.odbox.base.admin-username;
     tools = config.odbox.base.cli-tools;
   in (mkIf enabled
   {
@@ -77,14 +68,6 @@ with types;
 
     # Only allow to change users and groups through NixOS config.
     users.mutableUsers = false;
-
-    # Create the admin user but leave the setting of credentials
-    # to other modules.
-    users.users."${admin-usr}" = {
-      isNormalUser = true;
-      group = "users";
-      extraGroups = [ "wheel" ];
-    };
 
     # Let wheel users run `sudo` without a password.
     security.sudo.wheelNeedsPassword = false;
