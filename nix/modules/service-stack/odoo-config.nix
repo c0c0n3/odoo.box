@@ -20,6 +20,8 @@ let
 
       max_cron_threads = 1;
       workers = cpus * 2 + 1;                                  # (2)
+
+      log_handler = ":DEBUG";
     };
   };
 in
