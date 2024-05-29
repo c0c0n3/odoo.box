@@ -20,6 +20,8 @@ in {
   nixosConfigurations = {
     ec2 = mkNode "aarch64-linux" ./ec2-aarch64/configuration.nix;
     ec2-boot = mkNode "aarch64-linux" ./ec2-aarch64/config-boot.nix;
+    ec2-x86_64 = mkNode "x86_64-linux" ./ec2-x86_64/configuration.nix;
+    ec2-x86_64-boot = mkNode "x86_64-linux" ./ec2-x86_64/config-boot.nix;
     devm = mkNode "aarch64-linux" ./devm-aarch64/configuration.nix;
     devm-boot = mkNode "aarch64-linux" ./devm-aarch64/config-boot.nix;
   };
