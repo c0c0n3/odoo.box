@@ -2,17 +2,22 @@
 # See `docs.md` for package documentation.
 #
 {
+  system,
   lib, stdenv, fetchzip, fetchFromGitHub,
   poetry2nix, python39,
-  rtlcss, wkhtmltopdf
+  rtlcss, wkhtmltopdf, wkhtmltopdf-bin
 }:
 let
   isLinux = stdenv.isLinux;
   ifLinux = ps: if isLinux then ps else [];
+  is-x86_64 = lib.strings.hasPrefix "x86_64" system;
 
-  wkhtmltopdf-odoo = import ./wkhtmltopdf.nix {
-    inherit fetchFromGitHub wkhtmltopdf;
-  };                                                           # (1)
+  wkhtmltopdf-odoo =
+    if is-x86_64
+    then wkhtmltopdf-bin
+    else import ./wkhtmltopdf.nix {
+      inherit fetchFromGitHub wkhtmltopdf;
+    };                                                         # (1)
 in poetry2nix.mkPoetryApplication rec {
   pname = "odoo14";
   series = "14.0";
@@ -50,7 +55,13 @@ in poetry2nix.mkPoetryApplication rec {
 }
 # NOTE
 # ----
-# 1. wkhtmltopdf. See (1) in `wkhtmltopdf.nix`.
+# 1. wkhtmltopdf. See (1) in `wkhtmltopdf.nix` for the version we compile
+# as well as
+# - https://github.com/c0c0n3/odoo.box/issues/23
+# for the issues we're having at the moment. Notice `wkhtmltopdf-bin`
+# contains a binary fetched from the interwebs which was compiled for
+# Arch Linux and includes the `wkhtmltopdf` patched version of Qt. Not
+# optimal, but it works on x86 machines.
 #
 # 2. Source. Why not fetch from GitHub? Because the tarball consolidates
 # all the add-ons in the `odoo/addons` dir whereas the repo has them split
