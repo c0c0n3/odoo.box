@@ -41,8 +41,8 @@ in {
     };
     login.admin-email = "sys-admin@martel-innovate.com";
     service-stack = {
-      autocerts = false;
-      # domain = "test-odoo.martel-innovate.com";
+      autocerts = true;
+      domain = "test-odoo.martel-innovate.com";
       odoo-cpus = 2;
     };
     swapfile = {
