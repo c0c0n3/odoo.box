@@ -21,7 +21,7 @@ let
       max_cron_threads = 1;
       workers = cpus * 2 + 1;                                  # (2)
 
-      log_handler = ":DEBUG";
+      log_handler = ":INFO";
     };
   };
 in
@@ -39,3 +39,5 @@ in
 # 2. Performance. See:
 # - https://www.odoo.com/documentation/14.0/administration/install/deploy.html#id5
 #
+# 3. Log level. To make Odoo spill its guts, set the log handler to
+# ":DEBUG".
