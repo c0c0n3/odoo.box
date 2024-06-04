@@ -39,7 +39,7 @@ in {
       root-ssh-file = ./vault/ssh/id_rsa.pub;                  # (1)
       admin-ssh-file = ./vault/ssh/id_rsa.pub;                 # (1)
     };
-    login.admin-email = "andrea.falconi@martel-innovate.com";
+    login.admin-email = "sys-admin@martel-innovate.com";
     service-stack = {
       autocerts = true;
       domain = "test-odoo.martel-innovate.com";
