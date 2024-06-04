@@ -43,11 +43,11 @@ in {
     service-stack = {
       autocerts = false;
       # domain = "test-odoo.martel-innovate.com";
-      odoo-cpus = 4;
+      odoo-cpus = 2;
     };
     swapfile = {
       enable = true;
-      size = 32768;
+      size = 8192;
     };
   };
 }
