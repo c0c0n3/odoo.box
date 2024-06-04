@@ -30,12 +30,11 @@ in {
       };
     };
     vault = {
-      snakeoil.enable = true;
-      # agez.enable = true;                                      # (4)
-      # age = {
-      #   odoo-admin-pwd = ./vault/passwords/odoo-admin.txt.age;
-      #   pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.txt.age;
-      # };
+      agez.enable = true;                                      # (4)
+      age = {
+        odoo-admin-pwd = ./vault/passwords/odoo-admin.txt.age;
+        pgadmin-admin-pwd = ./vault/passwords/pgadmin-admin.txt.age;
+      };
       root-ssh-file = ./vault/ssh/id_rsa.pub;                  # (1)
       admin-ssh-file = ./vault/ssh/id_rsa.pub;                 # (1)
     };
