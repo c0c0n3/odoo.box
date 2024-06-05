@@ -74,9 +74,13 @@ At the moment we have the following configs:
 
 - [Dev VM][devm]. Qemu ARM64 VM to run and test the whole shebang
   in the comfort of your laptop.
-- [EC2][ec2]. EC2 Graviton VM to run the prod show. It works on
-  `m6g.xlarge`, `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and
-  `t4g.2xlarge` instance types.
+- [EC2 ARM64][ec2-aarch64]. EC2 Graviton VM to run the prod show.
+  Tested on `m6g.xlarge`, `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`,
+  and `t4g.2xlarge` instance types but it should work on any other
+  ARM64 instance type.
+- [EC2 x86_64][ec2-x86_64]. EC2 Intel Xeon VM to run the prod show.
+  Tested on `t3.medium` and `t3.2xlarge` instance types but it should
+  work on any other x86_64 instance type.
 
 
 ### Packages
@@ -112,7 +116,8 @@ We've developed the following Nix packages:
 [cli]: ../nix/pkgs/cli-tools/docs.md
 [db-init]: ../nix/pkgs/db-init/docs.md
 [devm]: ../nix/nodes/devm-aarch64/
-[ec2]: ../nix/nodes/ec2-aarch64/
+[ec2-aarch64]: ../nix/nodes/ec2-aarch64/
+[ec2-x86_64]: ../nix/nodes/ec2-x86_64/
 [local-ca]: ../nix/modules/local-ca/docs.md
 [login]: ../nix/modules/login/docs.md
 [nix-dir]: ../nix/
