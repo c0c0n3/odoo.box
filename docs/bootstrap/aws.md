@@ -32,7 +32,7 @@ settings:
 Pick the Odoo Box config for your EC2 VM's architecture:
 
 - [nodes/ec2-aarch64][ec2-aarch64] for ARM64
-- [nodes/ec2-x86_64/][ec2-x86_64] for x86_64
+- [nodes/ec2-x86_64][ec2-x86_64] for x86_64
 
 Then save your SSH identity key in your local `odoo.box` clone as
 either
