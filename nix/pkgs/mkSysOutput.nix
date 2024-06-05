@@ -9,7 +9,7 @@
   ...
 }:
 let
-  odoo = import ./odoo-14 { pkgs = sysPkgs; };
+  odoo = import ./odoo-14 { inherit system; pkgs = sysPkgs; };
   addons = import ./odoo-addons { pkgs = sysPkgs; };
   localhost-cert = import ./localhost-cert { pkgs = sysPkgs; };
   vaultgen = import ./vaultgen { pkgs = sysPkgs; };

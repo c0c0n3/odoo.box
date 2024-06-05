@@ -2,25 +2,57 @@ AWS Bootstrap
 -------------
 > Creating a prod VM on AWS.
 
+We're going to build an EC2 VM to host our Odoo stack to run the
+prod show. We'll start from scratch and follow pretty much the same
+procedure as that for the [Dev VM][devm]. So we'll keep the commentary
+to the bare minimum, read the [Dev VM][devm] page if you need more
+details.
+
 
 ### Creating an EC2 instance
 
-Start an on-demand EC2 Graviton VM
+We tested our AWS setup with both Graviton (ARM64) and Xeon (x86_64)
+instance types. Specifically, we ran Odoo Box on the instance types
+below, but any other ARM64 or x86_64 instance type should do.
+- ARM64: `m6g.xlarge`, `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`,
+  `t4g.2xlarge`.
+- x86_64: `t3.medium`, `t3.2xlarge`.
+
+So start an on-demand EC2 VM, either ARM64 or x86_64, with these
+settings:
 - AMI: Official NixOS `23.11`.
 - One EBS of 200GB to host the whole OS + data.
 - One EBS of 10GB to host backups.
-- Static IP: `99.80.119.231`
+- Static IP: e.g. `99.80.119.231`.
 - Inbound ports: `22`, `80`, `443`.
 
-We tested this with `m6g.xlarge`, `m6g.2xlarge`, `c6g.xlarge`,
-`c6g.2xlarge`, and `t4g.2xlarge` instance types. At the moment
-we have a `t4g.2xlarge` instance.
 
-Save your SSH identity key as `nodes/ec2-aarch64/vault/ssh/id_rsa`
-in your local `odoo.box` clone. The commands below assume your key
-is in that file. If you'd rather keep the key somewhere else, change
-the commands below accordingly. Either way, make sure to use the SSH
-key paired to `nodes/ec2-aarch64/vault/ssh/id_rsa.pub`.
+### Choosing an Odoo Box config
+
+Pick the Odoo Box config for your EC2 VM's architecture:
+
+- [nodes/ec2-aarch64][ec2-aarch64] for ARM64
+- [nodes/ec2-x86_64][ec2-x86_64] for x86_64
+
+Then save your SSH identity key in your local `odoo.box` clone as
+either
+- `nodes/ec2-aarch64/vault/ssh/id_rsa`; or
+- `nodes/ec2-x86_64/vault/ssh/id_rsa`
+
+depending on the Odoo Box config you chose.
+
+The commands in the rest of this guide refer to a scenario with
+- EC2 Graviton VM
+- VM's IP address of `99.80.119.231`
+- SSH identity in `nodes/ec2-aarch64/vault/ssh/id_rsa`
+
+Surely your IP address will be different, replace the above IP with
+yours. Likewise, if you have an x86_64 VM, you'll have to use the
+`ec2-x86_64` config, so tweak the commands below accordingly. Finally,
+if you'd rather keep the SSH identity in a file other than `id_rsa`
+in `vault/ssh/`, you can do that but tweak the SSH-related commands
+accordingly. Either way, make sure to use the SSH key paired to
+`/vault/ssh/id_rsa.pub`.
 
 
 ### Preparing the backup disk
@@ -82,7 +114,7 @@ First off, deploy the data bootstrap NixOS config.
 $ cd odoo.box/nix
 $ nix shell
 $ NIX_SSHOPTS='-i nodes/ec2-aarch64/vault/ssh/id_rsa' \
-  nixos-rebuild switch --fast --flake .#ec2-boot \
+  nixos-rebuild switch --fast --flake .#ec2-aarch64-boot \
       --target-host root@99.80.119.231 --build-host root@99.80.119.231
 ```
 
@@ -116,13 +148,16 @@ stack.
 $ cd odoo.box/nix
 $ nix shell
 $ NIX_SSHOPTS='-i nodes/ec2-aarch64/vault/ssh/id_rsa' \
-  nixos-rebuild switch --fast --flake .#ec2 \
+  nixos-rebuild switch --fast --flake .#ec2-aarch64 \
       --target-host root@99.80.119.231 --build-host root@99.80.119.231
 ```
 
 
 
 
+[devm]: ./dev-vm.md
+[ec2-aarch64]: ../../nix/nodes/ec2-aarch64/
+[ec2-x86_64]: ../../nix/nodes/ec2-x86_64/
 [odoo-data]: ./odoo-data.md
 [vault]: ../../nix/modules/vault/docs.md
 [vault-eg]: ../vault-n-login/README.md

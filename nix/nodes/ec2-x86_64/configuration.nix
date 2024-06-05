@@ -10,7 +10,6 @@ let
   backup-mount-dir = "/backup";
 in {
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
-  ec2.efi = true;
 
   time.timeZone = "Europe/Amsterdam";
   system.stateVersion = "23.11";
@@ -43,11 +42,11 @@ in {
     service-stack = {
       autocerts = true;
       domain = "test-odoo.martel-innovate.com";
-      odoo-cpus = 4;
+      odoo-cpus = 2;
     };
     swapfile = {
       enable = true;
-      size = 32768;
+      size = 8192;
     };
   };
 }

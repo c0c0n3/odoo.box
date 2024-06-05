@@ -1,1 +1,1 @@
-{ pkgs }: pkgs.callPackage ./pkg.nix {}
+{ system, pkgs }: pkgs.callPackage ./pkg.nix { inherit system; }

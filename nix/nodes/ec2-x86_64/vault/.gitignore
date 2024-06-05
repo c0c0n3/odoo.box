@@ -1,0 +1,15 @@
+# Ignore the Age identity
+/age.key
+
+# Ignore everything in certs except for Age-encrypted files.
+/certs/*
+!/certs/*.age
+
+# Ignore everything in passwords except for Age-encrypted files.
+/passwords/*
+!/passwords/*.age
+
+# Ignore everything in ssh except for public key files.
+/ssh/*
+!/ssh/*.pub
+

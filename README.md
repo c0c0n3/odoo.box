@@ -81,9 +81,8 @@ bit easier:
   the Odoo DB and file store at a point in time, you can restore
   your machine to the exact same state it was at that point in
   time with just a couple of commands.
-- Built-in EC2 Graviton support. One-liner install for `m6g.xlarge`,
-  `m6g.2xlarge`, `c6g.xlarge`, `c6g.2xlarge`, and `t4g.2xlarge`
-  instance types.
+- Built-in EC2 support. One-line install for Graviton (ARM64) and
+  Intel (x86_64) instance types.
 
 
 ### Development & Testing

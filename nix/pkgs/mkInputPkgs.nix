@@ -5,7 +5,10 @@
 { nixpkgs, poetry2nix, agenix }:
 nixpkgs // {
   mkConfig = system: {
-    permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];   # (1)
+    permittedInsecurePackages = [
+      "openssl-1.1.1w"
+      "qtwebkit-5.212.0-alpha4"
+    ];                                                           # (1)
   };
   mkOverlays = system: [
     poetry2nix.overlays.default
@@ -19,9 +22,9 @@ nixpkgs // {
 }
 # NOTE
 # ----
-# 1. qtwebkit. It shouldn't be used but Odoo indirectly depends on it---
-# see pkgs/odoo-14/pkg.nix. So we've got to override Nix's decision to
-# leave it out of the package set.
+# 1. Unsecure/unmaintained libs. They shouldn't be used but Odoo indirectly
+# depends on them---see pkgs/odoo-14/pkg.nix. So we've got to override Nix's
+# decision to leave them out of the package set.
 # 2. mkpasswd. Recent versions (up to `5.5.22`) won't compile with `clang`
 # > 14 on Apple Silicon. (Amazingly enough, source compiles just fine on
 # Linux.) So we downgrade `clang` to version 14 to be able to build on
