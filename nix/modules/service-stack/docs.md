@@ -9,7 +9,8 @@ Service stack to run Odoo.
 
 This [module][iface] configures a fully-fledged service stack to run
 Odoo on a single machine:
-- Odoo multi-processing server, including LiveChat gevent process.
+- Odoo multi-processing server, including LiveChat gevent process
+  and configurable user session timeout.
 - Sane, automatically generated Odoo [config][cfg].
 - Odoo [addons][addons].
 - [Systemd service][svc] to run Odoo, including daemon user and
@@ -67,6 +68,29 @@ odbox.service-stack = {
 
   # optionally
   pgadmin-enable = true;
+};
+```
+
+
+### Session timeout
+
+You can configure a Odoo user session timeout. This is a positive
+number of minutes `M` that determines how long a logged-in user is
+allowed to be inactive before they're automatically logged out. If
+the user's browser hasn't sent a request to the Odoo server in `M`
+minutes, the user session gets deleted and the user is forced to
+log in again.
+
+The default session timeout is 5 minutes. To change it, use the
+`odoo-session-timeout` option as in the example below where we set
+a timeout of 14 days. (This is just an example to show you can use
+a Nix expression to compute the value; in real life probably you
+wouldn't want a 14-day timeout, unless security isn't a concern.)
+
+```nix
+odbox.service-stack = {
+  odoo-session-timeout = 14 * 24 * 60;
+  # ...other options
 };
 ```
 
