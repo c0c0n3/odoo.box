@@ -44,6 +44,7 @@ in {
       autocerts = true;
       domain = "test-odoo.martel-innovate.com";
       odoo-cpus = 4;
+      odoo-session-timeout = 14 * 24 * 60;
     };
     swapfile = {
       enable = true;
