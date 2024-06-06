@@ -58,8 +58,11 @@ in {
   requires = [ "postgresql.service" ];
   restartTriggers = [ pwd-file ];
 
-  # pg_dump
+  # Make `pg_dump` available and disable session GC.
   path = [ postgres-pkg ];
+  environment = {
+    ODOO_DISABLE_SESSION_GC = "1";                             # (1), (2)
+  };
 
   script = run;
 
@@ -69,3 +72,14 @@ in {
     StateDirectory = odoo-usr;
   };
 }
+# NOTE
+# ----
+# 1. Disabling Odoo session GC.
+# See:
+# - https://github.com/c0c0n3/odoo.box/pull/25#issuecomment-2152662861
+#
+# 2. Session reaper. We disable session GC b/c we've got our own service
+# to get rid of inactive and junk sessions.
+# See:
+# - ./odoo-sesh-reaper.nix
+#

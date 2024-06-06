@@ -86,6 +86,15 @@ with types;
         default = 1;
         description = "Number of CPUs available to run the Odoo server.";
       };
+      odoo-session-timeout = mkOption {
+        type = ints.positive;
+        default =  5;
+        description = ''
+          Login session timeout in minutes. Any session inactive for longer
+          than these many minutes gets deleted and the user is forced to log
+          in again.
+        '';
+      };
       pgadmin-enable = mkOption {
         type = bool;
         default = false;

@@ -20,7 +20,8 @@ the main features, read up about the details in the [docs][docs].
 
 A fully-fledged, multi-architecture (x86-64 and ARM64) service stack
 to run Odoo on a single machine:
-- Odoo multi-processing server, including LiveChat gevent process.
+- Odoo multi-processing server, including LiveChat gevent process
+  and configurable user session timeout.
 - Sane, automatically generated Odoo config.
 - Nix-packaged Odoo addons.
 - systemd service to run Odoo, including daemon user and secure
