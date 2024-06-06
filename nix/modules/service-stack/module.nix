@@ -34,6 +34,7 @@ with types;
     };
 
     # Odoo.
+    sesh-timeout = config.odbox.service-stack.odoo-session-timeout;
     cfg-file = import ./odoo-config.nix {
       inherit pkgs odoo-db;
       cpus = config.odbox.service-stack.odoo-cpus;
@@ -43,6 +44,10 @@ with types;
       pwd-file = config.odbox.vault.odoo-admin-pwd-file;
       addons = config.odbox.service-stack.odoo-addons;
       bootstrap = config.odbox.service-stack.bootstrap-mode;
+    };
+    reaper = import ./odoo-sesh-reaper.nix {
+      inherit odoo-usr;
+      older-than = sesh-timeout;
     };
 
     # Nginx.
@@ -66,6 +71,11 @@ with types;
     # above config file and loads the given addons. The service's
     # home will be `/var/lib/${odoo-usr}`.
     systemd.services."${odoo-usr}" = svc;
+
+    # Schedule a service to zap inactive Odoo sessions.
+    # The service runs under the Odoo system user and its home will
+    # be `/var/lib/${odoo-usr}`.
+    systemd.services.odoo-session-reaper = reaper;
 
     # Run Nginx as a reverse proxy for Odoo.
     # Also accept ACME terms and set the admin email as a reg email,
