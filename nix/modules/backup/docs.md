@@ -29,14 +29,6 @@ before backing up and then restarts it as soon as the backup is done.
 Notice that a hot backup may result in an inconsistent DB and file
 store when restored, whereas cold backups are safe to restore.
 
-One last thing to mention is the Odoo sessions clean-up. Since we
-have to stop Odoo before making a cold backup, we take advantage
-of Odoo not running to get rid of any session files still on disk.
-Ideally Odoo should clean up after itself, but that doesn't always
-happen and overtime you could pile up truck loads of stale session
-files which would slow down directory access and in turn slow down
-Odoo itself.
-
 Have a look at these Nix files for the implementation details:
 - [Odoo implementation entry point][odoo-mod]
 - [Odoo backup script][odoo-script]
@@ -164,10 +156,12 @@ Normalized form: *-*-* 11,14,16:00:00
 
 ### AWS Lifecycle Manager - Volume snapshots
 
-As we described on the **Backup Area** section, an EBS Volume (`vol-0200287c009a32cdd`) is mounted on the `/backup` directory.
-
-On the AWS console we created a `Data Lifecycle Rule (policy-07d599ae024e674c7)` which basically defines a policy for snapshotting the volume on a schedule basis.
-The first snapshot taken is a FULL clone of the volume, then, all the other snapshots are incremental.
+As we described on the **Backup Area** section, an EBS Volume
+(`vol-0200287c009a32cdd`) is mounted on the `/backup` directory.
+On the AWS console we created a `Data Lifecycle Rule (policy-07d599ae024e674c7)`
+which basically defines a policy for snapshotting the volume on a
+schedule basis. The first snapshot taken is a FULL clone of the volume,
+then, all the other snapshots are incremental.
 
 As of now, we implemented 2 different schedules:
 
@@ -178,8 +172,11 @@ As of now, we implemented 2 different schedules:
 On the 91st day a new FULL will be taken.
 
 **Monthly**
-- Frequency: On the 1st Monday every month starting at 03:00 AM (UTC +2 - Zurich).
-- Retention rule: Snapshot will be retained in the standard tier for 30 days, then retained in the Archive tier for 90 days.
+- Frequency: On the 1st Monday every month starting at 03:00 AM
+  (UTC +2 - Zurich).
+- Retention rule: Snapshot will be retained in the standard tier
+  for 30 days, then retained in the Archive tier for 90 days.
+
 
 
 

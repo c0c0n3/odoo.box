@@ -7,14 +7,11 @@
   # The name of the Odoo DB.
   odoo-db,
   # Absolute path to the backup base dir.
-  basedir,
-  # Delete all Odoo sessions stored on disk?
-  clean-sessions ? false
+  basedir
 }:
 let
   dst-basedir = "${basedir}/odoo";
   src-filestore = "/var/lib/${odoo-usr}/data/filestore";
-  src-sessions = "/var/lib/${odoo-usr}/data/sessions";
   dst-db-dump = "${dst-basedir}/${odoo-db}.dump.sql";
 in ''
   umask 0077
@@ -27,8 +24,6 @@ in ''
           > '${dst-db-dump}'
 
   rsync -av --delete '${src-filestore}' '${dst-basedir}/'
-
-  ${if clean-sessions then "rm -rf '${src-sessions}'" else ""}
 ''
 # NOTE
 # ----
@@ -39,5 +34,4 @@ in ''
 # then the actual dump file in the backup dir ends up being owned
 # by the user who runs the script, typically root. So the `umask`
 # in (1) also applies to the dump file.
-# 3. Sessions dir. We zap it as Odoo will recreate it automatically.
 #

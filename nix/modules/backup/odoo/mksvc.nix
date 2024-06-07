@@ -32,7 +32,6 @@ in {
 
   script = import ./backup-script.nix {
     inherit odoo-usr odoo-db basedir;
-    clean-sessions = !hot;
   };
 
   postStop = if hot

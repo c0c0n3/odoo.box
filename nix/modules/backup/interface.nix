@@ -59,9 +59,6 @@ with types;
         in the systemd time format and for each entry you add to the
         list, there'll be a corresponding `OnCalendar` directive in
         the systemd unit file.
-
-        Notice the cold backup procedure also cleans up stale Odoo
-        session files.
       '';
     };
   };
