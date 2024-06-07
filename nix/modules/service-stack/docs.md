@@ -94,6 +94,16 @@ odbox.service-stack = {
 };
 ```
 
+We should mention Odoo has built-in support for session clean-up.
+So why roll out our own solution? First off, Odoo doesn't let you
+configure a session timeout, so you're stuck with the hardcoded
+value of one week—unless you install additional plugins. Second,
+in an ideal world, Odoo should clean up after itself, but that
+doesn't always happen and overtime you could pile up truck loads
+of stale session files which would slow down directory access and
+in turn slow down Odoo itself. More details over here:
+- https://github.com/c0c0n3/odoo.box/pull/25#issuecomment-2152662861
+
 
 ### TLS certificates
 
