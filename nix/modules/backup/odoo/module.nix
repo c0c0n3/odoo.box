@@ -14,16 +14,16 @@ with lib;
     # Feature flag.
     enabled = config.odbox.backup.odoo.enable;
 
-    # Service template function.
-    mksvc = import ./mksvc.nix;
+    # Service builder functions.
+    mk-backup-svc = import ./mk-backup-svc.nix;
     mk-restore-svc = import ./mk-restore-svc.nix;
   in (mkIf enabled
   {
-    systemd.services.odoo-hot-backup = mksvc {
+    systemd.services.odoo-hot-backup = mk-backup-svc {
       inherit config pkgs;
       hot = true;
     };
-    systemd.services.odoo-cold-backup = mksvc {
+    systemd.services.odoo-cold-backup = mk-backup-svc {
       inherit config pkgs;
       hot = false;
     };
