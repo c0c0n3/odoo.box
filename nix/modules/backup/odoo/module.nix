@@ -3,7 +3,9 @@
 # interface.
 # We set up systemd timers and services to run hot and cold backups.
 # We use `pg_dump` to extract DB defs and data, whereas `rsync` takes
-# care of syncing the file store to the backup area.
+# care of syncing the file store to the backup area. Plus, we've got
+# a restore service to take the backup DB dump and file store and turn
+# them into the live Odoo DB and file store, respectively.
 #
 { config, lib, pkgs, ... }:
 

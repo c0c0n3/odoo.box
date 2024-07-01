@@ -37,6 +37,13 @@ with types;
         as the backup is done. Notice that a hot backup may result in
         an inconsistent DB and file store when restored, whereas cold
         backups are safe to restore.
+
+        Finally enabling this module also installs a convenience systemd
+        service to restore backups. The service takes the backup DB dump
+        and file store and turns them into the live Odoo DB and file store,
+        respectively. Notice systemd will never start this service, the
+        sysadmin is meant to start it manually when they want to restore
+        a backup like so: `sudo systemctl start odoo-restore-backup`.
       '';
     };
     odbox.backup.odoo.hot-schedule = mkOption {

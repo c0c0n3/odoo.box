@@ -3,7 +3,8 @@ Backup
 > Nix module docs.
 
 This [module][iface] automatically backs up the Odoo DB and file
-store.
+store. It also installs a convenience systemd service to restore
+a backup.
 
 
 ### Overview
@@ -31,8 +32,23 @@ store when restored, whereas cold backups are safe to restore.
 
 Have a look at these Nix files for the implementation details:
 - [Odoo implementation entry point][odoo-mod]
-- [Odoo backup script][odoo-script]
-- [Odoo hot/cold backup module template][odoo-svc]
+- [Odoo backup script][odoo-backup-script]
+- [Odoo hot/cold backup service builder][odoo-backup-svc]
+
+Finally, we also install a convenience systemd service to restore
+backups. The service takes the backup DB dump and file store and
+turns them into the live Odoo DB and file store, respectively.
+Notice systemd will never start this service, the sysadmin is meant
+to start it manually when they want to restore a backup like so:
+
+```bash
+$ sudo systemctl start odoo-restore-backup
+```
+
+Have a look at these Nix files for the restore implementation:
+- [Odoo implementation entry point][odoo-mod]
+- [Odoo restore script][odoo-restore-script]
+- [Odoo restore service builder][odoo-restore-svc]
 
 
 ### Backup area
@@ -182,5 +198,7 @@ On the 91st day a new FULL will be taken.
 
 [iface]: ./interface.nix
 [odoo-mod]: ./odoo/module.nix
-[odoo-script]: ./odoo/backup-script.nix
-[odoo-svc]: ./odoo/mksvc.nix
+[odoo-backup-script]: ./odoo/backup-script.nix
+[odoo-backup-svc]: ./odoo/mk-backup-svc.nix
+[odoo-restore-script]: ./odoo/restore-script.nix
+[odoo-restore-svc]: ./odoo/mk-restore-svc.nix
