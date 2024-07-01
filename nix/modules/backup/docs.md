@@ -3,7 +3,8 @@ Backup
 > Nix module docs.
 
 This [module][iface] automatically backs up the Odoo DB and file
-store.
+store. It also installs a convenience systemd service to restore
+a backup.
 
 
 ### Overview
@@ -29,18 +30,25 @@ before backing up and then restarts it as soon as the backup is done.
 Notice that a hot backup may result in an inconsistent DB and file
 store when restored, whereas cold backups are safe to restore.
 
-One last thing to mention is the Odoo sessions clean-up. Since we
-have to stop Odoo before making a cold backup, we take advantage
-of Odoo not running to get rid of any session files still on disk.
-Ideally Odoo should clean up after itself, but that doesn't always
-happen and overtime you could pile up truck loads of stale session
-files which would slow down directory access and in turn slow down
-Odoo itself.
-
 Have a look at these Nix files for the implementation details:
 - [Odoo implementation entry point][odoo-mod]
-- [Odoo backup script][odoo-script]
-- [Odoo hot/cold backup module template][odoo-svc]
+- [Odoo backup script][odoo-backup-script]
+- [Odoo hot/cold backup service builder][odoo-backup-svc]
+
+Finally, we also install a convenience systemd service to restore
+backups. The service takes the backup DB dump and file store and
+turns them into the live Odoo DB and file store, respectively.
+Notice systemd will never start this service, the sysadmin is meant
+to start it manually when they want to restore a backup like so:
+
+```bash
+$ sudo systemctl start odoo-restore-backup
+```
+
+Have a look at these Nix files for the restore implementation:
+- [Odoo implementation entry point][odoo-mod]
+- [Odoo restore script][odoo-restore-script]
+- [Odoo restore service builder][odoo-restore-svc]
 
 
 ### Backup area
@@ -164,10 +172,12 @@ Normalized form: *-*-* 11,14,16:00:00
 
 ### AWS Lifecycle Manager - Volume snapshots
 
-As we described on the **Backup Area** section, an EBS Volume (`vol-0200287c009a32cdd`) is mounted on the `/backup` directory.
-
-On the AWS console we created a `Data Lifecycle Rule (policy-07d599ae024e674c7)` which basically defines a policy for snapshotting the volume on a schedule basis.
-The first snapshot taken is a FULL clone of the volume, then, all the other snapshots are incremental.
+As we described on the **Backup Area** section, an EBS Volume
+(`vol-0200287c009a32cdd`) is mounted on the `/backup` directory.
+On the AWS console we created a `Data Lifecycle Rule (policy-07d599ae024e674c7)`
+which basically defines a policy for snapshotting the volume on a
+schedule basis. The first snapshot taken is a FULL clone of the volume,
+then, all the other snapshots are incremental.
 
 As of now, we implemented 2 different schedules:
 
@@ -178,12 +188,17 @@ As of now, we implemented 2 different schedules:
 On the 91st day a new FULL will be taken.
 
 **Monthly**
-- Frequency: On the 1st Monday every month starting at 03:00 AM (UTC +2 - Zurich).
-- Retention rule: Snapshot will be retained in the standard tier for 30 days, then retained in the Archive tier for 90 days.
+- Frequency: On the 1st Monday every month starting at 03:00 AM
+  (UTC +2 - Zurich).
+- Retention rule: Snapshot will be retained in the standard tier
+  for 30 days, then retained in the Archive tier for 90 days.
+
 
 
 
 [iface]: ./interface.nix
 [odoo-mod]: ./odoo/module.nix
-[odoo-script]: ./odoo/backup-script.nix
-[odoo-svc]: ./odoo/mksvc.nix
+[odoo-backup-script]: ./odoo/backup-script.nix
+[odoo-backup-svc]: ./odoo/mk-backup-svc.nix
+[odoo-restore-script]: ./odoo/restore-script.nix
+[odoo-restore-svc]: ./odoo/mk-restore-svc.nix

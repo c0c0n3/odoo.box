@@ -31,19 +31,14 @@ how to enable and configure backups.
 
 Restoring a machine to its original state is a no-brainer. All you
 need to do is
-1. Deploy the boot NixOS config. Here you'd use the Flake as it
-   was in the repo at the time the backup was taken.
-2. Pump Odoo data back into the DB by running `psql` on the DB
-   backup file.
-3. Copy over the file store from the backup.
-4. Deploy the prod NixOS config. Here too, you'd use the Flake
-   as it was in the repo at the time the backup was taken.
-
-Basically the same procedure as explained in the *Restoring data*
-section of the [data bootstrap page][data-boot].
+1. Deploy the prod NixOS config. Here you'd use the Flake as it was
+   in the repo at the time the backup was taken.
+2. Mount the backup volume on the backup dir configured in the
+   [backup NixOS module][module].
+3. Start the restore systemd service the [backup NixOS module][module]
+   installs: `sudo systemctl start odoo-restore-backup`.
 
 
 
 
 [module]: ../nix/modules/backup/docs.md
-[data-boot]: ./bootstrap/odoo-data.md
