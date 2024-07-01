@@ -16,6 +16,7 @@ with lib;
 
     # Service template function.
     mksvc = import ./mksvc.nix;
+    mk-restore-svc = import ./mk-restore-svc.nix;
   in (mkIf enabled
   {
     systemd.services.odoo-hot-backup = mksvc {
@@ -25,6 +26,9 @@ with lib;
     systemd.services.odoo-cold-backup = mksvc {
       inherit config pkgs;
       hot = false;
+    };
+    systemd.services.odoo-restore-backup = mk-restore-svc {
+      inherit config pkgs;
     };
   });
 }
