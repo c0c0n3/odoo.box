@@ -11,7 +11,7 @@ let
   postgres = config.services.postgresql.package;
   rsync = pkgs.rsync;
 in {
-  description = "Restore Odoo DB and file store from ${const.backup-dir}.";
+  description = "Restore Odoo DB and file store from ${const.backup-dir}";
 
   path = [ sudo postgres rsync ];
 

@@ -3,10 +3,10 @@
 #
 { config, pkgs, hot ? true }:
 let
-  # User, DB, service names and schedules.
-  odoo-usr = config.odbox.service-stack.odoo-username;
-  odoo-db = config.odbox.service-stack.odoo-db-name;
-  odoo-svc = odoo-usr;                                         # (1)
+  # Config constants---service/user/db names, file paths, etc.
+  const = import ./const.nix { inherit config; };
+
+  # Backup schedules.
   schedule = if hot
              then config.odbox.backup.odoo.hot-schedule
              else config.odbox.backup.odoo.cold-schedule;
@@ -16,11 +16,10 @@ let
   postgres = config.services.postgresql.package;
   rsync = pkgs.rsync;
 
-  # Backup type and base dir.
-  basedir = config.odbox.backup.basedir;
+  # Backup type.
   kind = if hot then "hot" else "cold";
 in {
-  description = "Odoo DB and file store ${kind} backup to ${basedir}";
+  description = "Back up Odoo DB and file store ${kind} to ${const.backup-dir}";
 
   requires = [ "postgresql.service" ];
 
@@ -28,15 +27,15 @@ in {
 
   preStart = if hot
              then ""
-             else "systemctl stop ${odoo-svc}";
+             else "systemctl stop ${const.odoo-svc}";
 
   script = import ./backup-script.nix {
-    inherit odoo-usr odoo-db basedir;
+    inherit const;
   };
 
   postStop = if hot
              then ""
-             else "systemctl start ${odoo-svc}";
+             else "systemctl start ${const.odoo-svc}";
 
   serviceConfig = {
     Type = "oneshot";
@@ -45,8 +44,3 @@ in {
 
   startAt = schedule;
 }
-# NOTE
-# ----
-# 1. Odoo service name. The service stack module makes the Odoo service
-# name the same as the username specified through the module's interface
-# option.
